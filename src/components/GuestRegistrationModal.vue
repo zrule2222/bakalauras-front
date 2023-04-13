@@ -15,14 +15,14 @@
           </div>
           <div class="field">
             <label class="label has-text-left">Svečio pavardė</label>
-            <input class="input" :class="noGuestLastName ? 'is-danger' : ''" v-model="guestLastName" type="password"
+            <input class="input" :class="noGuestLastName ? 'is-danger' : ''" v-model="guestLastName" type="text"
                 placeholder="Svečio pavardė">
-            <p v-show="noGuestLastName" class="help is-danger">Svečio pavardė tuščia</p>
+            <p v-show="noGuestLastName" class="help is-danger has-text-left">Svečio pavardė tuščia</p>
           </div>
           <div class="field">
             <label class="label has-text-left">Svečio atvykimo laikas</label>
-            <VueDatePicker :state="noGuestArrival" v-model="guestArrival" locale="lt" cancelText="Atšaukti" selectText="Pasirinkti" :timezone="'UTC'" :teleport="true" :format="`yyyy/MM/dd HH:mm`"/>
-            <p v-show="noGuestArrival" class="help is-danger has-text-left">Nepasirinktas svečio atvykimo laikas</p>
+            <VueDatePicker :state="noGuestArrival" :minDate="new Date(new Date().setDate(new Date().getDate() - 1))"  v-model="guestArrival" locale="lt" cancelText="Atšaukti" selectText="Pasirinkti" :timezone="'UTC'" :teleport="true" :format="`yyyy/MM/dd HH:mm`"/>
+            <p v-show="noGuestArrival == false" class="help is-danger has-text-left">Nepasirinktas svečio atvykimo laikas</p>
           </div>
 
             </section>
@@ -48,9 +48,9 @@ export default {
             guestName: "",
             noGuestName: false,
             guestLastName: "",
-            noGuestLastName: "",
+            noGuestLastName: false,
             guestArrival: "",
-            noGuestArrival: false,
+            noGuestArrival: null,
             time: Date,
 
 
@@ -69,69 +69,53 @@ export default {
         closeModal() {
             this.$emit('close-action');
         },
-        async setUserData() {
-            if(!this.validateForm()){
-                return
-            }
-            if(!this.password){
-                this.password = null
-            }
-            let userinfo = {
-             email: this.email,
-             password: this.password,
-             newBlocked: this.newBlocked
-            }
-            try{
-            await this.$api.updateUserInfo(this.userId, userinfo)
-            this.$emit('update-sucess');
-            }
-            catch(error){
-                this.$emit('update-fail');
-            }
-        },
-       async getUserData(){
-        let userData = await this.$api.getUserInfo(this.userId)
-        this.email = userData.email
-        if(userData.blocked == 1){
-        this.blocked = true
-        this.newBlocked = true
-        }
-        else{
-            this.blocked = false
-            this.newBlocked = false
-        }
-        },
         validateForm() {
-          this.badEmail = false
-          this.noEmail = false
-      if (!this.email) {
-        this.noEmail = true
+          this.noGuestName = false
+          this.noGuestLastName = false
+      if (!this.guestName) {
+        this.noGuestName = true
         return false
       }
       else {
-        this.noEmail = false
+        this.noGuestName = false
       }
-    //   var emailCheck = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    //   if(this.email.match(emailCheck)){
-    //     this.badEmail = false
-    //   }
-    //   else{
-    //     this.badEmail = true
-    //     return false
-    //   }
-
-
+      if (!this.guestLastName) {
+        this.noGuestLastName = true
+        return false
+      }
+      else {
+        this.noGuestLastName = false
+      }
+      if (!this.guestArrival) {
+        this.noGuestArrival = false
+        return false
+      }
       return true
     },
-    test(){
-        let date = JSON.parse(JSON.stringify(this.time))
-        let diena = new Date(date)
-        // console.log(diena.getUTCHours())
-        // console.log(diena)
-        // console.log(this.time)
-        // console.log(date)
-        // console.log(date.hours)
-        // console.log(date.minutes)
+    async test(){
+        if(!this.validateForm()){
+            return
+        }
+        let userData = await this.$api.getDataFromToken()
+        let date = JSON.parse(JSON.stringify(this.guestArrival))
+        let arrival = new Date(date)
+        console.log(arrival)
+        let formatedGuestArrival = {
+            user_id: userData.id,
+	firstname: this.guestName,
+	lastname: this.guestLastName,
+	arrival: `${arrival.getUTCFullYear()}-${arrival.getMonth() + 1}-${arrival.getUTCDate()} ${arrival.getUTCHours()}:${arrival.getUTCMinutes()}`
+        }
+        try{
+        await this.$api.registerGuest(formatedGuestArrival)
+        this.$emit("registration-sucess")
+        }
+        catch(error){
+            console.log(error)
+            this.$emit("registration-fail")
+        }
+       
+        
     }
     },
     created() {

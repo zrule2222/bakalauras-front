@@ -45,6 +45,14 @@ api.userByName = async function (username) {
     }
     return response.data.number
   }
+  api.registerGuest = async function (guestData) {
+    const res = await this.authenticateUser()
+     let response = null
+     if (res == true) {
+       response = await this.http.post(`/registerGuest`,guestData)
+     }
+     return response.data
+   }
   api.blockUser = async function (id) {
    const res = await this.authenticateUser()
     let response = null
@@ -62,6 +70,62 @@ api.userByName = async function (username) {
    }
     return response.data
   }
+
+  api.cancelGuestRegistration = async function (id) {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.put(`/cancelGuest/${id}`)
+    }
+     return response.data
+   }
+
+   api.getActiveGuestRegistrations = async function () {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.get(`/activeGuests`)
+    }
+     return response.data
+   }
+   api.acceptGuestRegistration = async function (id) {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.put(`/updateGuest/${id}`, {	status : "Patvirtinta"})
+    }
+     return response.data
+   }
+
+   api.rejectGuestRegistration = async function (id) {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.put(`/updateGuest/${id}`, {	status : "Atmesta"})
+    }
+     return response.data
+   }
+
+   api.getConfirmedGuestRegistrations = async function () {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.get(`/confirmedGuests`)
+    }
+     return response.data
+   }
+
+   api.setGuestRegistrationAsDone = async function (id) {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.put(`/updateGuest/${id}`, {	status : "Užbaikta"})
+    }
+     return response.data
+   }
+   
+   
+   
 
  api.authenticateUser = async function () {
    if (localStorage.getItem("token") != null){
@@ -93,6 +157,14 @@ api.userByName = async function (username) {
     }
       return response.data
     },
+    api.getuserGuestRegistrations = async function(id){
+      const res = await this.authenticateUser()
+      let response = null
+      if (res == true) {
+      response =  await this.http.get(`/guestRegistrations/${id}`)
+      }
+        return response.data
+      },
 
   api.getDataFromToken = async function(){
   let response =  await this.http.get(`/authenticate`, {

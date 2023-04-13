@@ -69,7 +69,30 @@ const routes = [
   path: '/guests',
   name: 'guests',
   component: GuestRegistrationView,
-  meta: { requiresAuth: true }
+  meta: { requiresAuth: true },
+
+  beforeEnter: async (to, from, next) => {
+
+    try {
+          const response =  await axios.get(`http://localhost:5000/authenticate`, {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          if (response.data.role == "Gyventojas" || response.data.role == "Budėtojas"){
+          to.params.role=response.data.role
+            next()
+          }
+          else{
+            next('/404')
+          }
+        
+    }
+    catch (error) {
+      alert(error)
+        next('/404')
+    }
+}
 },
 
   

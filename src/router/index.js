@@ -6,6 +6,8 @@ import UserInfoView from "../views/UserInfoView.vue"
 import ContactInformationView from "../views/ContactInformationView.vue"
 import ServiceView from "../views/ServiceView.vue"
 import GuestRegistrationView from "../views/GuestRegistrationView.vue"
+import LeisureRoomView from "../views/LeisureRoomView.vue"
+import LeisureRoomRegistrationsView from "../views/LeisureRoomRegistrationsView.vue"
 import axios from 'axios';
 //import babelPolyfill from 'babel-polyfill'
 
@@ -80,6 +82,63 @@ const routes = [
             }
           })
           if (response.data.role == "Gyventojas" || response.data.role == "Budėtojas"){
+          to.params.role=response.data.role
+            next()
+          }
+          else{
+            next('/404')
+          }
+        
+    }
+    catch (error) {
+      alert(error)
+        next('/404')
+    }
+}
+},
+{
+  path: '/leisureRoom',
+  name: 'leisureRoom',
+  component: LeisureRoomView,
+  meta: { requiresAuth: true },
+
+  beforeEnter: async (to, from, next) => {
+
+    try {
+          const response =  await axios.get(`http://localhost:5000/authenticate`, {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          if (response.data.role == "Gyventojas" || response.data.role == "Budėtojas"){
+          to.params.role=response.data.role
+            next()
+          }
+          else{
+            next('/404')
+          }
+        
+    }
+    catch (error) {
+      alert(error)
+        next('/404')
+    }
+}
+},
+{
+  path: '/leisureRegistrations',
+  name: 'leisureRegistrations',
+  component: LeisureRoomRegistrationsView,
+  meta: { requiresAuth: true },
+  beforeEnter: async (to, from, next) => {
+
+    try {
+          const response =  await axios.get(`http://localhost:5000/authenticate`, {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          if ( response.data.role == "Budėtojas"){
           to.params.role=response.data.role
             next()
           }

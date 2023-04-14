@@ -38,7 +38,11 @@
            <button class="button is-warning sm:ml-10 min-w-[193px]  ">Jūsų registracijos</button>
         </router-link>
         </div>
+        <div v-if="service.name == 'Laisvalaikio kambarys'">
+            <router-link :to="{ name: 'leisureRoom'}">
            <button v-if="service.name == 'Laisvalaikio kambarys'" class="button is-warning sm:ml-10   ">Kambario užimtumas</button>
+        </router-link>
+        </div>
            <button v-if="service.name == 'Skalbykla'" class="button is-warning sm:ml-10   ">Skalbyklos puslapis</button>
         </div>
     </div>

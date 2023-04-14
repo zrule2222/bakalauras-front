@@ -92,7 +92,8 @@ api.userByName = async function (username) {
     const res = await this.authenticateUser()
      let response = null
     if (res == true) {
-       response = await this.http.put(`/updateGuest/${id}`, {	status : "Patvirtinta"})
+      let data = await this.getDataFromToken()
+       response = await this.http.put(`/updateGuest/${id}`, {	status : "Patvirtinta",doorKeeper_id: data.id})
     }
      return response.data
    }
@@ -101,7 +102,8 @@ api.userByName = async function (username) {
     const res = await this.authenticateUser()
      let response = null
     if (res == true) {
-       response = await this.http.put(`/updateGuest/${id}`, {	status : "Atmesta"})
+      let data = await this.getDataFromToken()
+       response = await this.http.put(`/updateGuest/${id}`, {	status : "Atmesta",doorKeeper_id: data.id})
     }
      return response.data
    }
@@ -119,7 +121,17 @@ api.userByName = async function (username) {
     const res = await this.authenticateUser()
      let response = null
     if (res == true) {
-       response = await this.http.put(`/updateGuest/${id}`, {	status : "Užbaikta"})
+      let data = await this.getDataFromToken()
+       response = await this.http.put(`/updateGuest/${id}`, {	status : "Užbaikta",doorKeeper_id: data.id})
+    }
+     return response.data
+   }
+
+   api.leisureRoomRegistration = async function (id) {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.post(`/registerLeisure/${id}`)
     }
      return response.data
    }
@@ -165,6 +177,66 @@ api.userByName = async function (username) {
       }
         return response.data
       },
+
+      api.getLeisureRoomRegistrations = async function(){
+        const res = await this.authenticateUser()
+        let response = null
+        if (res == true) {
+        response =  await this.http.get(`/activeLeisure`)
+        }
+          return response.data
+        },
+
+        
+      api.acceptLeisureRoomRegistration = async function(id){
+        const res = await this.authenticateUser()
+        let response = null
+        if (res == true) {
+          let data = await this.getDataFromToken()
+          console.log(data)
+        response =  await this.http.put(`/updateLeisure/${id}`,{status: "Patvirtinta", doorKeeper_id: data.id})
+        }
+          return response.data
+        },
+
+        api.rejectLeisureRoomRegistration = async function(id){
+          const res = await this.authenticateUser()
+          let response = null
+          if (res == true) {
+            let data = await this.getDataFromToken()
+            console.log(data)
+          response =  await this.http.put(`/updateLeisure/${id}`,{status: "Atmesta", doorKeeper_id: data.id})
+          }
+            return response.data
+          },
+
+          api.getLeisureRoomData = async function(){
+            const res = await this.authenticateUser()
+            let response = null
+            if (res == true) {
+            response =  await this.http.get(`/confirmedLeisure`)
+            }
+              return response.data
+            },
+
+            api.getuserLeisureRegistration = async function(id){
+              const res = await this.authenticateUser()
+              let response = null
+              if (res == true) {
+              response =  await this.http.get(`/userLeisure/${id}`)
+              }
+                return response.data
+              },
+
+              api.cancelLeisureRegistration = async function(id){
+                const res = await this.authenticateUser()
+                let response = null
+                if (res == true) {
+                response =  await this.http.put(`/updateUserLeisure/${id}`,{status: "Atšaukta"})
+                }
+                  return response.data
+                },
+
 
   api.getDataFromToken = async function(){
   let response =  await this.http.get(`/authenticate`, {

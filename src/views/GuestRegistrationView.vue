@@ -19,7 +19,7 @@
     <div v-if="$route.params.role == 'Budėtojas'" class="text-4xl mt-20">
       Registracijos laukiančios patvirtinimo
     </div>
-      <div v-if="$route.params.role == 'Gyventojas'" class="">
+      <div v-if="$route.params.role == 'Gyventojas' && userRegistrations.length > 0" class="">
       <table class="table is-bordered is-striped is-hoverable ml-auto mr-auto mt-7">
         <thead>
     <tr>
@@ -40,8 +40,12 @@
         </tbody>
       </table>
     </div>
+    <div v-else-if="$route.params.role == 'Gyventojas' && userRegistrations.length == 0" class="text-xl mt-2 has-text-info">
+      Šiuo metu neturite užregistravę svečių
+    </div>
 
-    <div v-if="$route.params.role == 'Budėtojas'" class="">
+
+    <div v-if="$route.params.role == 'Budėtojas'  && registrations.length > 0" class="">
       <table class="table is-bordered is-striped is-hoverable ml-auto mr-auto mt-7">
         <thead>
     <tr>
@@ -63,17 +67,21 @@
         </tbody>
       </table>
     </div>
+    <div v-else-if="$route.params.role == 'Budėtojas' && registrations.length == 0" class="text-xl mt-2 has-text-info">
+      Šiuo metu nėra svečių laukančių patvirtinimo
+    </div>
 
     <div v-if="$route.params.role == 'Budėtojas'" class="text-4xl mt-14">
       Svečio išvykimo patvirtinimas
     </div>
 
-    <div v-if="$route.params.role == 'Budėtojas'" class="">
+    <div v-if="$route.params.role == 'Budėtojas' && acceptedRegistrations.length > 0" class="">
       <table class="table is-bordered is-striped is-hoverable ml-auto mr-auto mt-7">
         <thead>
     <tr>
         <th class="has-text-centered">Numeris</th>
         <th class="has-text-centered">Svečias</th>
+        <th class="has-text-centered">Svečias atvyko</th>
         <th class="has-text-centered">Svečio išvykimas</th>
     </tr>
         </thead>
@@ -81,10 +89,14 @@
             <tr>
                 <th class="has-text-centered">{{count+1}}</th>
                 <td>{{registration.guest_firstname}} {{ registration.guest_lastname }}</td>
+                <td>{{ registration.updated_at }}</td>
                 <td><button class="button is-warning is-small w-2/3" @click="setRegistrationAsDone(registration.guest_id)"> Svečias išvyko</button></td>
             </tr>
         </tbody>
       </table>
+    </div>
+    <div v-else-if="$route.params.role == 'Budėtojas' && acceptedRegistrations.length == 0" class="text-xl mt-2 has-text-info">
+      Šiuo metu bendrabutyje nėra svečių
     </div>
 
 <GuestRegistrationModal @registration-sucess="registrationComplete()" @registration-fail="registrationFailed()" @close-action="closeRegistrationModal" v-if="showModal" :is-active="showModal" ></GuestRegistrationModal>
@@ -141,6 +153,7 @@ this.showModal = false
 this.showSucessMessage = true
 },
  async getActiveUserRegistrations(){
+  try{
     let userData = await this.$api.getDataFromToken()
     let registrations = await this.$api.getuserGuestRegistrations(userData.id)
     for (let index = 0; index < registrations.length; index++) {
@@ -160,6 +173,11 @@ this.showSucessMessage = true
       registrations[index].guest_arrival = finalDate
     }
  this.userRegistrations = registrations
+  }
+  catch(error){
+    console.log(error)
+    this.userRegistrations = []
+  }
  },
 closeSucessMessageModal(){
       this.showSucessMessage = false
@@ -203,10 +221,30 @@ closeSucessMessageModal(){
     },
   async  getConfirmedRegistrations(){
         try{
-           this.acceptedRegistrations = await this.$api.getConfirmedGuestRegistrations()
+           let registrations = await this.$api.getConfirmedGuestRegistrations()
+           for (let index = 0; index < registrations.length; index++) {
+     let year =   new Date(registrations[index].updated_at).getUTCFullYear()
+    let month =   new Date(registrations[index].updated_at).getUTCMonth() +1
+     let day =   new Date(registrations[index].updated_at).getUTCDate()
+     let hour =   new Date(registrations[index].updated_at).getHours()
+      let minute =  new Date(registrations[index].updated_at).getMinutes()
+
+      if(month < 10){
+        month = '0' + month
+      }
+      if(day < 10){
+        day = '0' + day
+      }
+      let finalDate = `${year}-${month}-${day} ${hour}:${minute}`
+      registrations[index].updated_at = finalDate
+     
+    }
+    this.acceptedRegistrations = registrations
+           
         }
         catch(error){
             console.log(error)
+            this.acceptedRegistrations = []
         }
     },
   async getActiveRegistrations(){
@@ -234,6 +272,7 @@ closeSucessMessageModal(){
     }
     catch(error){
         console.log(error)
+        this.registrations = []
     }
     },
    async confirmRegistration(id){

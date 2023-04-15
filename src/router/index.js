@@ -8,6 +8,7 @@ import ServiceView from "../views/ServiceView.vue"
 import GuestRegistrationView from "../views/GuestRegistrationView.vue"
 import LeisureRoomView from "../views/LeisureRoomView.vue"
 import LeisureRoomRegistrationsView from "../views/LeisureRoomRegistrationsView.vue"
+import Page401 from "../views/Page401.vue"
 import axios from 'axios';
 //import babelPolyfill from 'babel-polyfill'
 
@@ -16,6 +17,11 @@ const routes = [
     path: '/',
     name: 'login',
     component: LoginView
+  },
+  {
+    path: '/401',
+    name: '401',
+    component: Page401
   },
   {
     path: '/main',
@@ -39,18 +45,17 @@ const routes = [
                 Authorization: 'Bearer ' + localStorage.getItem('token')
               }
             })
-            console.log(response2.data.username)
+
             if(response2.data.username == to.params.name && response2.data.role == "Gyventojas" || response2.data.role == "Administratorius" && response.data.role == "Gyventojas" ){
             to.params.id=response.data.user_id
               next()
             }
             else{
-              next('/404')
+              next('/401')
             }
           }
-      }
+          }
       catch (error) {
-        alert(error)
           next('/404')
       }
   }
@@ -59,13 +64,57 @@ const routes = [
   path: '/contacts',
   name: 'contacts',
   component: ContactInformationView,
-  meta: { requiresAuth: true }
+  meta: { requiresAuth: true },
+  beforeEnter: async (to, from, next) => {
+
+    try {
+          const response =  await axios.get(`http://localhost:5000/authenticate`, {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          if (response.data.role == "Gyventojas"){
+          to.params.role=response.data.role
+            next()
+          }
+          else{
+            next('/401')
+          }
+        
+    }
+    catch (error) {
+      alert(error)
+        next('/404')
+    }
+}
 },
 {
   path: '/services',
   name: 'services',
   component: ServiceView,
-  meta: { requiresAuth: true }
+  meta: { requiresAuth: true },
+  beforeEnter: async (to, from, next) => {
+
+    try {
+          const response =  await axios.get(`http://localhost:5000/authenticate`, {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          if (response.data.role == "Gyventojas"){
+          to.params.role=response.data.role
+            next()
+          }
+          else{
+            next('/401')
+          }
+        
+    }
+    catch (error) {
+      alert(error)
+        next('/404')
+    }
+}
 },
 {
   path: '/guests',
@@ -86,7 +135,7 @@ const routes = [
             next()
           }
           else{
-            next('/404')
+            next('/401')
           }
         
     }
@@ -115,7 +164,7 @@ const routes = [
             next()
           }
           else{
-            next('/404')
+            next('/401')
           }
         
     }
@@ -143,12 +192,11 @@ const routes = [
             next()
           }
           else{
-            next('/404')
+            next('/401')
           }
         
     }
     catch (error) {
-      alert(error)
         next('/404')
     }
 }

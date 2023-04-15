@@ -9,12 +9,14 @@
         </div>
       </section>
     </div>
- <MenuBar :menu-type="'main-resident'"></MenuBar>
- <div class="is-flex is-flex-direction-row is-justify-content-space-between  mt-4">
-<div class="  ml-6 min-w-fit">
+ <MenuBar v-if="role == 'Gyventojas'" :menu-type="'main-resident'"></MenuBar>
+ <MenuBar v-if="role == 'Administratorius'" :menu-type="'main-admin'"></MenuBar>
+ <MenuBar v-if="role == 'Budėtojas'" :menu-type="'main-doorkeeper'"></MenuBar>
+ <div v-if="role == 'Gyventojas'" class="is-flex is-flex-direction-row is-justify-content-space-between  mt-4">
+<div v-if="role == 'Gyventojas'" class="  ml-6 min-w-fit">
  Jūsų kambarys: {{ room }}
 </div>
-<div class="mr-6">
+<div v-if="role == 'Gyventojas'" class="mr-6">
   <div class=" sm:ml-6 min-w-fit text-left sm:text-center">
   Darbuotojų užimtumas
 </div>
@@ -35,23 +37,67 @@
   </div>
 </div>
 </div>
+
 </div>
+<div v-else class="is-flex is-flex-direction-row is-justify-content-end  mt-4">
+<div  class="mr-6">
+  <div class=" sm:ml-6 min-w-fit text-left sm:text-center">
+  Užimtumas
+</div>
+<div class="has-text-left is-flex is-flex-direction-column min-w-fit">
+    <div class="has-text-left is-flex is-flex-direction-row items-center">
+    Jūsų užimtumas:
+    <div v-if="role == 'Administratorius' && administratorOccupation == 'Užimtas'" class="has-text-danger ml-2">
+    {{administratorOccupation}}
+  </div>
+  <div v-else-if="role == 'Administratorius' && administratorOccupation == 'Laisvas'" class="has-text-primary ml-2">
+    {{administratorOccupation}}
+  </div>
+  <div v-else-if="role == 'Administratorius' && administratorOccupation == 'Prisijiungęs'" class="has-text-info ml-2">
+    {{administratorOccupation}}
+  </div>
+  <div v-if="role == 'Budėtojas' && doorkeeperOccupation == 'Užimtas'" class="has-text-danger ml-2">
+    {{doorkeeperOccupation}}
+  </div>
+  <div v-else-if="role == 'Budėtojas' && doorkeeperOccupation == 'Laisvas'" class="has-text-primary ml-2">
+    {{doorkeeperOccupation}}
+  </div>
+  <div v-else-if="role == 'Budėtojas' && doorkeeperOccupation == 'Prisijiungęs'" class="has-text-info ml-2">
+    {{doorkeeperOccupation}}
+  </div>
+  </div>
+  <button class="button is-primary mt-2" @click="showUserStatusModal()" >Keisti užimtumą</button>
+</div>
+</div>
+</div>
+<UserOccupationModal v-if="showModal" :isActive="showModal" @close-action="closeUserStatusModal()" @occupation-sucess="occupationUpdateSucess()" @occupation-fail="occupationUpdateFail()"></UserOccupationModal>
+<SucessMessageModal v-if="showSucessModal" :isActive="showSucessModal" :Message="sucessMessage" @close-action="closeSucessModal()"></SucessMessageModal>
 
     </div> 
 </template>
 <script>
 import MenuBar from "../components/MenuBar.vue"
+import UserOccupationModal from "../components/UserOccupationModal.vue"
+import SucessMessageModal from"../components/SucessMessageModal.vue"
 export default {
   name: 'MainView',
   data() {
     return {
       username: "",
       room: 0,
+      role: "",
+      administratorOccupation: "",
+      doorkeeperOccupation: "",
+      showModal: false,
+      showSucessModal: false,
+      sucessMessage: "",
 
     };
   },
   components:{
-    MenuBar
+    MenuBar,
+    UserOccupationModal,
+    SucessMessageModal,
   },
   props: {
     // message: {
@@ -59,15 +105,63 @@ export default {
     // }
   },
   methods: {
-   async setPageData(){
-      this.username = localStorage.getItem('username')
-      let user = await this.$api.getUserInfo(localStorage.getItem('id'))
-      this.room = await this.$api.getUserRoom(localStorage.getItem('id'),user.fk_room)
+   async getUserInfo(){
+    let data = await this.$api.getDataFromToken()
+    this.role = data.role
+    if(this.role == "Gyventojas"){
+      let user = await this.$api.getUserInfo(data.id)
+      this.room = await this.$api.getUserRoom(data.id,user.fk_room)
+    }
+    else if(this.role == "Administratorius"){
 
     }
+    else if(this.role == "Budėtojas"){
+
+    }
+
+    },
+    showUserStatusModal(){
+      this.showModal = true
+    },
+    closeUserStatusModal(){
+      this.showModal = false
+    },
+    closeSucessModal(){
+      this.showSucessModal = false
+      this.getUserInfo()
+      if(this.role == 'Administratorius' || this.role == 'Budėtojas' ){
+   this.getWorkerOccupation()
+   }
+    },
+    occupationUpdateSucess(){
+      this.sucessMessage = "Užimtumas atnaujintas sėkmingai"
+      this.showModal = false
+      this.showSucessModal = true
+
+    },
+    occupationUpdateFail(){
+      this.sucessMessage = "Nepavyko atnaujinti užimtumo"
+      this.showModal = false
+      this.showSucessModal = true
+
+    },
+   async getWorkerOccupation(){
+    let data = await this.$api.getDataFromToken()
+    let occupation = await this.$api.getUserOccupations(data.id)
+      if(data.role == 'Administratorius'){
+      this.administratorOccupation = occupation.occupation
+      }
+      else if(data.role == 'Budėtojas'){
+        this.doorkeeperOccupation = occupation.occupation
+      }
+     
+    }
   },
-  created(){
-   this.setPageData()
+ async created(){
+   await this.getUserInfo()
+   if(this.role == 'Administratorius' || this.role == 'Budėtojas' ){
+   this.getWorkerOccupation()
+   }
   }
 }
 </script>

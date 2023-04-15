@@ -43,6 +43,36 @@
         <li v-if="menuType == 'main-back'" class="m-0">
             <button @click="$router.go(-1)" class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Atgal</button>
         </li>
+        <li v-if="menuType == 'main-admin'" class="m-0">
+          <!-- <router-link :to="{ name: 'main'}"> -->
+            <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Registracija</button>
+          <!-- </router-link> -->
+        </li>
+        <li v-if="menuType == 'main-admin'" class="m-0">
+          <!-- <router-link :to="{ name: 'main'}"> -->
+            <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Skalbykla</button>
+          <!-- </router-link> -->
+        </li>
+        <li v-if="menuType == 'main-admin'" class="m-0">
+          <!-- <router-link :to="{ name: 'main'}"> -->
+            <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Gyventojai</button>
+          <!-- </router-link> -->
+        </li>
+        <li v-if="menuType == 'main-admin'" class="m-0">
+          <!-- <router-link :to="{ name: 'main'}"> -->
+            <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Paslaugų istorija</button>
+          <!-- </router-link> -->
+        </li>
+        <li v-if="menuType == 'main-doorkeeper'" class="m-0">
+          <router-link :to="{ name: 'guests'}">
+            <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Svečiai</button>
+          </router-link>
+        </li>
+        <li v-if="menuType == 'main-doorkeeper'" class="m-0">
+          <router-link :to="{ name: 'leisureRoom'}">
+            <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Laisvalaikio kambarys</button>
+          </router-link>
+        </li>
             <!-- <div class="ml-auto"> -->
                 <li class="ml-auto">
         <div class="md:flex md:flex-wrap md:items-center md:ml-auto md:justify-end hidden ">
@@ -98,7 +128,11 @@ export default {
         this.navOpen = true
         }
     },
-    logout(){
+   async logout(){
+    let data = await this.$api.getDataFromToken()
+    if(data.role == 'Administratorius' || data.role == 'Budėtojas'){
+         await this.$api.setWorkerOccupation("Neprisijiungęs",data.id)
+    }
       localStorage.removeItem('token')
       this.$router.push('/')
     },

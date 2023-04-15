@@ -78,7 +78,8 @@ export default {
        async getServices() {
            this.services = await this.$api.getServices()
         },
-        openInfoModal(name,description){
+       async openInfoModal(name,description){
+         await this.$api.authenticateUser()
            this.showInfoModal = true
            this.serviceName = name
            this.serviceInformation = description

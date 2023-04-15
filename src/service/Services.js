@@ -150,17 +150,30 @@ api.userByName = async function (username) {
     return true
     }
     catch(error){
+      console.log('a')
+      console.log(error)
       localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijiungti")
-      router.push("/")
+      router.push({ path: '/' })
       return false
     }
+    
    }
    else{
       localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijiungti")
-      router.push("/")
+     router.push({ path: '/' })
       return false
    }
   }
+
+  api.setWorkerOccupation = async function(occupation, id){
+    const res = await this.authenticateUser()
+    let response = null
+    if (res == true) {
+    response =  await this.http.put(`/occupation/${id}`,{occupation: occupation})
+    }
+      return response.data
+    },
+
   api.getServices = async function(){
     const res = await this.authenticateUser()
     let response = null
@@ -169,6 +182,15 @@ api.userByName = async function (username) {
     }
       return response.data
     },
+
+    api.getUserOccupations = async function(id){
+      const res = await this.authenticateUser()
+      let response = null
+      if (res == true) {
+      response =  await this.http.get(`/userOccupation/${id}`)
+      }
+        return response.data
+      },
     api.getuserGuestRegistrations = async function(id){
       const res = await this.authenticateUser()
       let response = null
@@ -239,12 +261,24 @@ api.userByName = async function (username) {
 
 
   api.getDataFromToken = async function(){
+    if (localStorage.getItem("token") != null){
+      try{
   let response =  await this.http.get(`/authenticate`, {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
     })
     return response.data
+  }
+  catch(error){
+    localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijiungti")
+    router.push({ path: '/' })
+  }
+  }
+  else{
+    localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijiungti")
+    router.push({ path: '/' })
+  }
   }
 
 export default {

@@ -18,9 +18,10 @@
         <div class="columns is-flex is-flex-direction-column box">
           <div class="column has-text-left">
             <label for="username">Prisijiungimo vardas</label>
-            <input class="input is-primary" type="text" :class="noUsername ? 'is-danger' : ''"
+            <input class="input is-primary" type="text" :class="noUsername || badUsernameLenght ? 'is-danger' : ''"
               placeholder="Prisijiungimo vardas" v-model="username">
             <p v-show="noUsername" class="help is-danger">Prisijiungimo vardas tuščias</p>
+            <p v-show="badUsernameLenght" class="help is-danger">Prisijiungimo vardas negali viršyti 50 simbolių</p>
           </div>
           <div class="column has-text-left">
             <label for="Name">Slaptažodis</label>
@@ -50,6 +51,7 @@ export default {
       errorMessage: "",
       showMessage: false,
       message: "",
+      badUsernameLenght: false
     };
   },
   props: {
@@ -68,25 +70,48 @@ export default {
           "password": this.password
         })
         localStorage.removeItem('message')
-        localStorage.setItem('token', response)
+        if(response.blocked == 0){
+        localStorage.setItem('token', response.token)
         
-        // localStorage.setItem('username', response.username)
-        // localStorage.setItem('role', response.role)
-        // localStorage.setItem('id', response.id)
+
+        this.message = localStorage.getItem('message')
+        this.showMessage = true
+        let data = await this.$api.getDataFromToken()
+        if(data.role == 'Administratorius' || data.role == 'Budėtojas'){
+        await this.$api.setWorkerOccupation("Prisijiungęs",data.id)
+        }
         this.$router.push('/main')
+        }
+        else{
+          this.message = "Jūsų paskyra užblokuota"
+        this.showMessage = true
+        }
       }
       catch (error) {
+        this.showMessage = false
         this.showError = true
         this.errorMessage = error.response.data
       }
     },
     validateForm() {
+      this.showError = false
+      this.showMessage = false
+      this.noUsername = false
+      this.noPassword = false
+      this.badUsernameLenght = false
       if (!this.username) {
         this.noUsername = true
         return false
       }
       else {
         this.noUsername = false
+      }
+      if(this.username.length > 50){
+        this.badUsernameLenght = true
+        return false
+      }
+      else{
+        this.badUsernameLenght = false
       }
       if (!this.password) {
         this.noPassword = true

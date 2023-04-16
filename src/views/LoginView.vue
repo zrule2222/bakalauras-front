@@ -75,6 +75,7 @@ export default {
         
 
         this.message = localStorage.getItem('message')
+       // sessionStorage.setItem('reloaded', 'yes');  
         this.showMessage = true
         let data = await this.$api.getDataFromToken()
         if(data.role == 'Administratorius' || data.role == 'Budėtojas'){

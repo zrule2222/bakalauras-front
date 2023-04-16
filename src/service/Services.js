@@ -117,6 +117,79 @@ api.userByName = async function (username) {
      return response.data
    }
 
+   api.getDoorkeeperOccupation = async function () {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.get(`/doorkeeperOccupation`)
+    }
+     return response.data
+   }
+
+   api.getAdminOccupation = async function () {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.get(`/adminOccupation`)
+    }
+     return response.data
+   }
+
+   api.getRoomsForRegistration = async function (roomType) {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.post(`/roomsForRegistration`,{room_gender: roomType})
+    }
+     return response.data
+   }
+
+   api.registerUser = async function (userData) {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.post(`/register`,userData)
+    }
+     return response.data
+   }
+
+   api.updateRoomSpace = async function (id) {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.put(`/updateRoomSpace/${id}`)
+    }
+     return response.data
+   }
+
+   api.checkUsername = async function (username) {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.post(`/checkUsername`, {username: username})
+    }
+     return response.data
+   }
+
+   api.getAllResidents = async function () {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.get(`/residents`)
+    }
+     return response.data
+   }
+
+   api.updateRoomstatus = async function () {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.put(`/updateRoomstatus`)
+    }
+     return response.data
+   }
+
+
    api.setGuestRegistrationAsDone = async function (id) {
     const res = await this.authenticateUser()
      let response = null
@@ -173,6 +246,8 @@ api.userByName = async function (username) {
     }
       return response.data
     },
+
+
 
   api.getServices = async function(){
     const res = await this.authenticateUser()

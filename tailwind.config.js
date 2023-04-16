@@ -5,6 +5,7 @@ module.exports = {
       colors: {
           'white': '#FFFFFF',
           'bulma-green': '#00d1b2',
+          'boarder-red': '#f14668'
       },
       textColors: {
           

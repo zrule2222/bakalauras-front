@@ -23,17 +23,29 @@
   <div class="has-text-left is-flex is-flex-direction-column min-w-fit">
     <div class="has-text-left is-flex is-flex-direction-row">
     Budėtojas:
-    <div class="has-text-danger">
-    Laisvas
+    <div v-if="role == 'Gyventojas' && doorkeeperOccupation == 'Užimtas'" class="has-text-danger ml-2">
+    {{doorkeeperOccupation}}
+  </div>
+  <div v-else-if="role == 'Gyventojas' && doorkeeperOccupation == 'Laisvas'" class="has-text-primary ml-2">
+    {{doorkeeperOccupation}}
+  </div>
+  <div v-else-if="role == 'Gyventojas' && doorkeeperOccupation == 'Neprisijiungęs'" class="has-text-info ml-2">
+    {{doorkeeperOccupation}}
   </div>
 </div>
     <div class="has-text-left is-flex is-flex-direction-row">
     <div>
       Administratorius:
     </div >
-    <div class="has-text-success">
-     Užimtas
-    </div>
+    <div v-if="role == 'Gyventojas' && administratorOccupation == 'Užimtas'" class="has-text-danger ml-2">
+    {{administratorOccupation}}
+  </div>
+  <div v-if="role == 'Gyventojas' && administratorOccupation == 'Laisvas'" class="has-text-primary ml-2">
+    {{administratorOccupation}}
+  </div>
+  <div v-if="role == 'Gyventojas' && administratorOccupation == 'Neprisijiungęs'" class="has-text-info ml-2">
+    {{administratorOccupation}}
+  </div>
   </div>
 </div>
 </div>
@@ -66,6 +78,20 @@
     {{doorkeeperOccupation}}
   </div>
   </div>
+  <div  class="flex flex-row">
+  <div v-if="role == 'Administratorius'">
+      Budėtojas:
+    </div >
+    <div v-if="role == 'Administratorius' && doorkeeperOccupation == 'Užimtas'" class="has-text-danger ml-2">
+    {{doorkeeperOccupation}}
+  </div>
+  <div v-else-if="role == 'Administratorius' && doorkeeperOccupation == 'Laisvas'" class="has-text-primary ml-2">
+    {{doorkeeperOccupation}}
+  </div>
+  <div v-else-if="role == 'Administratorius' && doorkeeperOccupation == 'Neprisijiungęs'" class="has-text-info ml-2">
+    {{doorkeeperOccupation}}
+  </div>
+</div>
   <button class="button is-primary mt-2" @click="showUserStatusModal()" >Keisti užimtumą</button>
 </div>
 </div>
@@ -155,12 +181,39 @@ export default {
         this.doorkeeperOccupation = occupation.occupation
       }
      
+    },
+
+    async getDoorkeeperOccupationForResident(){
+      try{
+    let data = await this.$api.getDoorkeeperOccupation()
+        this.doorkeeperOccupation = data.occupation
+      }
+      catch(error){
+        this.doorkeeperOccupation = "Neprisijiungęs"
+      }
+    },
+
+    async getAdminOccupationForResident(){
+      try{
+        let data2 = await this.$api.getAdminOccupation()
+        this.administratorOccupation = data2.occupation
+      }
+      catch(error){
+        this.administratorOccupation = "Neprisijiungęs"
+      }
     }
   },
  async created(){
    await this.getUserInfo()
    if(this.role == 'Administratorius' || this.role == 'Budėtojas' ){
    this.getWorkerOccupation()
+   if(this.role == 'Administratorius'){
+    this.getDoorkeeperOccupationForResident()
+   }
+   }
+   else if(this.role == 'Gyventojas'){
+    this.getDoorkeeperOccupationForResident()
+    this.getAdminOccupationForResident()
    }
   }
 }

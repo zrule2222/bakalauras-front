@@ -10,7 +10,7 @@
                 <div class="field w-fit mx-auto">
             <label class="label text-left">Naujas užimtumas</label>
             <div class="control">
-              <div class="select" :class="noOccupations ? 'is-danger' : ''">
+              <div :class="noOccupations ? 'is-danger' : ''">
                 <select v-model="userOccupation">
                   <option value="" disabled selected>Pasirinkite užimtumą</option>
                   <option value="Laisvas" :disabled="currectOccupation == 'Laisvas' ? true : false" selected>Laisvas</option>

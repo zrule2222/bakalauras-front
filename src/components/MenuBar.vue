@@ -44,9 +44,9 @@
             <button @click="$router.go(-1)" class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Atgal</button>
         </li>
         <li v-if="menuType == 'main-admin'" class="m-0">
-          <!-- <router-link :to="{ name: 'main'}"> -->
+          <router-link :to="{ name: 'registration'}">
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Registracija</button>
-          <!-- </router-link> -->
+          </router-link>
         </li>
         <li v-if="menuType == 'main-admin'" class="m-0">
           <!-- <router-link :to="{ name: 'main'}"> -->
@@ -54,9 +54,9 @@
           <!-- </router-link> -->
         </li>
         <li v-if="menuType == 'main-admin'" class="m-0">
-          <!-- <router-link :to="{ name: 'main'}"> -->
+          <router-link :to="{ name: 'residents'}">
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Gyventojai</button>
-          <!-- </router-link> -->
+          </router-link>
         </li>
         <li v-if="menuType == 'main-admin'" class="m-0">
           <!-- <router-link :to="{ name: 'main'}"> -->
@@ -93,13 +93,20 @@
 </template>
 <script>
 import { Collapse } from 'flowbite';
+// window.addEventListener('beforeunload', function (e) {
+//             e.preventDefault();
+//            this.logout()
+//         })
 export default {
+  
   name: 'MenuBar',
   data() {
     return {
     username: "",
     role: "",
-    navOpen: false
+    navOpen: false,
+    window: document.defaultView,
+    loaded: false
 
     };
   },
@@ -110,6 +117,7 @@ export default {
      }
   },
   methods: {
+    
   async  setPageData(){
       let data = await this.$api.getDataFromToken()
     this.username = data.username
@@ -129,17 +137,33 @@ export default {
         }
     },
    async logout(){
+    // if(this.loaded){
+    //  if (sessionStorage.getItem('reloaded') == null){
     let data = await this.$api.getDataFromToken()
     if(data.role == 'Administratorius' || data.role == 'Budėtojas'){
          await this.$api.setWorkerOccupation("Neprisijiungęs",data.id)
     }
       localStorage.removeItem('token')
       this.$router.push('/')
+ // }
+
+   //}
+  // else{
+  //   this.loaded = true
+  // }
     },
+    // test(){
+    //   this.loaded = true
+    //   sessionStorage.removeItem('reloaded')
+    // }
   },
-   created(){
+   mounted(){
 
     this.setPageData()
+     //window.addEventListener("onload",  this.test());
+     //window.addEventListener("beforeunload", this.test());
+   // window.addEventListener("onunload", this.logout());
+
   }
 }
 </script>

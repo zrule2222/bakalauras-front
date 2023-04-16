@@ -1,6 +1,6 @@
 <template>
     <div>
-      <div class="hero is-fullheight">
+      <div  :class="users.length > 0 ? 'hero is-fullheight' : 'hero'">
       <div class="hero">
       <section class="hero is-primary is-small">
         <div class="hero-body is-justify-content-center">
@@ -11,8 +11,9 @@
       </section>
     </div>
     <MenuBar :menu-type="'main-back'"></MenuBar>
-
-    <div v-for="user in users" :key="user.id" class="hero-body is-justify-content-center is-align-items-center">
+    
+    <!-- <div  v-if="users.length > 0"> -->
+    <div v-if="users.length > 0" v-for="user in users" :key="user.id" class="hero-body is-justify-content-center is-align-items-center">
         <div class="columns is-flex is-flex-direction-column box w-[304px] h-[220px]">
           <div class="column has-text-left">
             <label class="font-bold text-3xl" for="username">{{user.role}}</label>
@@ -25,8 +26,18 @@
           </div>
         </div>
       </div>
+    <!-- </div> -->
+    <div v-else class="text-xl mt-7 has-text-info">
+    Šiuo metu bendrabutyje nėra užregistruotų darbuotojų
     </div>
+
+
+    </div>
+
+    
   </div>
+
+  
 
 </template>
 <script>
@@ -50,7 +61,12 @@ export default {
   methods: {
     async getContactInfo(){
     //   this.id = this.$route.params.id
+    try{
       this.users = await this.$api.getContactInformation()
+    }
+    catch(error){
+      this.users = []
+    }
        
     }
   },

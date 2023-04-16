@@ -9,6 +9,8 @@ import GuestRegistrationView from "../views/GuestRegistrationView.vue"
 import LeisureRoomView from "../views/LeisureRoomView.vue"
 import LeisureRoomRegistrationsView from "../views/LeisureRoomRegistrationsView.vue"
 import Page401 from "../views/Page401.vue"
+import RegistrationView from "../views/RegistrationView.vue"
+import UsersView from "../views/UsersView.vue"
 import axios from 'axios';
 //import babelPolyfill from 'babel-polyfill'
 
@@ -28,6 +30,40 @@ const routes = [
     name: 'main',
     component: MainView,
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/residents',
+    name: 'residents',
+    component: UsersView,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/registration',
+    name: 'registration',
+    component: RegistrationView,
+    meta: { requiresAuth: true },
+    beforeEnter: async (to, from, next) => {
+
+      try {
+            const response =  await axios.get(`http://localhost:5000/authenticate`, {
+              headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+              }
+            })
+            if (response.data.role == "Administratorius"){
+            to.params.role=response.data.role
+              next()
+            }
+            else{
+              next('/401')
+            }
+          
+      }
+      catch (error) {
+        alert(error)
+          next('/404')
+      }
+  }
   },
   {
     path: '/user/:name',

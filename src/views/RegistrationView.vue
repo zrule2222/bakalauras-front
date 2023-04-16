@@ -1,0 +1,315 @@
+<template>
+    <div class="hero is-fullheight">
+        <div class="hero">
+      <section class="hero is-primary is-small">
+        <div class="hero-body is-justify-content-center">
+          <p class="title">
+            Gyventojų ir darbuotojų registraciją
+          </p>
+        </div>
+      </section>
+    </div>
+ <MenuBar  :menu-type="'main-back'"></MenuBar>
+
+ <div class="hero-body is-justify-content-center is-align-items-center">
+        <div class="columns is-flex is-flex-direction-column box">
+          <div class="column has-text-left">
+            <label for="username">Prisijiungimo vardas</label>
+            <input class="input " type="text" :class="noUsername || badUsernameLenght ? 'is-danger' : ''"
+              placeholder="Prisijiungimo vardas" v-model="username">
+            <p v-show="noUsername" class="help is-danger">Prisijiungimo vardas tuščias</p>
+            <p v-show="badUsernameLenght" class="help is-danger">Prisijiungimo vardas negali viršyti 50 simbolių</p>
+          </div>
+          <div class="column has-text-left">
+            <label for="Name">Slaptažodis</label>
+            <input class="input " type="password" :class="noPassword ? 'is-danger' : ''" placeholder="Slaptažodis"
+              v-model="password">
+            <p v-show="noPassword" class="help is-danger">Slaptažodis tuščias</p>
+          </div>
+          <div class="column has-text-left">
+          <div class="field w-fit mr-auto">
+            <label class=" text-left">Rolė</label>
+            <div class="control">
+              <div>
+                <select v-model="role" :class="noRole ? 'border-boarder-red' : ''" @change="getRooms()">
+                  <option value="" disabled selected>Pasirinkite Rolę</option>
+                  <option value="Gyventojas"  selected>Gyventojas</option>
+                  <option value="Budėtojas"  selected>Budėtojas</option>
+                </select>
+                <p v-show="noRole" class="help is-danger has-text-left">Nepasirinkta rolė</p>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="column has-text-left">
+            <label for="Name">El. paštas</label>
+            <input class="input " type="text" :class="noEmail || badEmail ? 'is-danger' : ''" placeholder="El. paštas"
+              v-model="email">
+              <p v-show="noEmail" class="help is-danger has-text-left">El. pašto laukelis tuščias</p>
+            <p v-show="badEmail" class="help is-danger has-text-left">Netinkamas El. pašto formatas</p>
+          </div>
+          <div class="column has-text-left">
+            <label for="Name">Vardas</label>
+            <input class="input " type="text" :class="noName ? 'is-danger' : ''" placeholder="Vardas"
+              v-model="name">
+            <p v-show="noName" class="help is-danger">Vardas tuščias</p>
+          </div>
+          <div class="column has-text-left">
+            <label for="Name">Pavardė</label>
+            <input class="input " type="text" :class="noLastName ? 'is-danger' : ''" placeholder="Pavardė"
+              v-model="lastName">
+            <p v-show="noLastName" class="help is-danger">Pavardė tuščia</p>
+          </div>
+          <div class="column has-text-left">
+          <div class="field w-fit mr-auto">
+            <label class=" text-left">Lytis</label>
+            <div class="control">
+              <div>
+                <select v-model="gender" :class="noGender ? 'border-boarder-red' : ''" @change="getRooms()">
+                  <option value="" disabled selected>Pasirinkite Lytį</option>
+                  <option value="Vyras"  selected>Vyras</option>
+                  <option value="Moteris"  selected>Moteris</option>
+                </select>
+                <p v-show="noGender" class="help is-danger has-text-left">Nepasirinkta lytis</p>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div v-if="role == 'Gyventojas' && gender != ''" class="column has-text-left">
+          <div class="field w-fit mr-auto">
+            <label class=" text-left">Kambarys</label>
+            <div class="control">
+              <div v-if="!noFreeRooms">
+                <select v-model="room" :class="noRoom ? 'border-boarder-red' : ''" >
+                  <option  value="" disabled selected>Pasirinkite Kambarį</option>
+                  <option  v-for="rooms in roomsForRegistration" :key="rooms.room_id" :value="`${rooms.room_id}`">{{ rooms.number }}</option>
+                  <!-- <option value="Vyras"  selected>Vyras</option> -->
+                  <!-- <option value="Moteris"  selected>Moteris</option> -->
+                </select>
+                <p v-show="noRoom" class="help is-danger has-text-left">Nepasirinktas kambarys</p>
+              </div>
+              <div v-if="noFreeRooms">
+                <select v-model="room" :class="noRoom ? 'border-boarder-red' : ''" >
+                  <option  value="" disabled selected>Nėra laisvų kambarių</option>
+                  <!-- <option value="Vyras"  selected>Vyras</option> -->
+                  <!-- <option value="Moteris"  selected>Moteris</option> -->
+                </select>
+                <p v-show="noRoom" class="help is-danger has-text-left">Nepasirinktas kambarys</p>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="column">
+            <button class="button is-primary is-fullwidth"  @click="registerUser()">Registruoti</button>
+          </div>
+
+          <SucessMessageModal v-if="showSucessModal" :isActive="showSucessModal" :Message="sucessMessage" @close-action="closeSucessMessageModal()"></SucessMessageModal>
+          <SucessMessageModal v-if="showUsernameSucessModal" :isActive="showUsernameSucessModal" :Message="usernameExistsMessage" @close-action="closeUsernameMessageModal()"></SucessMessageModal>
+
+        </div>
+      </div>
+
+
+    </div>
+</template>
+
+<script>
+import MenuBar from "../components/MenuBar.vue"
+import SucessMessageModal from"../components/SucessMessageModal.vue"
+export default {
+    name: 'RegistrationView',
+    data() {
+        return {
+            username: "",
+            noUsername: false,
+            badUsernameLenght: false,
+            password: "",
+            noPassword:false,
+            role: "",
+            noRole: false,
+            email: "",
+            noEmail: false,
+            badEmail: false,
+            name: "",
+            noName: false,
+            lastName: "",
+            noLastName: false,
+            gender: "",
+            noGender: false,
+            room: "",
+            noRoom: false,
+            roomsForRegistration: [],
+            noFreeRooms: false,
+            showSucessModal: false,
+      sucessMessage: "",
+      showUsernameSucessModal: false,
+      usernameExistsMessage: "",
+
+        }
+    },
+    props: {
+
+    },
+    components:{
+        MenuBar,
+        SucessMessageModal,
+    },
+    methods: {
+       async registerUser() {
+            if(!this.validateForm()){
+                return
+            }
+            if(this.role == 'Budėtojas'){
+                 this.room = null
+            }
+            let userData ={
+                username: this.username,
+	            password: this.password,
+	            role: this.role,
+                blocked: 0,
+	            email: this.email,
+                firstname: this.name,
+	            lastname: this.lastName,
+	            gender: this.gender,
+                room: this.room,
+	            occupation: "",
+                
+            }
+            try{
+           
+               if(await this.checkUsername()){
+            await this.$api.registerUser(userData)
+            if(this.role == 'Gyventojas'){
+            await this.$api.updateRoomSpace(this.room)
+            await this.$api.updateRoomstatus()
+            }
+            this.sucessMessage = "Naudotojas užregistruotas sėkmingai",
+            this.showSucessMessageModal()
+        }
+        else{
+            this.usernameExistsMessage = "Naudotojas su nurodytu prisijiungimo vardu jau egzistuoja",
+            this.showUsernameSucessModal = true
+        }
+
+            }
+            catch(error){
+                this.sucessMessage = "Naudotojo registracija nebuvo sėkmingą",
+                this.showSucessMessageModal()
+            }
+            
+        },
+        closeSucessMessageModal(){
+            this.showSucessModal = false
+            this.$router.go(0);
+        },
+        closeUsernameMessageModal(){
+            this.showUsernameSucessModal = false
+        },
+      async  checkUsername(){
+        try{
+            await this.$api.checkUsername(this.username)
+            return true
+        }
+        catch(error){
+        return false
+        }
+        },
+        showSucessMessageModal(){
+            this.showSucessModal = true
+        },
+        validateForm(){
+            if (!this.username) {
+        this.noUsername = true
+        return false
+      }
+      else {
+        this.noUsername = false
+      }
+      if (!this.password) {
+        this.noPassword = true
+        return false
+      }
+      else {
+        this.noPassword = false
+      }
+      if (!this.role) {
+        this.noRole = true
+        return false
+      }
+      else {
+        this.noRole = false
+      }
+      if (!this.email) {
+        this.noEmail = true
+        return false
+      }
+      else {
+        this.noEmail = false
+      }
+      var emailCheck = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+      if(this.email.match(emailCheck)){
+        this.badEmail = false
+      }
+      else{
+        this.badEmail = true
+        return false
+      }
+      if (!this.name) {
+        this.noName = true
+        return false
+      }
+      else {
+        this.noName = false
+      }
+      if (!this.lastName) {
+        this.noLastName = true
+        return false
+      }
+      else {
+        this.noLastName = false
+      }
+      if (!this.gender) {
+        this.noGender = true
+        return false
+      }
+      else {
+        this.noGender = false
+      }
+      if(this.role == 'Gyventojas'){
+      if (!this.room) {
+        this.noRoom = true
+        return false
+      }
+      else {
+        this.noRoom = false
+      }
+    }
+      return true
+        },
+       async getRooms(){
+        this.noRoom = false
+        let roomType
+        if(this.gender && this.role == 'Gyventojas'){
+            let roomType = null
+            if(this.gender == 'Vyras')
+            {
+                roomType = 'Vyrams'
+            }
+            else if(this.gender == 'Moteris'){
+                roomType = 'Moterims'
+            }
+            try{
+            this.roomsForRegistration = await this.$api.getRoomsForRegistration(roomType)
+            this.noFreeRooms = false
+            }
+            catch(error){
+                console.log(error)
+                this.noFreeRooms = true
+            }
+        }
+    }
+    },
+    created() {
+    }
+}
+</script>

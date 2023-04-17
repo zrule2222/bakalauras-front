@@ -120,6 +120,8 @@ export default {
     
   async  setPageData(){
       let data = await this.$api.getDataFromToken()
+      sessionStorage.setItem('id',data.id)
+      sessionStorage.setItem('role',data.role)
     this.username = data.username
     },
     navCollapse(){
@@ -141,7 +143,11 @@ export default {
     //  if (sessionStorage.getItem('reloaded') == null){
     let data = await this.$api.getDataFromToken()
     if(data.role == 'Administratorius' || data.role == 'Budėtojas'){
+      try{
          await this.$api.setWorkerOccupation("Neprisijiungęs",data.id)
+      }
+      catch(error){
+      }
     }
       localStorage.removeItem('token')
       this.$router.push('/')

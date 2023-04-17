@@ -132,7 +132,6 @@ try{
     this.showSucessMessageModal()
 }
 catch(error){
-    console.log(error)
     this.sucessMessage = "Laisvalaikio kambario registracija nebuvo sėkminga"
     this.showConfirmation = false
   this.showSucessMessageModal()
@@ -154,7 +153,6 @@ try{
  this.numberOfUsers =  this.users.length
 }
 catch(error){
-console.log(error)
 this.users = []
 this.numberOfUsers = 0
 }
@@ -169,7 +167,6 @@ try{
   }
 }
 catch(error){
-console.log(error)
 this.userHasRegistration = false
 }
 },
@@ -182,7 +179,6 @@ async unregister(id){
 
   }
   catch(error){
- console.log(error)
  this.sucessMessage = "Iš laisvalaikio kambario išsiregistruoti nepavyko"
     this.showCancelConfirmation = false
     this.showSucessMessageModal()

@@ -10,7 +10,7 @@
       </section>
     </div>
     <MenuBar :menu-type="'main-back'"></MenuBar>
-    <div class=" flex flex-col items-center">
+    <div v-if="$route.params.id" class=" flex flex-col items-center">
      <div class="text-4xl mt-5">
       {{ name }} {{ lastname }}
      </div>
@@ -39,6 +39,9 @@
        <button @click="showEditModal()" class="button is-warning">Redaguoti informaciją</button>
        <button @click="showConfirmationModal()" v-if="userRole == 'Administratorius' && blocked != -1 && blocked == 0" class="button is-danger ml-3">Blokuoti paskyrą</button>
      </div>
+    </div>
+    <div v-else class="text-xl mt-7 has-text-info">
+      Nepavyko gauti naudotojo informaciją
     </div>
     <ConfirmationModal v-if="displayConfirmationModal" @confirm-action="blockUser($route.params.id)" @close-action="closeConfirmationModal" :isActive="displayConfirmationModal"></ConfirmationModal>
     <SucessMessageModal @close-action="closeSucessMessageModal()" :Message="messageSucess" v-if="showSucessMessage" :isActive="showSucessMessage"></SucessMessageModal>
@@ -101,7 +104,7 @@ export default {
       this.userRole = UserRole.role
       }
       catch(error){
-       console.log(error)
+        this.room = -1
       }
     },
     showConfirmationModal(){
@@ -121,7 +124,6 @@ export default {
         this.messageSucess = "Nepavyko užblokuoti naudotojo"
         this.displayConfirmationModal = false
         this.showSucessMessage = true
-        console.log(error)
       }
     },
     closeSucessMessageModal(){

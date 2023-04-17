@@ -25,9 +25,10 @@
           </div>
           <div class="column has-text-left">
             <label for="Name">Slaptažodis</label>
-            <input class="input is-primary" type="password" :class="noPassword ? 'is-danger' : ''" placeholder="Slaptažodis"
+            <input class="input is-primary" type="password" :class="noPassword || badPasswordLenght ? 'is-danger' : ''" placeholder="Slaptažodis"
               v-model="password">
             <p v-show="noPassword" class="help is-danger">Slaptažodis tuščias</p>
+            <p v-show="badPasswordLenght" class="help is-danger">Slaptažodis negali viršyti 100 simbolių</p>
 
           </div>
           <div class="column">
@@ -48,6 +49,7 @@ export default {
       showError: false,
       noUsername: false,
       noPassword: false,
+      badPasswordLenght: false,
       errorMessage: "",
       showMessage: false,
       message: "",
@@ -100,6 +102,7 @@ export default {
       this.noUsername = false
       this.noPassword = false
       this.badUsernameLenght = false
+      this.badPasswordLenght = false
       if (!this.username) {
         this.noUsername = true
         return false
@@ -121,6 +124,14 @@ export default {
       else {
         this.noPassword = false
       }
+      if(this.password.length > 100){
+        this.badPasswordLenght = true
+        return false
+      }
+      else{
+        this.badPasswordLenght = false
+      }
+
       return true
     },
     checkAndShowMessage() {

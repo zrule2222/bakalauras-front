@@ -29,7 +29,7 @@
   <div v-else-if="role == 'Gyventojas' && doorkeeperOccupation == 'Laisvas'" class="has-text-primary ml-2">
     {{doorkeeperOccupation}}
   </div>
-  <div v-else-if="role == 'Gyventojas' && doorkeeperOccupation == 'Neprisijiungęs'" class="has-text-info ml-2">
+  <div v-else-if="role == 'Gyventojas' && doorkeeperOccupation == 'Neprisijiungęs'" class="text-violet-700 ml-2">
     {{doorkeeperOccupation}}
   </div>
 </div>
@@ -43,7 +43,7 @@
   <div v-if="role == 'Gyventojas' && administratorOccupation == 'Laisvas'" class="has-text-primary ml-2">
     {{administratorOccupation}}
   </div>
-  <div v-if="role == 'Gyventojas' && administratorOccupation == 'Neprisijiungęs'" class="has-text-info ml-2">
+  <div v-if="role == 'Gyventojas' && administratorOccupation == 'Neprisijiungęs'" class=" ml-2 text-violet-700">
     {{administratorOccupation}}
   </div>
   </div>
@@ -88,7 +88,7 @@
   <div v-else-if="role == 'Administratorius' && doorkeeperOccupation == 'Laisvas'" class="has-text-primary ml-2">
     {{doorkeeperOccupation}}
   </div>
-  <div v-else-if="role == 'Administratorius' && doorkeeperOccupation == 'Neprisijiungęs'" class="has-text-info ml-2">
+  <div v-else-if="role == 'Administratorius' && doorkeeperOccupation == 'Neprisijiungęs'" class="text-violet-700 ml-2">
     {{doorkeeperOccupation}}
   </div>
 </div>
@@ -135,8 +135,13 @@ export default {
     let data = await this.$api.getDataFromToken()
     this.role = data.role
     if(this.role == "Gyventojas"){
+      try{
       let user = await this.$api.getUserInfo(data.id)
       this.room = await this.$api.getUserRoom(data.id,user.fk_room)
+      }
+      catch(error){
+        this.room = -1
+      }
     }
     else if(this.role == "Administratorius"){
 
@@ -173,13 +178,19 @@ export default {
     },
    async getWorkerOccupation(){
     let data = await this.$api.getDataFromToken()
+    try{
     let occupation = await this.$api.getUserOccupations(data.id)
       if(data.role == 'Administratorius'){
       this.administratorOccupation = occupation.occupation
+      this.getDoorkeeperOccupationForResident()
       }
       else if(data.role == 'Budėtojas'){
         this.doorkeeperOccupation = occupation.occupation
       }
+    }
+    catch(error){
+      
+    }
      
     },
 

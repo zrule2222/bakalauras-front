@@ -213,6 +213,7 @@ api.userByName = async function (username) {
    
 
  api.authenticateUser = async function () {
+  console.log('a')
    if (localStorage.getItem("token") != null){
     try{
       await this.http.get(`/authenticate`, {
@@ -223,8 +224,11 @@ api.userByName = async function (username) {
     return true
     }
     catch(error){
-      console.log('a')
-      console.log(error)
+      console.log('b')
+      if(sessionStorage.getItem('role')  == 'Administratorius' || sessionStorage.getItem('role')  == 'Budėtojas'){
+        console.log('c')
+        this.setWorkerOccupation("Neprisijiungęs",sessionStorage.getItem('id'))
+      }
       localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijiungti")
       router.push({ path: '/' })
       return false
@@ -239,12 +243,12 @@ api.userByName = async function (username) {
   }
 
   api.setWorkerOccupation = async function(occupation, id){
-    const res = await this.authenticateUser()
+    //const res = await this.authenticateUser()
     let response = null
-    if (res == true) {
+    //if (res == true) {
     response =  await this.http.put(`/occupation/${id}`,{occupation: occupation})
-    }
-      return response.data
+    //}
+      //return response.data
     },
 
 
@@ -346,6 +350,9 @@ api.userByName = async function (username) {
     return response.data
   }
   catch(error){
+    if(sessionStorage.getItem('role')  == 'Administratorius' || sessionStorage.getItem('role')  == 'Budėtojas'){
+      this.setWorkerOccupation("Neprisijiungęs",sessionStorage.getItem('id'))
+    }
     localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijiungti")
     router.push({ path: '/' })
   }

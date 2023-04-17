@@ -169,13 +169,18 @@ this.showSucessMessage = true
       if(day < 10){
         day = '0' + day
       }
+      if(minute < 10){
+        minute = '0' + minute
+      }
+      if(hour < 10){
+        hour = '0' + hour
+      }
       let finalDate = `${year}-${month}-${day} ${hour}:${minute}`
       registrations[index].guest_arrival = finalDate
     }
  this.userRegistrations = registrations
   }
   catch(error){
-    console.log(error)
     this.userRegistrations = []
   }
  },
@@ -210,7 +215,6 @@ closeSucessMessageModal(){
   this.showSucessMessage = true
        }
        catch(error){
-          console.log(error)
           this.sucessMessage = "Nepavyko pažymėti Svečio išvykimo"
   this.showConfirmationModal = false
   this.showSucessMessage = true
@@ -235,6 +239,12 @@ closeSucessMessageModal(){
       if(day < 10){
         day = '0' + day
       }
+      if(minute < 10){
+        minute = '0' + minute
+      }
+      if(hour < 10){
+        hour = '0' + hour
+      }
       let finalDate = `${year}-${month}-${day} ${hour}:${minute}`
       registrations[index].updated_at = finalDate
      
@@ -243,7 +253,6 @@ closeSucessMessageModal(){
            
         }
         catch(error){
-            console.log(error)
             this.acceptedRegistrations = []
         }
     },
@@ -265,13 +274,18 @@ closeSucessMessageModal(){
       if(day < 10){
         day = '0' + day
       }
+      if(minute < 10){
+        minute = '0' + minute
+      }
+      if(hour < 10){
+        hour = '0' + hour
+      }
       let finalDate = `${year}-${month}-${day} ${hour}:${minute}`
       registrations[index].guest_arrival = finalDate
     }
  this.registrations = registrations
     }
     catch(error){
-        console.log(error)
         this.registrations = []
     }
     },
@@ -282,7 +296,6 @@ closeSucessMessageModal(){
       this.showSucessMessage = true
    }
    catch(error){
-  console.log(error)
   this.sucessMessage = "Nepavyko patvirtinti svečio registracijos"
       this.showSucessMessage = true
    }
@@ -295,7 +308,6 @@ closeSucessMessageModal(){
       this.showSucessMessage = true
    }
    catch(error){
-  console.log(error)
   this.sucessMessage = "Nepavyko atmesti svečio registracijos"
       this.showSucessMessage = true
    }

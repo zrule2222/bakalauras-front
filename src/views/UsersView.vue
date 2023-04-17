@@ -62,7 +62,7 @@ export default {
           this.users =  await this.$api.getAllResidents()
         }
         catch(error){
-
+        this.users = []
         }
         }
     },

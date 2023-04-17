@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="hero is-fullheight">
+        <div  :class="services.length > 0 ? 'hero is-fullheight' : 'hero'">
         <div class="hero">
       <section class="hero is-primary is-small">
         <div class="hero-body is-justify-content-center">
@@ -12,7 +12,7 @@
     </div>
  <MenuBar :menu-type="'main-back'"></MenuBar>
 
- <div v-for="service in services" :key="service.id" class="hero-body is-justify-content-center is-align-items-center  ">
+ <div v-if="services.length > 0" v-for="service in services" :key="service.id" class="hero-body is-justify-content-center is-align-items-center  ">
     <div class="box is-radiusless border-2 border-bulma-green  w-[700px]">
         <div class=" flex flex-row">
         <div v-if="service.name == 'Laisvalaikio kambarys'" class="min-w-[175px] min-h-[160px]">
@@ -49,6 +49,9 @@
         </div>
     </div>
  </div>
+ <div v-else class="text-xl mt-7 has-text-info">
+    Šiuo metu bendrabutyje nėra teikiamų paslaugų
+    </div>
  <ServiceInfoModal  @close-action="closeInfoModal()" v-if="showInfoModal" :serviceName="serviceName" :serviceInformation="serviceInformation" :isActive="showInfoModal"></ServiceInfoModal>
 </div>
 </div>
@@ -76,7 +79,12 @@ export default {
     },
     methods: {
        async getServices() {
+        try{
            this.services = await this.$api.getServices()
+        }
+        catch(error){
+            this.services = []
+        }
         },
        async openInfoModal(name,description){
          await this.$api.authenticateUser()

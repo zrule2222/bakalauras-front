@@ -96,7 +96,6 @@ async getRegistrations(){
     this.registrations = registrations
    }
    catch(error){
-  console.log(error)
   this.registrations = []
    }
 },
@@ -107,7 +106,6 @@ async confirmRegistration(id){
       this.showSucessMessage = true
    }
    catch(error){
-  console.log(error)
   this.sucessMessage = "Nepavyko patvirtinti laisvalaikio kambario registracijos"
       this.showSucessMessage = true
    }
@@ -123,7 +121,6 @@ async rejectRegistration(id){
       this.showSucessMessage = true
    }
    catch(error){
-  console.log(error)
   this.sucessMessage = "Nepavyko atmesti laisvalaikio kambario registracijos"
       this.showSucessMessage = true
    }

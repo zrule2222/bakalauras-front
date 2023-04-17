@@ -8,16 +8,17 @@
             <section class="modal-card-body">
                 <div class="field">
             <label class="label has-text-left">El. paštas</label>
-            <input class="input" :class="noEmail || badEmail ? 'is-danger' : ''" v-model="email" type="email"
+            <input class="input" :class="noEmail || badEmail || badEmailLenght ? 'is-danger' : ''" v-model="email" type="email"
                 placeholder="Email">
             <p v-show="noEmail" class="help is-danger has-text-left">El. pašto laukelis tuščias</p>
             <p v-show="badEmail" class="help is-danger has-text-left">Netinkamas El. pašto formatas</p>
+            <p v-show="badEmailLenght" class="help is-danger has-text-left">El. paštas negali viršyti 100 simbolių</p>
           </div>
           <div class="field">
             <label class="label has-text-left">Naujas slaptažodis</label>
-            <input class="input" :class="noPassword ? 'is-danger' : ''" v-model="password" type="password"
+            <input class="input" :class="badPasswordLenght ? 'is-danger' : ''" v-model="password" type="password"
                 placeholder="Slaptažodis">
-            <p v-show="noPassword" class="help is-danger">Slaptažodžio laukelis tuščias</p>
+            <p v-show="badPasswordLenght" class="help is-danger has-text-left">Slaptažodis negali viršyti 100 simbolių</p>
           </div>
           <div v-if="blocked == true"  class="field has-text-left">
             <label class="label">Užblokuotas</label>
@@ -44,8 +45,9 @@ export default {
             email: "",
             noEmail: false,
             badEmail: false,
+            badEmailLenght: false,
             password: "",
-            noPassword: false,
+            badPasswordLenght: false,
             blocked: false,
             newBlocked: false,
 
@@ -83,8 +85,13 @@ export default {
             }
         },
        async getUserData(){
+        try{
         let userData = await this.$api.getUserInfo(this.userId)
         this.email = userData.email
+        }
+        catch(error){
+            this.email = ""
+        }
         if(userData.blocked == 1){
         this.blocked = true
         this.newBlocked = true
@@ -97,6 +104,15 @@ export default {
         validateForm() {
           this.badEmail = false
           this.noEmail = false
+          this.badEmailLenght = false
+          this.badPasswordLenght = false
+          if(this.password.length > 100){
+        this.badPasswordLenght = true
+        return false
+      }
+      else{
+        this.badPasswordLenght = false
+      }
       if (!this.email) {
         this.noEmail = true
         return false
@@ -111,6 +127,13 @@ export default {
       else{
         this.badEmail = true
         return false
+      }
+      if(this.email.length > 100){
+        this.badEmailLenght = true
+        return false
+      }
+      else{
+        this.badEmailLenght = false
       }
 
 

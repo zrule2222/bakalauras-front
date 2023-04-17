@@ -35,7 +35,30 @@ const routes = [
     path: '/residents',
     name: 'residents',
     component: UsersView,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
+    beforeEnter: async (to, from, next) => {
+
+      try {
+            const response =  await axios.get(`http://localhost:5000/authenticate`, {
+              headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+              }
+            })
+            if (response.data.role == "Administratorius"){
+            to.params.role=response.data.role
+              next()
+            }
+            else{
+              next('/401')
+            }
+          
+      }
+      catch (error) {
+          next('/404')
+      }
+  }
+    
+    
   },
   {
     path: '/registration',
@@ -60,7 +83,6 @@ const routes = [
           
       }
       catch (error) {
-        alert(error)
           next('/404')
       }
   }
@@ -119,7 +141,6 @@ const routes = [
         
     }
     catch (error) {
-      alert(error)
         next('/404')
     }
 }
@@ -147,7 +168,6 @@ const routes = [
         
     }
     catch (error) {
-      alert(error)
         next('/404')
     }
 }
@@ -176,7 +196,6 @@ const routes = [
         
     }
     catch (error) {
-      alert(error)
         next('/404')
     }
 }
@@ -205,7 +224,6 @@ const routes = [
         
     }
     catch (error) {
-      alert(error)
         next('/404')
     }
 }
@@ -271,6 +289,9 @@ router.beforeEach( async (to, from, next) => {
       next();
       }
       catch(error){
+        if(sessionStorage.getItem('role')  == 'Administratorius' || sessionStorage.getItem('role')  == 'Budėtojas'){
+          await axios.put(`http://localhost:5000/occupation/${sessionStorage.getItem('id')}`,{occupation: "Neprisijiungęs"})
+        }
         localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijiungti")
         next({
           path: "/", 

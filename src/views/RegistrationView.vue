@@ -22,9 +22,10 @@
           </div>
           <div class="column has-text-left">
             <label for="Name">Slaptažodis</label>
-            <input class="input " type="password" :class="noPassword ? 'is-danger' : ''" placeholder="Slaptažodis"
+            <input class="input " type="password" :class="noPassword || badPasswordLenght ? 'is-danger' : ''" placeholder="Slaptažodis"
               v-model="password">
             <p v-show="noPassword" class="help is-danger">Slaptažodis tuščias</p>
+            <p v-show="badPasswordLenght" class="help is-danger">Slaptažodis negali viršyti 100 simbolių</p>
           </div>
           <div class="column has-text-left">
           <div class="field w-fit mr-auto">
@@ -43,22 +44,25 @@
           </div>
           <div class="column has-text-left">
             <label for="Name">El. paštas</label>
-            <input class="input " type="text" :class="noEmail || badEmail ? 'is-danger' : ''" placeholder="El. paštas"
+            <input class="input " type="text" :class="noEmail || badEmail || badEmailLenght ? 'is-danger' : ''" placeholder="El. paštas"
               v-model="email">
               <p v-show="noEmail" class="help is-danger has-text-left">El. pašto laukelis tuščias</p>
             <p v-show="badEmail" class="help is-danger has-text-left">Netinkamas El. pašto formatas</p>
+            <p v-show="badEmailLenght" class="help is-danger">El. paštas negali viršyti 100 simbolių</p>
           </div>
           <div class="column has-text-left">
             <label for="Name">Vardas</label>
-            <input class="input " type="text" :class="noName ? 'is-danger' : ''" placeholder="Vardas"
+            <input class="input " type="text" :class="noName || badNameLenght ? 'is-danger' : ''" placeholder="Vardas"
               v-model="name">
             <p v-show="noName" class="help is-danger">Vardas tuščias</p>
+            <p v-show="badNameLenght" class="help is-danger">Vardas negali viršyti 40 simbolių</p>
           </div>
           <div class="column has-text-left">
             <label for="Name">Pavardė</label>
-            <input class="input " type="text" :class="noLastName ? 'is-danger' : ''" placeholder="Pavardė"
+            <input class="input " type="text" :class="noLastName || BadLastNameLenght ? 'is-danger' : ''" placeholder="Pavardė"
               v-model="lastName">
             <p v-show="noLastName" class="help is-danger">Pavardė tuščia</p>
+            <p v-show="BadLastNameLenght" class="help is-danger">Pavardė negali viršyti 40 simbolių</p>
           </div>
           <div class="column has-text-left">
           <div class="field w-fit mr-auto">
@@ -125,15 +129,19 @@ export default {
             badUsernameLenght: false,
             password: "",
             noPassword:false,
+            badPasswordLenght: false,
             role: "",
             noRole: false,
             email: "",
             noEmail: false,
             badEmail: false,
+            badEmailLenght: false,
             name: "",
             noName: false,
+            badNameLenght: false,
             lastName: "",
             noLastName: false,
+            BadLastNameLenght: false,
             gender: "",
             noGender: false,
             room: "",
@@ -218,6 +226,20 @@ export default {
             this.showSucessModal = true
         },
         validateForm(){
+          this.noUsername = false
+          this.badUsernameLenght = false
+          this.noPassword = false
+          this.badPasswordLenght = false
+          this.noRole = false
+          this.noEmail = false
+          this.badEmail = false
+          this.badEmailLenght = false
+          this.noName = false
+          this.noLastName = false
+          this.badNameLenght = false
+          this.BadLastNameLenght = false
+          this.noGender = false
+          this.noRoom = false
             if (!this.username) {
         this.noUsername = true
         return false
@@ -225,12 +247,26 @@ export default {
       else {
         this.noUsername = false
       }
+      if(this.username.length > 50){
+        this.badUsernameLenght = true
+        return false
+      }
+      else{
+        this.badUsernameLenght = false
+      }
       if (!this.password) {
         this.noPassword = true
         return false
       }
       else {
         this.noPassword = false
+      }
+      if(this.password.length > 100){
+        this.badPasswordLenght = true
+        return false
+      }
+      else{
+        this.badPasswordLenght = false
       }
       if (!this.role) {
         this.noRole = true
@@ -254,6 +290,13 @@ export default {
         this.badEmail = true
         return false
       }
+      if(this.email.length > 100){
+        this.badEmailLenght = true
+        return false
+      }
+      else{
+        this.badEmailLenght = false
+      }
       if (!this.name) {
         this.noName = true
         return false
@@ -261,12 +304,26 @@ export default {
       else {
         this.noName = false
       }
+      if(this.name.length > 40){
+        this.badNameLenght = true
+        return false
+      }
+      else{
+        this.badNameLenght = false
+      }
       if (!this.lastName) {
         this.noLastName = true
         return false
       }
       else {
         this.noLastName = false
+      }
+      if(this.lastName.length > 40){
+        this.BadLastNameLenght = true
+        return false
+      }
+      else{
+        this.BadLastNameLenght = false
       }
       if (!this.gender) {
         this.noGender = true

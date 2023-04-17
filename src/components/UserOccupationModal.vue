@@ -10,8 +10,8 @@
                 <div class="field w-fit mx-auto">
             <label class="label text-left">Naujas užimtumas</label>
             <div class="control">
-              <div :class="noOccupations ? 'is-danger' : ''">
-                <select v-model="userOccupation">
+              <div>
+                <select v-model="userOccupation" :class="noOccupations ? 'border-boarder-red' : ''">
                   <option value="" disabled selected>Pasirinkite užimtumą</option>
                   <option value="Laisvas" :disabled="currectOccupation == 'Laisvas' ? true : false" selected>Laisvas</option>
                   <option value="Užimtas" :disabled="currectOccupation == 'Užimtas' ? true : false" selected>Užimtas</option>
@@ -66,15 +66,19 @@ export default {
            this.$emit("occupation-sucess")
           }
           catch(error){
-            console.log(error)
             this.$emit("occupation-fail")
           }
         }
     },
    async created() {
         let data = await this.$api.getDataFromToken()
+        try{
     let occupation = await this.$api.getUserOccupations(data.id)
     this.currectOccupation = occupation.occupation
+        }
+        catch(error){
+          this.currectOccupation = ""
+        }
     }
 }
 </script>

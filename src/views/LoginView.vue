@@ -17,11 +17,11 @@
       <div class="hero-body is-justify-content-center is-align-items-center">
         <div class="columns is-flex is-flex-direction-column box">
           <div class="column has-text-left">
-            <label for="username">Prisijiungimo vardas</label>
+            <label for="username">Prisijungimo vardas</label>
             <input class="input is-primary" type="text" :class="noUsername || badUsernameLenght ? 'is-danger' : ''"
-              placeholder="Prisijiungimo vardas" v-model="username">
-            <p v-show="noUsername" class="help is-danger">Prisijiungimo vardas tuščias</p>
-            <p v-show="badUsernameLenght" class="help is-danger">Prisijiungimo vardas negali viršyti 50 simbolių</p>
+              placeholder="Prisijungimo vardas" v-model="username">
+            <p v-show="noUsername" class="help is-danger">Prisijungimo vardas tuščias</p>
+            <p v-show="badUsernameLenght" class="help is-danger">Prisijungimo vardas negali viršyti 50 simbolių</p>
           </div>
           <div class="column has-text-left">
             <label for="Name">Slaptažodis</label>

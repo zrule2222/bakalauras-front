@@ -213,7 +213,6 @@ api.userByName = async function (username) {
    
 
  api.authenticateUser = async function () {
-  console.log('a')
    if (localStorage.getItem("token") != null){
     try{
       await this.http.get(`/authenticate`, {
@@ -224,9 +223,7 @@ api.userByName = async function (username) {
     return true
     }
     catch(error){
-      console.log('b')
       if(sessionStorage.getItem('role')  == 'Administratorius' || sessionStorage.getItem('role')  == 'Budėtojas'){
-        console.log('c')
         this.setWorkerOccupation("Neprisijiungęs",sessionStorage.getItem('id'))
       }
       localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijiungti")
@@ -337,6 +334,15 @@ api.userByName = async function (username) {
                 }
                   return response.data
                 },
+
+                api.finishLeisureRegistration = async function(id){
+                  const res = await this.authenticateUser()
+                  let response = null
+                  if (res == true) {
+                  response =  await this.http.put(`/updateUserLeisure/${id}`,{status: "Užbaikta"})
+                  }
+                    return response.data
+                  },
 
 
   api.getDataFromToken = async function(){

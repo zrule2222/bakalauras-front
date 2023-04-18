@@ -21,7 +21,8 @@
 </router-link>
 </div>
 <div v-else-if="$route.params.role == 'Gyventojas' &&  userHasRegistration" class="sm:ml-6 min-w-fit">
- <button class="button is-danger" @click="showCancelConfirmationModal()">Išsiregistruoti</button>
+ <button v-if="registrationStatus == 'Laukiama patvirtinimo'" class="button is-danger" @click="showCancelConfirmationModal()">Atšaukti</button>
+ <button v-else-if="registrationStatus == 'Patvirtinta'" class="button is-danger" @click="showCancelConfirmationModal()">Išsiregistruoti</button>
 </div>
 <div class="mr-6">
   <div class="  sm:ml-6 min-w-fit text-left sm:text-center">
@@ -97,7 +98,8 @@ export default {
             sucessMessage: "",
             users: [],
             numberOfUsers: Number,
-            userHasRegistration: false
+            userHasRegistration: false,
+            registrationStatus: ""
         }
     },
     props: {
@@ -164,6 +166,7 @@ try{
   if(response.length > 0){
     this.userHasRegistration = true
     this.registrationId = response[0].leisure_id
+    this.registrationStatus = response[0].leisure_status
   }
 }
 catch(error){
@@ -171,18 +174,33 @@ this.userHasRegistration = false
 }
 },
 async unregister(id){
+  if(this.registrationStatus == 'Laukiama patvirtinimo'){
   try{
   await this.$api.cancelLeisureRegistration(id)
-  this.sucessMessage = "Iš laisvalaikio kambario išsiregistruota sėkmingai"
+  this.sucessMessage = "Laisvalaikio kambario registracija atšaukta teisingai"
     this.showCancelConfirmation = false
     this.showSucessMessageModal()
 
   }
   catch(error){
- this.sucessMessage = "Iš laisvalaikio kambario išsiregistruoti nepavyko"
+ this.sucessMessage = "Laisvalaikio kambario registracijos atšaukti nepavyko"
     this.showCancelConfirmation = false
     this.showSucessMessageModal()
   }
+}
+else if(this.registrationStatus == 'Patvirtinta'){
+  try{
+    await this.$api.finishLeisureRegistration(id)
+  this.sucessMessage = "Iš laisvalaikio kambario išsiregistruota sėkmingai"
+    this.showCancelConfirmation = false
+    this.showSucessMessageModal()
+  }
+  catch(error){
+    this.sucessMessage = "Iš laisvalaikio kambario išsiregistruoti nepavyko"
+    this.showCancelConfirmation = false
+    this.showSucessMessageModal()
+  }
+}
 }
     },
     created() {

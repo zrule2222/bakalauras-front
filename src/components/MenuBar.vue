@@ -8,7 +8,7 @@
     <div class="flex flex-wrap items-center   ml-auto justify-end md:hidden h-full">
             <!-- <button  class="text-sm  text-white hover:bg-gray-700 rounded-md px-3 py-2">(555) 412-1234</button> -->
             <div>
-              prisijungęs: {{ username }}
+              Prisijungęs: {{ username }}
             </div>
             <button  class="text-sm  text-white hover:bg-gray-700 rounded-md px-3 py-2 fa-solid fa-right-from-bracket"></button>
         </div>

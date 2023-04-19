@@ -53,7 +53,8 @@ export default {
       errorMessage: "",
       showMessage: false,
       message: "",
-      badUsernameLenght: false
+      badUsernameLenght: false,
+      //failCount: 0
     };
   },
   props: {
@@ -67,11 +68,24 @@ export default {
         return
       }
       try {
+        // if(localStorage.getItem('bruteForseTimer') != null && new Date(localStorage.getItem('bruteForseTimer')) > new Date()  && this.failCount >= 5){
+        //   localStorage.setItem('bruteForseTimer', new Date(new Date().getTime() + 5 * 60000))
+        //   this.message = "Per daug bandymų prisijiungti. Pabandykite už kelių minučių"
+        // this.showMessage = true
+        // }
+        // else if(localStorage.getItem('bruteForseTimer') == null && this.failCount >= 5){
+        //   localStorage.setItem('bruteForseTimer', new Date(new Date().getTime() + 5 * 60000))
+        //   this.message = "Per daug bandymų prisijiungti. Pabandykite už kelių minučių"
+        // this.showMessage = true
+        // }
+        // else{
+        //   localStorage.removeItem('bruteForseTimer')
         const response = await this.$api.login({
           "username": this.username,
           "password": this.password
         })
         localStorage.removeItem('message')
+        console.log(response)
         if(response.blocked == 0){
         localStorage.setItem('token', response.token)
         
@@ -90,10 +104,25 @@ export default {
         this.showMessage = true
         }
       }
+   // }
       catch (error) {
+        console.log(error)
+        if(error.response.status == 429){
+          this.message = error.response.data
+          this.showMessage = true
+        
+        }
+        else{
         this.showMessage = false
         this.showError = true
         this.errorMessage = error.response.data
+        }
+      // this.failCount = this.failCount + 1
+      // if( this.failCount >= 5){
+      //   localStorage.setItem('bruteForseTimer', new Date(new Date().getTime() + 5 * 60000))
+
+      // }
+
       }
     },
     validateForm() {

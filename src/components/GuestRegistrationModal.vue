@@ -29,7 +29,7 @@
 
             </section>
             <footer class="modal-card-foot flex justify-between">
-                <button @click="test()" class="button is-success">Tvirtinti</button>
+                <button @click="registerGuest()" class="button is-success">Tvirtinti</button>
                 <button @click.prevent="closeModal()" class="button is-danger">Uždaryti</button>
             </footer>
 
@@ -112,7 +112,7 @@ export default {
       }
       return true
     },
-    async test(){
+    async registerGuest(){
         if(!this.validateForm()){
             return
         }

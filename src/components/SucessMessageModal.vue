@@ -10,7 +10,7 @@
 
             </section>
             <footer class="modal-card-foot flex justify-end">
-                <button @click.prevent="reject()" class="button is-danger">Uždaryti</button>
+                <button @click.prevent="close()" class="button is-danger">Uždaryti</button>
             </footer>
 
 
@@ -31,7 +31,7 @@ export default {
         Message: {type: String, required: true},
     },
     methods: {
-        reject() {
+        close() {
             this.$emit('close-action');
         }
     },

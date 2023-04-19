@@ -87,16 +87,21 @@ export default {
        async getUserData(){
         try{
         let userData = await this.$api.getUserInfo(this.userId)
+        console.log(userData)
         this.email = userData.email
-        }
-        catch(error){
-            this.email = ""
-        }
         if(userData.blocked == 1){
         this.blocked = true
+        console.log(this.blocked)
         this.newBlocked = true
         }
         else{
+            this.blocked = false
+            this.newBlocked = false
+        }
+        }
+        catch(error){
+          console.log(error)
+            this.email = ""
             this.blocked = false
             this.newBlocked = false
         }

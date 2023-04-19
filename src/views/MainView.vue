@@ -109,7 +109,6 @@ export default {
   name: 'MainView',
   data() {
     return {
-      username: "",
       room: 0,
       role: "",
       administratorOccupation: "",

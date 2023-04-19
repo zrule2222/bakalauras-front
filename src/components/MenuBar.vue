@@ -105,8 +105,6 @@ export default {
     username: "",
     role: "",
     navOpen: false,
-    window: document.defaultView,
-    loaded: false
 
     };
   },
@@ -118,10 +116,10 @@ export default {
   },
   methods: {
     
-  async  setPageData(){
+  async  setMenuData(){
       let data = await this.$api.getDataFromToken()
-      sessionStorage.setItem('id',data.id)
-      sessionStorage.setItem('role',data.role)
+      // sessionStorage.setItem('id',data.id)
+      // sessionStorage.setItem('role',data.role)
     this.username = data.username
     },
     navCollapse(){
@@ -165,7 +163,7 @@ export default {
   },
    mounted(){
 
-    this.setPageData()
+    this.setMenuData()
      //window.addEventListener("onload",  this.test());
      //window.addEventListener("beforeunload", this.test());
    // window.addEventListener("onunload", this.logout());

@@ -4,7 +4,7 @@
         <div class="hero-body">
             <div>
                 <p class="title">
-                    404 Puslapis
+                    404 puslapis
                 </p>
                 <p class="subtitle mr-5">
                     Puslapis nerastas

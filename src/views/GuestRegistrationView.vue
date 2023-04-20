@@ -61,14 +61,14 @@
                 <th class="has-text-centered">{{count+1}}</th>
                 <td>{{registration.guest_firstname}} {{ registration.guest_lastname }}</td>
                 <td>{{ registration.guest_arrival }}</td>
-                <td><button class="button is-primary is-small w-2/3" @click="confirmRegistration(registration.guest_id)"> Tvirtinti registracija</button></td>
-                <td><button class="button is-danger is-small w-2/3" @click="declineRegistration(registration.guest_id)"> Atmesti registracija</button></td>
+                <td><button class="button is-primary is-small w-2/3" @click="confirmRegistration(registration.guest_id)"> Tvirtinti registraciją</button></td>
+                <td><button class="button is-danger is-small w-2/3" @click="declineRegistration(registration.guest_id)"> Atmesti registraciją</button></td>
             </tr>
         </tbody>
       </table>
     </div>
     <div v-else-if="$route.params.role == 'Budėtojas' && registrations.length == 0" class="text-xl mt-2 has-text-info">
-      Šiuo metu nėra svečių laukančių patvirtinimo
+      Šiuo metu nėra svečių laukiančių patvirtinimo
     </div>
 
     <div v-if="$route.params.role == 'Budėtojas'" class="text-4xl mt-14">
@@ -148,7 +148,7 @@ this.showModal = false
 this.showSucessMessage = true
 },
 registrationFailed(){
-this.sucessMessage = "Svečias registracija nebuvo sėkmingai"
+this.sucessMessage = "Svečio registracija nebuvo sėkminga"
 this.showModal = false
 this.showSucessMessage = true
 },
@@ -210,7 +210,7 @@ closeSucessMessageModal(){
    async setRegistrationAsDone(id){
        try{
          await this.$api.setGuestRegistrationAsDone(id)
-         this.sucessMessage = "Svečio išvykimas pažymėtas sekmingai"
+         this.sucessMessage = "Svečio išvykimas pažymėtas sėkmingai"
   this.showConfirmationModal = false
   this.showSucessMessage = true
        }

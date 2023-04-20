@@ -273,7 +273,7 @@ router.beforeEach( async (to, from, next) => {
   if (to.meta.requiresAuth) {
     if (localStorage.getItem("token") == null) {
       // to.params.message = "Jūs neturite galiojančios sesijos"
-      localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijiungti")
+      localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijungti")
       next({
         path: "/", 
       });
@@ -292,7 +292,7 @@ router.beforeEach( async (to, from, next) => {
         if(sessionStorage.getItem('role')  == 'Administratorius' || sessionStorage.getItem('role')  == 'Budėtojas'){
           await axios.put(`http://localhost:5000/occupation/${sessionStorage.getItem('id')}`,{occupation: "Neprisijiungęs"})
         }
-        localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijiungti")
+        localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijungti")
         next({
           path: "/", 
         });

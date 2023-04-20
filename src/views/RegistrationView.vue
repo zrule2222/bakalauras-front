@@ -4,7 +4,7 @@
       <section class="hero is-primary is-small">
         <div class="hero-body is-justify-content-center">
           <p class="title">
-            Gyventojų ir darbuotojų registraciją
+            Gyventojų ir darbuotojų registracija
           </p>
         </div>
       </section>
@@ -47,7 +47,7 @@
             <input class="input " type="text" :class="noEmail || badEmail || badEmailLenght ? 'is-danger' : ''" placeholder="El. paštas"
               v-model="email">
               <p v-show="noEmail" class="help is-danger has-text-left">El. pašto laukelis tuščias</p>
-            <p v-show="badEmail" class="help is-danger has-text-left">Netinkamas El. pašto formatas</p>
+            <p v-show="badEmail" class="help is-danger has-text-left">Netinkamas el. pašto formatas</p>
             <p v-show="badEmailLenght" class="help is-danger">El. paštas negali viršyti 100 simbolių</p>
           </div>
           <div class="column has-text-left">
@@ -70,7 +70,7 @@
             <div class="control">
               <div>
                 <select v-model="gender" :class="noGender ? 'border-boarder-red' : ''" @change="getRooms()">
-                  <option value="" disabled selected>Pasirinkite Lytį</option>
+                  <option value="" disabled selected>Pasirinkite lytį</option>
                   <option value="Vyras"  selected>Vyras</option>
                   <option value="Moteris"  selected>Moteris</option>
                 </select>
@@ -85,7 +85,7 @@
             <div class="control">
               <div v-if="!noFreeRooms">
                 <select v-model="room" :class="noRoom ? 'border-boarder-red' : ''" >
-                  <option  value="" disabled selected>Pasirinkite Kambarį</option>
+                  <option  value="" disabled selected>Pasirinkite kambarį</option>
                   <option  v-for="rooms in roomsForRegistration" :key="rooms.room_id" :value="`${rooms.room_id}`">{{ rooms.number }}</option>
                   <!-- <option value="Vyras"  selected>Vyras</option> -->
                   <!-- <option value="Moteris"  selected>Moteris</option> -->
@@ -195,13 +195,13 @@ export default {
             this.showSucessMessageModal()
         }
         else{
-            this.usernameExistsMessage = "Naudotojas su nurodytu prisijiungimo vardu jau egzistuoja",
+            this.usernameExistsMessage = "Naudotojas su nurodytu prisijungimo vardu jau egzistuoja",
             this.showUsernameSucessModal = true
         }
 
             }
             catch(error){
-                this.sucessMessage = "Naudotojo registracija nebuvo sėkmingą",
+                this.sucessMessage = "Naudotojo registracija nebuvo sėkminga",
                 this.showSucessMessageModal()
             }
             

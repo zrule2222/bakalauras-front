@@ -14,7 +14,7 @@
      <div class="text-4xl mt-5">
       {{ name }} {{ lastname }}
      </div>
-     <div>
+     <div  v-if="userRole == 'Administratorius'">
       Rolė: {{ role }}
      </div>
      <div>
@@ -137,12 +137,12 @@ export default {
       this.showModal = false
     },
     updateSucess(){
-      this.messageSucess = "Naudotojas duomenys atnaujinti sėkmingai"
+      this.messageSucess = "Naudotojo duomenys atnaujinti sėkmingai"
       this.showModal = false
       this.showSucessMessage = true
     },
     updateFail(){
-      this.messageSucess = "Naudotojas duomenys nebuvo atnaujinti"
+      this.messageSucess = "Naudotojo duomenys nebuvo atnaujinti"
       this.showModal = false
       this.showSucessMessage = true
     }

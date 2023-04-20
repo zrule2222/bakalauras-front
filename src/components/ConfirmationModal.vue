@@ -6,7 +6,7 @@
           <p  class="modal-card-title has-text-left">Pakartotinis patvirtinimas</p>
         </header>
             <section class="modal-card-body">
-                <label class="label">Ar jūs tirai norite atlikti šį veiksmą?</label>
+                <label class="label">Ar jūs tikrai norite atlikti šį veiksmą?</label>
 
             </section>
             <footer class="modal-card-foot flex flex-row justify-between ">

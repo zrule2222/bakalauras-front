@@ -15,7 +15,7 @@
                   <option value="" disabled selected>Pasirinkite užimtumą</option>
                   <option value="Laisvas" :disabled="currectOccupation == 'Laisvas' ? true : false" selected>Laisvas</option>
                   <option value="Užimtas" :disabled="currectOccupation == 'Užimtas' ? true : false" selected>Užimtas</option>
-                  <option value="Prisijiungęs" :disabled="currectOccupation == 'Prisijiungęs' ? true : false" selected>Prisijiungęs</option>
+                  <option value="Prisijiungęs" :disabled="currectOccupation == 'Prisijiungęs' ? true : false" selected>Prisijungęs</option>
                 </select>
                 <p v-show="noOccupations" class="help is-danger has-text-left">Nepasirinktas užimtumas</p>
               </div>

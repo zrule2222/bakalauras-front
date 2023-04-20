@@ -32,7 +32,7 @@
 
           </div>
           <div class="column">
-            <button class="button is-primary is-fullwidth" type="submit">Prisijiungti</button>
+            <button class="button is-primary is-fullwidth" type="submit">Prisijungti</button>
           </div>
         </div>
       </div>

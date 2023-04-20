@@ -195,7 +195,7 @@ api.userByName = async function (username) {
      let response = null
     if (res == true) {
       let data = await this.getDataFromToken()
-       response = await this.http.put(`/updateGuest/${id}`, {	status : "Užbaikta",doorKeeper_id: data.id})
+       response = await this.http.put(`/updateGuest/${id}`, {	status : "Užbaigta",doorKeeper_id: data.id})
     }
      return response.data
    }
@@ -224,16 +224,16 @@ api.userByName = async function (username) {
     }
     catch(error){
       if(sessionStorage.getItem('role')  == 'Administratorius' || sessionStorage.getItem('role')  == 'Budėtojas'){
-        this.setWorkerOccupation("Neprisijiungęs",sessionStorage.getItem('id'))
+        this.setWorkerOccupation("Neprisijungęs",sessionStorage.getItem('id'))
       }
-      localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijiungti")
+      localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijungti")
       router.push({ path: '/' })
       return false
     }
     
    }
    else{
-      localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijiungti")
+      localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijungti")
      router.push({ path: '/' })
       return false
    }
@@ -339,7 +339,7 @@ api.userByName = async function (username) {
                   const res = await this.authenticateUser()
                   let response = null
                   if (res == true) {
-                  response =  await this.http.put(`/updateUserLeisure/${id}`,{status: "Užbaikta"})
+                  response =  await this.http.put(`/updateUserLeisure/${id}`,{status: "Užbaigta"})
                   }
                     return response.data
                   },
@@ -357,14 +357,14 @@ api.userByName = async function (username) {
   }
   catch(error){
     if(sessionStorage.getItem('role')  == 'Administratorius' || sessionStorage.getItem('role')  == 'Budėtojas'){
-      this.setWorkerOccupation("Neprisijiungęs",sessionStorage.getItem('id'))
+      this.setWorkerOccupation("Neprisijungęs",sessionStorage.getItem('id'))
     }
-    localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijiungti")
+    localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijungti")
     router.push({ path: '/' })
   }
   }
   else{
-    localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijiungti")
+    localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijungti")
     router.push({ path: '/' })
   }
   }

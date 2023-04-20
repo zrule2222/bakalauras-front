@@ -30,17 +30,17 @@
 </div>
   <div class="has-text-left is-flex is-flex-direction-column min-w-fit">
     <div class="has-text-left is-flex is-flex-direction-row items-center justify-center">
-    užimtumas:
+      Užimtumas:
     <div v-if="numberOfUsers >= 1" class="has-text-danger ml-2">
-    užimtas
+      Užimtas
   </div>
   <div v-else-if="numberOfUsers == 0" class="has-text-primary ml-2">
-    laisvas
+    Laisvas
   </div>
 </div>
     <div class="has-text-left is-flex is-flex-direction-row justify-center">
     <div>
-      žmonių skaičius:
+      Žmonių skaičius:
     </div >
     <div class=" ml-2">
      {{ numberOfUsers }}

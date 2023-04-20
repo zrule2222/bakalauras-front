@@ -4,7 +4,7 @@
         <div class="hero-body">
             <div>
                 <p class="title text-left">
-                    401 Puslapis
+                    401 puslapis
                 </p>
                 <p class="subtitle w-fit ">
                     Jūs neturite teisės patekti į norimą puslapį

@@ -15,20 +15,20 @@
  <div v-if="services.length > 0" v-for="service in services" :key="service.id" class="hero-body is-justify-content-center is-align-items-center  ">
     <div class="box is-radiusless border-2 border-bulma-green  w-[700px]">
         <div class=" flex flex-row">
-        <div v-if="service.name == 'Laisvalaikio kambarys'" class="min-w-[175px] min-h-[160px]">
+        <div v-if="service.name == 'Laisvalaikio kambarys'" class="min-w-[213px] min-h-[160px]">
             <img src="../assets/leisure_room.jpg" class=" object-cover min-w-[175px] min-h-[160px] h-40" >
         </div>
-        <div v-if="service.name == 'Skalbykla'" class="min-w-[175px] min-h-[160px]">
+        <div v-if="service.name == 'Skalbykla'" class="min-w-[213px] min-h-[160px]">
             <img src="../assets/washing_machine.jpg" class=" object-cover min-w-[213px] min-h-[160px]  h-40" >
         </div>
-        <div v-if="service.name == 'Svečiai'" class="min-w-[175px] min-h-[160px]">
+        <div v-if="service.name == 'Svečiai'" class="min-w-[213px] min-h-[160px]">
             <img src="../assets/guests.jpg" class=" object-cover min-w-[213px] min-h-[160px]  h-40" >
         </div>
         <div class="flex flex-col items-start ">
         <div class=" ml-3 font-bold text-3xl">
             {{service.name}}
         </div>
-        <div class=" ml-3 mt-4 font-semibold  break-all">
+        <div class=" ml-3 mt-4 font-semibold  break-all text-left">
             {{service.information}}  
         </div>
         <div class=" ml-3 h-fill sm:mt-auto  flex  sm:flex-row flex-col ">

@@ -142,7 +142,7 @@ export default {
     let data = await this.$api.getDataFromToken()
     if(data.role == 'Administratorius' || data.role == 'Budėtojas'){
       try{
-         await this.$api.setWorkerOccupation("Neprisijiungęs",data.id)
+         await this.$api.setWorkerOccupation("Neprisijungęs",data.id)
       }
       catch(error){
       }

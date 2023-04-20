@@ -3,7 +3,7 @@
    <div class="modal-background"></div>
       <div class="modal-content">
         <header class="modal-card-head">
-          <p  class="modal-card-title has-text-left">Pakeisti naudotojo informacija</p>
+          <p  class="modal-card-title has-text-left">Pakeisti naudotojo informaciją</p>
         </header>
             <section class="modal-card-body">
                 <div class="field">
@@ -11,7 +11,7 @@
             <input class="input" :class="noEmail || badEmail || badEmailLenght ? 'is-danger' : ''" v-model="email" type="email"
                 placeholder="Email">
             <p v-show="noEmail" class="help is-danger has-text-left">El. pašto laukelis tuščias</p>
-            <p v-show="badEmail" class="help is-danger has-text-left">Netinkamas El. pašto formatas</p>
+            <p v-show="badEmail" class="help is-danger has-text-left">Netinkamas el. pašto formatas</p>
             <p v-show="badEmailLenght" class="help is-danger has-text-left">El. paštas negali viršyti 100 simbolių</p>
           </div>
           <div class="field">

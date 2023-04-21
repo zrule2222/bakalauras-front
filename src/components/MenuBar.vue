@@ -73,6 +73,11 @@
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Laisvalaikio kambarys</button>
           </router-link>
         </li>
+        <li v-if="menuType == 'main-doorkeeper'" class="m-0">
+          <router-link :to="{ name: 'changePassword'}">
+            <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Slaptažodžio keitimas</button>
+          </router-link>
+        </li>
             <!-- <div class="ml-auto"> -->
                 <li class="ml-auto">
         <div class="md:flex md:flex-wrap md:items-center md:ml-auto md:justify-end hidden ">

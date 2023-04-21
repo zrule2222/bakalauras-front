@@ -16,10 +16,20 @@
           </div>
           <div class="field">
             <label class="label has-text-left">Naujas slaptažodis</label>
-            <input class="input" :class="badPasswordLenght ? 'is-danger' : ''" v-model="password" type="password"
+            <input class="input" :class="noPassword || badPasswordLenght ? 'is-danger' : ''" v-model="password" type="password"
                 placeholder="Slaptažodis">
+                <p v-show="noPassword" class="help is-danger has-text-left">Slaptažodis tuščias</p>
             <p v-show="badPasswordLenght" class="help is-danger has-text-left">Slaptažodis negali viršyti 100 simbolių</p>
           </div>
+          <div class="field">
+            <label class="label has-text-left">Slaptažio pakartojimas</label>
+            <input class="input " type="password" :class=" repeatNoPassword || repeatBadPasswordLength || passwordsDontMatch ? 'is-danger' : ''"
+              placeholder="Slaptažio pakartojimas" v-model="repeatPassword">
+            <p v-show="repeatNoPassword" class="help is-danger has-text-left">Pakartotas slaptažodis tuščias</p>
+            <p v-show="repeatBadPasswordLength" class="help is-danger has-text-left ">Pakartotas slaptažodis negali viršyti 100 simbolių</p>
+            <p v-show="passwordsDontMatch" class="help is-danger has-text-left">Pakartotas slaptažodis nesutampa su įvestu slaptažodžiu</p>
+          </div>
+          
           <div v-if="blocked == true"  class="field has-text-left">
             <label class="label">Užblokuotas</label>
             <input class="ml-[1px]" type="checkbox" v-model="newBlocked">
@@ -47,9 +57,16 @@ export default {
             badEmail: false,
             badEmailLenght: false,
             password: "",
+            noPassword: false,
             badPasswordLenght: false,
             blocked: false,
             newBlocked: false,
+            repeatPassword: "",
+            repeatNoPassword: false,
+            repeatBadPasswordLength: false,
+            passwordsDontMatch: false,
+            
+
 
         }
     },
@@ -111,13 +128,9 @@ export default {
           this.noEmail = false
           this.badEmailLenght = false
           this.badPasswordLenght = false
-          if(this.password.length > 100){
-        this.badPasswordLenght = true
-        return false
-      }
-      else{
-        this.badPasswordLenght = false
-      }
+          this.repeatNoPassword = false
+          this.repeatBadPasswordLength = false
+          this.passwordsDontMatch = false
       if (!this.email) {
         this.noEmail = true
         return false
@@ -139,6 +152,41 @@ export default {
       }
       else{
         this.badEmailLenght = false
+      }
+      if (this.repeatPassword && !this.password) {
+        this.noPassword = true
+        return false
+      }
+      else {
+        this.noPassword = false
+      }
+      if(this.password.length > 100 && this.password){
+        this.badPasswordLenght = true
+        return false
+      }
+      else{
+        this.badPasswordLenght = false
+      }
+      if (!this.repeatPassword && this.password) {
+        this.repeatNoPassword = true
+        return false
+      }
+      else {
+        this.repeatNoPassword = false
+      }
+      if(this.repeatPassword.length > 100 && this.repeatPassword){
+            this.repeatBadPasswordLength = true
+            return false
+      }else{
+        this.repeatBadPasswordLength = false
+      }
+
+      if(this.password != this.repeatPassword){
+this.passwordsDontMatch = true
+return false
+      }
+      else{
+        this.passwordsDontMatch = false
       }
 
 

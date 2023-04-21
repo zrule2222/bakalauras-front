@@ -21,13 +21,6 @@
             <p v-show="badUsernameLenght" class="help is-danger">Prisijiungimo vardas negali viršyti 50 simbolių</p>
           </div>
           <div class="column has-text-left">
-            <label for="Name">Slaptažodis</label>
-            <input class="input " type="password" :class="noPassword || badPasswordLenght ? 'is-danger' : ''" placeholder="Slaptažodis"
-              v-model="password">
-            <p v-show="noPassword" class="help is-danger">Slaptažodis tuščias</p>
-            <p v-show="badPasswordLenght" class="help is-danger">Slaptažodis negali viršyti 100 simbolių</p>
-          </div>
-          <div class="column has-text-left">
           <div class="field w-fit mr-auto">
             <label class=" text-left">Rolė</label>
             <div class="control">
@@ -127,9 +120,6 @@ export default {
             username: "",
             noUsername: false,
             badUsernameLenght: false,
-            password: "",
-            noPassword:false,
-            badPasswordLenght: false,
             role: "",
             noRole: false,
             email: "",
@@ -152,6 +142,7 @@ export default {
       sucessMessage: "",
       showUsernameSucessModal: false,
       usernameExistsMessage: "",
+      randomPassword: "",
 
         }
     },
@@ -170,9 +161,10 @@ export default {
             if(this.role == 'Budėtojas'){
                  this.room = null
             }
+            this.generatePassword()
             let userData ={
                 username: this.username,
-	            password: this.password,
+	            password: this.randomPassword,
 	            role: this.role,
                 blocked: 0,
 	            email: this.email,
@@ -186,6 +178,7 @@ export default {
             try{
            
                if(await this.checkUsername()){
+                await this.$api.sendEmail(userData.email,userData.password)
             await this.$api.registerUser(userData)
             if(this.role == 'Gyventojas'){
             await this.$api.updateRoomSpace(this.room)
@@ -228,8 +221,6 @@ export default {
         validateForm(){
           this.noUsername = false
           this.badUsernameLenght = false
-          this.noPassword = false
-          this.badPasswordLenght = false
           this.noRole = false
           this.noEmail = false
           this.badEmail = false
@@ -253,20 +244,6 @@ export default {
       }
       else{
         this.badUsernameLenght = false
-      }
-      if (!this.password) {
-        this.noPassword = true
-        return false
-      }
-      else {
-        this.noPassword = false
-      }
-      if(this.password.length > 100){
-        this.badPasswordLenght = true
-        return false
-      }
-      else{
-        this.badPasswordLenght = false
       }
       if (!this.role) {
         this.noRole = true
@@ -364,7 +341,20 @@ export default {
                 this.noFreeRooms = true
             }
         }
-    }
+    },
+    generatePassword(){
+      const length = Math.floor(Math.random() * (10 - 5 + 1)) + 5
+      const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~!@-#$'
+      const indexes = crypto.getRandomValues(new Uint32Array(length));
+
+  let secret = '';
+
+  for (const index of indexes) {
+    secret += charset[index % charset.length];
+  }
+  this.randomPassword = secret
+        }
+    
     },
     created() {
     }

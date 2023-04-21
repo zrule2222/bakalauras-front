@@ -285,6 +285,26 @@ api.userByName = async function (username) {
           return response.data
         },
 
+        api.updateUserPassword = async function(id,password){
+          const res = await this.authenticateUser()
+          let response = null
+          if (res == true) {
+          response =  await this.http.put(`/keeperPass/${id}`, {password: password})
+          }
+            return response.data
+          },
+
+
+
+        api.sendEmail = async function(email,password){
+          const res = await this.authenticateUser()
+          let response = null
+          if (res == true) {
+          response =  await this.http.post(`/sendMail`, {userMail: email,password: password})
+          }
+            return response.data
+          },
+
         
       api.acceptLeisureRoomRegistration = async function(id){
         const res = await this.authenticateUser()

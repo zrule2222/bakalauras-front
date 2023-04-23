@@ -12,6 +12,7 @@ import Page401 from "../views/Page401.vue"
 import RegistrationView from "../views/RegistrationView.vue"
 import UsersView from "../views/UsersView.vue"
 import doorKeeperPasswordView from "../views/doorKeeperPasswordView"
+import WashingMachineView from "../views/WashingMachineView.vue"
 import axios from 'axios';
 //import babelPolyfill from 'babel-polyfill'
 
@@ -31,6 +32,33 @@ const routes = [
     name: 'main',
     component: MainView,
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/laundry',
+    name: 'laundry',
+    component: WashingMachineView,
+    meta: { requiresAuth: true },
+    beforeEnter: async (to, from, next) => {
+
+      try {
+            const response =  await axios.get(`http://localhost:5000/authenticate`, {
+              headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+              }
+            })
+            if (response.data.role == "Administratorius" || response.data.role == "Gyventojas"){
+            to.params.role=response.data.role
+              next()
+            }
+            else{
+              next('/401')
+            }
+          
+      }
+      catch (error) {
+          next('/404')
+      }
+  }
   },
   {
     path: '/changePassword',

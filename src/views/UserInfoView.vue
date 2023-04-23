@@ -45,7 +45,7 @@
     </div>
     <ConfirmationModal v-if="displayConfirmationModal" @confirm-action="blockUser($route.params.id)" @close-action="closeConfirmationModal" :isActive="displayConfirmationModal"></ConfirmationModal>
     <SucessMessageModal @close-action="closeSucessMessageModal()" :Message="messageSucess" v-if="showSucessMessage" :isActive="showSucessMessage"></SucessMessageModal>
-    <UserInfoModal @update-sucess="updateSucess()" @update-fail="updateFail()" :userId="$route.params.id" @close-action="closeEditModal()" v-if="showModal" :isActive="showModal"></UserInfoModal>
+    <UserInfoModal @update-sucess="updateSucess()" @update-fail="updateFail()" :userId="$route.params.id" @close-action="closeEditModal()" @same-password="messageSucess = 'Naujas slaptažodis negali būti toks pat kaip senas', showModal = false, showSucessMessage = true" @no-changes="messageSucess = 'Nebuvo įvesti nauji duomenys', showModal = false, showSucessMessage = true" v-if="showModal" :isActive="showModal"></UserInfoModal>
   </div>
 </template>
 <script>

@@ -56,6 +56,7 @@ export default {
             noEmail: false,
             badEmail: false,
             badEmailLenght: false,
+            ckeckEmail: "",
             password: "",
             noPassword: false,
             badPasswordLenght: false,
@@ -85,30 +86,64 @@ export default {
             if(!this.validateForm()){
                 return
             }
-            if(!this.password){
-                this.password = null
-            }
+            // if(!this.password){
+            //     this.password = null
+            // }
             let userinfo = {
              email: this.email,
              password: this.password,
-             newBlocked: this.newBlocked
+             blocked: this.newBlocked
             }
             try{
-            await this.$api.updateUserInfo(this.userId, userinfo)
-            this.$emit('update-sucess');
+              if(this.password && this.repeatPassword){
+                let data = await this.$api.getDataFromToken()
+                if(data.role == 'Gyventojas'){
+                await this.$api.updateUserPassword(data.id,this.password)
+                }
+                else{
+                  await this.$api.updateUserPassword(this.userId,this.password)
+                }
+
+                if(this.email == this.ckeckEmail){
+                  this.$emit('update-sucess');
+                }
+                if(this.email != this.ckeckEmail || this.blocked != this.newBlocked){
+                  await this.$api.updateUserInfo(this.userId, userinfo)
+             this.$emit('update-sucess');
+                }
+              }
+              else if(this.email != this.ckeckEmail){
+             await this.$api.updateUserInfo(this.userId, userinfo)
+             this.$emit('update-sucess');
+              }
+              else if(this.blocked != this.newBlocked){
+                await this.$api.updateUserInfo(this.userId, userinfo)
+                this.$emit('update-sucess');
+              }
+              else{
+                this.$emit('no-changes');
+              }
+            //   else if(!this.password && !this.repeatPassword){
+            // await this.$api.updateUserInfo(this.userId, userinfo)
+            // this.$emit('update-sucess');
+            //   }
             }
             catch(error){
-                this.$emit('update-fail');
+              if(error.request.status == 500){
+                this.$emit('same-password');
+              }
+              else{
+              this.$emit('update-fail');
+              }
             }
         },
        async getUserData(){
         try{
         let userData = await this.$api.getUserInfo(this.userId)
-        console.log(userData)
         this.email = userData.email
+        this.ckeckEmail = userData.email
         if(userData.blocked == 1){
         this.blocked = true
-        console.log(this.blocked)
         this.newBlocked = true
         }
         else{
@@ -117,7 +152,6 @@ export default {
         }
         }
         catch(error){
-          console.log(error)
             this.email = ""
             this.blocked = false
             this.newBlocked = false

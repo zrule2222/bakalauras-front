@@ -71,6 +71,24 @@ api.userByName = async function (username) {
     return response.data
   }
 
+  api.getWashingMachineData = async function () {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.get(`/machineData`)
+    }
+     return response.data
+   }
+
+   api.registerWashing = async function (registrationData) {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.post(`/registerWashing`,registrationData)
+    }
+     return response.data
+   }
+
   api.cancelGuestRegistration = async function (id) {
     const res = await this.authenticateUser()
      let response = null
@@ -289,7 +307,7 @@ api.userByName = async function (username) {
           const res = await this.authenticateUser()
           let response = null
           if (res == true) {
-          response =  await this.http.put(`/keeperPass/${id}`, {password: password})
+          response =  await this.http.put(`/userPass/${id}`, {password: password})
           }
             return response.data
           },

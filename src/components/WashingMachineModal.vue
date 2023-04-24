@@ -60,12 +60,23 @@ export default {
                 let registrationData ={
                     user: data.id,
 	                status: "Aktyvus",
-	               created_at: new Date(),
+	              // created_at: new Date(),
 	               machine: this.machineId,
                    time : `${timer.hours}:${timer.minutes}`
                 }
-                 await this.$api.registerWashing(registrationData)
-                 this.$emit('washing-sucess');
+                let washingFinishDate = new Date()
+                 washingFinishDate.setHours(washingFinishDate.getHours() + timer.hours)
+                 washingFinishDate.setMinutes(washingFinishDate.getMinutes() + timer.minutes)
+                 washingFinishDate.setSeconds(0)
+               let response =  await this.$api.registerWashing(registrationData)
+               let updateData ={
+                    status: "Occupied",
+	                time: washingFinishDate,
+	                user: data.id,
+                    registration: response.insertId
+                }
+                  await this.$api.updateWashingMachine(this.machineId,updateData)
+                  this.$emit('washing-sucess');
             }
             catch(error){
             console.log(error)

@@ -12,19 +12,19 @@
     <MenuBar :menu-type="'main-back'"></MenuBar>
 
     <div class="columns is-multiline mt-3 is-centered ">
-<div v-for="machine in washingMachines" :key="machine.machine_id" class="mb-3 column is-4 mt-auto has-text-centered">
+<div v-for="machine in washingMachines" :key="machine.machine_id" :class="machine.machine_status == 'Occupied'? '!mt-0': ''"   class="mb-3 column is-4 mt-5    has-text-centered">
 <div class="tex text-xl">Skalbyklė nr. {{ machine.machine_number  }}</div>
-<div  v-if="false">skalbimo laikas</div>
-<img src="../assets/washing_machine.jpg"  class="m-auto">
+<div  v-if="machine.machine_status == 'Occupied'"> skalbiama iki: {{machine.time}}</div>
+<img  src="../assets/washing_machine.jpg"  class="m-auto">
 <div class=" justify-between mt-2">
-<button class="button is-primary m-1" @click="showRegistrationModal(machine.machine_id,machine.machine_number)">Registruoti skalbimą</button>
-<button class="button is-danger m-1">Registruoti gedimą</button>
+<button  v-if="machine.machine_status == 'Working'" class="button is-primary m-1" @click="showRegistrationModal(machine.machine_id,machine.machine_number)">Registruoti skalbimą</button>
+<button  v-if="machine.machine_status == 'Working'" class="button is-danger m-1">Registruoti gedimą</button>
 </div>
 </div>
     </div>
 
 <WashingMachineModal v-if="showModal" :isActive="showModal" :machineId="machineId" :machineNumber="washingNumber" @close-action="closeMachineModal()" @washing-sucess="washingSucess()" @washing-fail="washingFail()"></WashingMachineModal>
-<SucessMessageModal v-if="showSucessMessage" :isActive="showSucessMessage" :Message="messageSucess" @close-action="showSucessMessage = false, messageSucess = ''"></SucessMessageModal>
+<SucessMessageModal v-if="showSucessMessage" :isActive="showSucessMessage" :Message="messageSucess" @close-action="showSucessMessage = false, messageSucess = '', getMachineData()"></SucessMessageModal>
     </div>
 </template>
 
@@ -58,11 +58,50 @@ export default {
        async getMachineData() {
         try{
         let machines = await this.$api.getWashingMachineData()
-        this.washingMachines = machines.sort((a, b) => a.machine_number-b.machine_number)
+        //this.washingMachines = machines.sort((a, b) => a.machine_number-b.machine_number)
+        for (let index = 0; index <  machines.length; index++) {
+            if(new Date(machines[index].time) < new Date() && machines[index].time != null){
+                try{
+                await this.$api.finishWashingMachine(machines[index].machine_id)
+               await this.$api.finishWashingRegistration(machines[index].fk_wasking_registration)
+                }
+                catch(error){
+                    
+                    console.log(error)
+                }
+            }
+            else{
+
+            }
+            
         }
+
+        this.washingMachines = await this.$api.getWashingMachineData()
+        this.washingMachines = this.washingMachines.sort((a, b) => a.machine_number-b.machine_number)
+        for (let index = 0; index <   this.washingMachines.length; index++) {
+        let month =   new Date(this.washingMachines[index].time).getUTCMonth() +1
+     let day =   new Date(this.washingMachines[index].time).getUTCDate()
+     let hour =   new Date(this.washingMachines[index].time).getHours()
+      let minute =  new Date(this.washingMachines[index].time).getMinutes()
+
+      if(month < 10){
+        month = '0' + month
+      }
+      if(day < 10){
+        day = '0' + day
+      }
+      if(minute < 10){
+        minute = '0' + minute
+      }
+      if(hour < 10){
+        hour = '0' + hour
+      }
+      let WashingEnd = `${month}-${day} ${hour}:${minute}`
+      this.washingMachines[index].time = WashingEnd
+        }
+    }
         catch(error){
             console.log(error)
-        console.log('no machine data')
     }
     },
     showRegistrationModal(id,number){

@@ -89,6 +89,15 @@ api.userByName = async function (username) {
      return response.data
    }
 
+   api.updateWashingMachine = async function (id, updateData) {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.put(`/updatemachine/${id}`,updateData)
+    }
+     return response.data
+   }
+
   api.cancelGuestRegistration = async function (id) {
     const res = await this.authenticateUser()
      let response = null
@@ -223,6 +232,24 @@ api.userByName = async function (username) {
      let response = null
     if (res == true) {
        response = await this.http.post(`/registerLeisure/${id}`)
+    }
+     return response.data
+   }
+
+   api.finishWashingMachine = async function (id) {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.put(`/finishMachine/${id}`)
+    }
+     return response.data
+   }
+
+   api.finishWashingRegistration = async function (id) {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.put(`/finishWashing/${id}`)
     }
      return response.data
    }

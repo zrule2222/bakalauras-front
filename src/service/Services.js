@@ -89,6 +89,15 @@ api.userByName = async function (username) {
      return response.data
    }
 
+   api.getCurrectFailRegUsers = async function (id) {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.get(`/getFailRegUsers/${id}`)
+    }
+     return response.data
+   }
+
    api.updateWashingMachine = async function (id, updateData) {
     const res = await this.authenticateUser()
      let response = null
@@ -244,6 +253,40 @@ api.userByName = async function (username) {
     }
      return response.data
    }
+   api.registerMachineFailure = async function (id, userId) {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       let resp = await this.http.post(`/registerFailure`,{user: userId, machineId:id} )
+       console.log(resp.data.insertId)
+
+        try{
+          console.log(resp.data.insertId)
+          await this.http.put(`/machineFailFirstReg/${id}`,{regId: resp.data.insertId} )
+        }
+        catch(error){
+          try{
+            console.log(resp.data.insertId)
+          await this.http.put(`/machineFailSecondtReg/${id}`,{regId: resp.data.insertId} )
+          }
+          catch(error){
+            try{
+              console.log(resp.data.insertId)
+            await this.http.put(`/machineFailThirdtReg/${id}`,{regId: resp.data.insertId} )
+            }
+            catch(error){
+              return false
+            }
+          }
+        }
+        return true
+    }
+    else{
+      return false
+    }
+
+   }
+
 
    api.finishWashingRegistration = async function (id) {
     const res = await this.authenticateUser()

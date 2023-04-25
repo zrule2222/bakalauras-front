@@ -15,16 +15,19 @@
 <div v-for="machine in washingMachines" :key="machine.machine_id" :class="machine.machine_status == 'Occupied'? '!mt-0': ''"   class="mb-3 column is-4 mt-5    has-text-centered">
 <div class="tex text-xl">Skalbyklė nr. {{ machine.machine_number  }}</div>
 <div  v-if="machine.machine_status == 'Occupied'"> skalbiama iki: {{machine.time}}</div>
-<img  src="../assets/washing_machine.jpg"  class="m-auto">
+<img v-if="machine.machine_status == 'Working' || machine.machine_status == 'Occupied'"  src="../assets/washing_machine.jpg"  class="m-auto">
+<img v-else-if="machine.machine_status == 'Broken' "  src="../assets/broken_washing_machine.jpg"  class="m-auto">
 <div class=" justify-between mt-2">
-<button  v-if="machine.machine_status == 'Working'" class="button is-primary m-1" @click="showRegistrationModal(machine.machine_id,machine.machine_number)">Registruoti skalbimą</button>
-<button  v-if="machine.machine_status == 'Working'" class="button is-danger m-1">Registruoti gedimą</button>
+<button  v-if="machine.machine_status == 'Working' && machine.hasFailReg != true" class="button is-primary m-1" @click="showRegistrationModal(machine.machine_id,machine.machine_number)">Registruoti skalbimą</button>
+<button  v-if="machine.machine_status == 'Working' && machine.hasFailReg != true" class="button is-danger m-1" @click="showRegistrationConfirmationModal(machine.machine_id)">Registruoti gedimą</button>
 </div>
 </div>
     </div>
 
 <WashingMachineModal v-if="showModal" :isActive="showModal" :machineId="machineId" :machineNumber="washingNumber" @close-action="closeMachineModal()" @washing-sucess="washingSucess()" @washing-fail="washingFail()"></WashingMachineModal>
 <SucessMessageModal v-if="showSucessMessage" :isActive="showSucessMessage" :Message="messageSucess" @close-action="showSucessMessage = false, messageSucess = '', getMachineData()"></SucessMessageModal>
+<ConfirmationModal  v-if="showConfirmation" :isActive="showConfirmation" @close-action="closeFailRegModal()" @confirm-action="registerFailure(brokenMachineRegistrationId)"></ConfirmationModal>
+<SucessMessageModal v-if="showFailRegMessage" :isActive="showFailRegMessage" :Message="failRegMessage" @close-action="showFailRegMessage = false, failRegMessage = '', getMachineData()"></SucessMessageModal>
     </div>
 </template>
 
@@ -32,6 +35,7 @@
 import MenuBar from "../components/MenuBar.vue"
 import WashingMachineModal from "../components/WashingMachineModal.vue"
 import SucessMessageModal from "../components/SucessMessageModal.vue"
+import ConfirmationModal from "../components/ConfirmationModal.vue"
 export default {
     name: 'WashingMachineView',
     data() {
@@ -42,6 +46,11 @@ export default {
             showSucessMessage: false,
             messageSucess: '',
             washingNumber: Number,
+            showConfirmation: false,
+            brokenMachineRegistrationId: Number,
+            showFailRegMessage: false,
+            failRegMessage: '',
+            noFailRegProvided: true
         }
     },
     props: {
@@ -53,6 +62,7 @@ export default {
         MenuBar,
         WashingMachineModal,
         SucessMessageModal,
+        ConfirmationModal,
     },
     methods: {
        async getMachineData() {
@@ -99,6 +109,49 @@ export default {
       let WashingEnd = `${month}-${day} ${hour}:${minute}`
       this.washingMachines[index].time = WashingEnd
         }
+        try{
+            let data = await this.$api.getDataFromToken()
+            // for (let index = 0; index < this.washingMachines.length; index++) {
+            //     if(users[index].fk_user == data.id){
+            //         this.noFailRegProvided = false
+            //         this.washingMachines[index].hasFailReg = true
+
+            //     }
+            //     else{
+            //         this.washingMachines[index].hasFailReg = false
+            //     }
+
+                
+            // }
+            // console.log( this.washingMachines)
+
+            for (let index = 0; index < this.washingMachines.length; index++) {
+                try{
+                let users = await this.$api.getCurrectFailRegUsers( this.washingMachines[index].machine_id)
+                console.log(users)
+                for (let indexUser = 0; indexUser < users.length; indexUser++) {
+                    if(users[indexUser].fk_user == data.id){
+                        console.log(index)
+                        this.washingMachines[index].hasFailReg = true
+                    }
+                    else{
+                        this.washingMachines[index].hasFailReg = false
+                    }
+                   
+                    
+                }
+            }
+            catch(error){
+                console.log(error)
+            }
+                
+            }
+        
+        }
+        catch(error){
+
+        }
+
     }
         catch(error){
             console.log(error)
@@ -125,6 +178,45 @@ export default {
         this.showSucessMessage = true
 
     },
+    showRegistrationConfirmationModal(id){
+        this.showConfirmation = true
+        this.brokenMachineRegistrationId = id
+    },
+    closeFailRegModal(){
+        this.showConfirmation = false
+        this.brokenMachineRegistrationId = Number
+    },
+    async registerFailure(id){
+        try{
+        let data = await this.$api.getDataFromToken()
+    try{
+      const response = await this.$api.registerMachineFailure(id,data.id)
+      if(response == true){
+        this.showConfirmation = false
+        this.failRegMessage = 'Skalbimo mašinos gedimas užregistruotas sėkmingai'
+        this.showFailRegMessage = true
+        console.log('emit sucess')
+      }
+      else{
+        this.showConfirmation = false
+        this.failRegMessage = 'Skalbimo mašinos gedimo užregistruoto nepavyko'
+        this.showFailRegMessage = true
+        console.log('emit fail')
+      }
+    }
+    catch(error){
+     console.log(error)
+     console.log('registration failed')
+     this.showConfirmation = false
+        this.failRegMessage = 'įvyko klaida registruojant skalbimo mašinos gedimą'
+        this.showFailRegMessage = true
+    }
+}
+catch(error){
+    console.log(error)
+    console.log('no data from token')
+}
+    }
 
 
     

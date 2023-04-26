@@ -29,7 +29,7 @@
   <div v-else-if="role == 'Gyventojas' && doorkeeperOccupation == 'Laisvas'" class="has-text-primary ml-2">
     {{doorkeeperOccupation}}
   </div>
-  <div v-else-if="role == 'Gyventojas' && doorkeeperOccupation == 'Neprisijiungęs'" class="text-violet-700 ml-2">
+  <div v-else-if="role == 'Gyventojas' && doorkeeperOccupation == 'Neprisijungęs'" class="text-violet-700 ml-2">
     {{doorkeeperOccupation}}
   </div>
 </div>
@@ -43,7 +43,7 @@
   <div v-if="role == 'Gyventojas' && administratorOccupation == 'Laisvas'" class="has-text-primary ml-2">
     {{administratorOccupation}}
   </div>
-  <div v-if="role == 'Gyventojas' && administratorOccupation == 'Neprisijiungęs'" class=" ml-2 text-violet-700">
+  <div v-if="role == 'Gyventojas' && administratorOccupation == 'Neprisijungęs'" class=" ml-2 text-violet-700">
     {{administratorOccupation}}
   </div>
   </div>
@@ -65,7 +65,7 @@
   <div v-else-if="role == 'Administratorius' && administratorOccupation == 'Laisvas'" class="has-text-primary ml-2">
     {{administratorOccupation}}
   </div>
-  <div v-else-if="role == 'Administratorius' && administratorOccupation == 'Prisijiungęs'" class="has-text-info ml-2">
+  <div v-else-if="role == 'Administratorius' && administratorOccupation == 'Prisijungęs'" class="has-text-info ml-2">
     {{administratorOccupation}}
   </div>
   <div v-if="role == 'Budėtojas' && doorkeeperOccupation == 'Užimtas'" class="has-text-danger ml-2">
@@ -74,7 +74,7 @@
   <div v-else-if="role == 'Budėtojas' && doorkeeperOccupation == 'Laisvas'" class="has-text-primary ml-2">
     {{doorkeeperOccupation}}
   </div>
-  <div v-else-if="role == 'Budėtojas' && doorkeeperOccupation == 'Prisijiungęs'" class="has-text-info ml-2">
+  <div v-else-if="role == 'Budėtojas' && doorkeeperOccupation == 'Prisijungęs'" class="has-text-info ml-2">
     {{doorkeeperOccupation}}
   </div>
   </div>
@@ -88,7 +88,7 @@
   <div v-else-if="role == 'Administratorius' && doorkeeperOccupation == 'Laisvas'" class="has-text-primary ml-2">
     {{doorkeeperOccupation}}
   </div>
-  <div v-else-if="role == 'Administratorius' && doorkeeperOccupation == 'Neprisijiungęs'" class="text-violet-700 ml-2">
+  <div v-else-if="role == 'Administratorius' && doorkeeperOccupation == 'Neprisijungęs'" class="text-violet-700 ml-2">
     {{doorkeeperOccupation}}
   </div>
 </div>
@@ -199,7 +199,7 @@ export default {
         this.doorkeeperOccupation = data.occupation
       }
       catch(error){
-        this.doorkeeperOccupation = "Neprisijiungęs"
+        this.doorkeeperOccupation = "Neprisijungęs"
       }
     },
 
@@ -209,7 +209,7 @@ export default {
         this.administratorOccupation = data2.occupation
       }
       catch(error){
-        this.administratorOccupation = "Neprisijiungęs"
+        this.administratorOccupation = "Neprisijungęs"
       }
     }
   },

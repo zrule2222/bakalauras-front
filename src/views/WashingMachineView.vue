@@ -11,23 +11,29 @@
     </div>
     <MenuBar :menu-type="'main-back'"></MenuBar>
 
-    <div class="columns is-multiline mt-3 is-centered ">
+    <div v-if="washingMachines.length > 0" class="columns is-multiline mt-3 is-centered ">
 <div v-for="machine in washingMachines" :key="machine.machine_id" :class="machine.machine_status == 'Occupied'? '!mt-0': ''"   class="mb-3 column is-4 mt-5    has-text-centered">
 <div class="tex text-xl">Skalbyklė nr. {{ machine.machine_number  }}</div>
 <div  v-if="machine.machine_status == 'Occupied'"> skalbiama iki: {{machine.time}}</div>
 <img v-if="machine.machine_status == 'Working' || machine.machine_status == 'Occupied'"  src="../assets/washing_machine.jpg"  class="m-auto">
 <img v-else-if="machine.machine_status == 'Broken' "  src="../assets/broken_washing_machine.jpg"  class="m-auto">
 <div class=" justify-between mt-2">
-<button  v-if="machine.machine_status == 'Working' && machine.hasFailReg != true" class="button is-primary m-1" @click="showRegistrationModal(machine.machine_id,machine.machine_number)">Registruoti skalbimą</button>
-<button  v-if="machine.machine_status == 'Working' && machine.hasFailReg != true" class="button is-danger m-1" @click="showRegistrationConfirmationModal(machine.machine_id)">Registruoti gedimą</button>
+<button  v-if="machine.machine_status == 'Working' && machine.hasFailReg != true && $route.params.role == 'Gyventojas'" class="button is-primary m-1" @click="showRegistrationModal(machine.machine_id,machine.machine_number)">Registruoti skalbimą</button>
+<button  v-if="machine.machine_status == 'Working' && machine.hasFailReg != true && $route.params.role == 'Gyventojas'" class="button is-danger m-1" @click="showRegistrationConfirmationModal(machine.machine_id)">Registruoti gedimą</button>
+<button  v-if="machine.machine_status == 'Broken' &&  $route.params.role == 'Administratorius'" class="button is-warning m-1" @click="showFixConfirmation = true, fixingId = machine.machine_id">Gedimas sutvarkytas</button>
 </div>
 </div>
+    </div>
+    <div v-else class="text-xl mt-7 has-text-info">
+    Šiuo metu bendrabutyje nėra skalbyklių
     </div>
 
 <WashingMachineModal v-if="showModal" :isActive="showModal" :machineId="machineId" :machineNumber="washingNumber" @close-action="closeMachineModal()" @washing-sucess="washingSucess()" @washing-fail="washingFail()"></WashingMachineModal>
 <SucessMessageModal v-if="showSucessMessage" :isActive="showSucessMessage" :Message="messageSucess" @close-action="showSucessMessage = false, messageSucess = '', getMachineData()"></SucessMessageModal>
 <ConfirmationModal  v-if="showConfirmation" :isActive="showConfirmation" @close-action="closeFailRegModal()" @confirm-action="registerFailure(brokenMachineRegistrationId)"></ConfirmationModal>
 <SucessMessageModal v-if="showFailRegMessage" :isActive="showFailRegMessage" :Message="failRegMessage" @close-action="showFailRegMessage = false, failRegMessage = '', getMachineData()"></SucessMessageModal>
+<ConfirmationModal  v-if="showFixConfirmation" :isActive="showFixConfirmation" @close-action="showFixConfirmation = false, fixingId = Number" @confirm-action="fixMachine(fixingId)"></ConfirmationModal>
+<SucessMessageModal v-if="showFixSucessMessage" :isActive="showFixSucessMessage" :Message="fixSucessMessage" @close-action="showFixSucessMessage = false, fixSucessMessage = '', getMachineData()"></SucessMessageModal>
     </div>
 </template>
 
@@ -50,7 +56,13 @@ export default {
             brokenMachineRegistrationId: Number,
             showFailRegMessage: false,
             failRegMessage: '',
-            noFailRegProvided: true
+            noFailRegProvided: true,
+            userRole: '',
+            showFixConfirmation: false,
+            fixingId: Number,
+            showFixSucessMessage: false, 
+            fixSucessMessage: '',
+
         }
     },
     props: {
@@ -186,6 +198,22 @@ export default {
         this.showConfirmation = false
         this.brokenMachineRegistrationId = Number
     },
+   async fixMachine(id){
+    try{
+      await this.$api.fixWashingMachine(id)
+      this.showFixConfirmation = false
+      this.fixSucessMessage = 'Gedimas sutvarkytas sėkmingai'
+      this.showFixSucessMessage = true
+    }
+    catch(error){
+        console.log(error)
+        this.showFixConfirmation = false
+      this.fixSucessMessage = 'Gedimo sutvarkyti nepavyko'
+      this.showFixSucessMessage = true
+
+    }
+    },
+
     async registerFailure(id){
         try{
         let data = await this.$api.getDataFromToken()

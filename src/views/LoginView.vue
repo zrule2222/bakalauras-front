@@ -95,7 +95,7 @@ export default {
         this.showMessage = true
         let data = await this.$api.getDataFromToken()
         if(data.role == 'Administratorius' || data.role == 'Budėtojas'){
-        await this.$api.setWorkerOccupation("Prisijiungęs",data.id)
+        await this.$api.setWorkerOccupation("Prisijungęs",data.id)
         }
         this.$router.push('/main')
         }

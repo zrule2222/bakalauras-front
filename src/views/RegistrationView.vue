@@ -178,7 +178,7 @@ export default {
             try{
            
                if(await this.checkUsername()){
-                await this.$api.sendEmail(userData.email,userData.password)
+                await this.$api.sendEmail(userData.email,userData.password,userData.username)
             await this.$api.registerUser(userData)
             if(this.role == 'Gyventojas'){
             await this.$api.updateRoomSpace(this.room)

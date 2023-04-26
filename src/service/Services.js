@@ -98,6 +98,15 @@ api.userByName = async function (username) {
      return response.data
    }
 
+   api.fixWashingMachine = async function (id) {
+    const res = await this.authenticateUser()
+     let response = null
+    if (res == true) {
+       response = await this.http.put(`/fixMachine/${id}`)
+    }
+     return response.data
+   }
+
    api.updateWashingMachine = async function (id, updateData) {
     const res = await this.authenticateUser()
      let response = null
@@ -384,14 +393,51 @@ api.userByName = async function (username) {
 
 
 
-        api.sendEmail = async function(email,password){
+        api.sendEmail = async function(email,password,username){
           const res = await this.authenticateUser()
           let response = null
           if (res == true) {
-          response =  await this.http.post(`/sendMail`, {userMail: email,password: password})
+          response =  await this.http.post(`/sendMail`, {userMail: email,password: password,username: username})
           }
             return response.data
           },
+
+          api.getServiceHistory = async function(id,role,service){
+            const res = await this.authenticateUser()
+            let response = null
+            if (res == true) {
+              if(role == 'Gyventojas'){
+                if(service == 'guests'){
+
+                }
+                else if(service == 'leisureRoom'){
+
+                }
+                else if(service == 'washing'){
+
+                }
+                else if(service == 'machineFail'){
+                  response =  await this.http.get(`/machineFailResident/${id}`)
+                }
+
+              }else if(role == 'Administratorius'){
+                if(service == 'guests'){
+
+                }
+                else if(service == 'leisureRoom'){
+
+                }
+                else if(service == 'washing'){
+
+                }
+                else if(service == 'machineFail'){
+                  response =  await this.http.get(`/machineFailAdmin`)
+                }
+              }
+            //response =  await this.http.post(`/sendMail`, {userMail: email,password: password,username: username})
+            }
+              return response.data
+            },
 
         
       api.acceptLeisureRoomRegistration = async function(id){

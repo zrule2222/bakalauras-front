@@ -33,7 +33,9 @@
         </router-link>
         </li>
         <li v-if="menuType == 'main-resident'" class="m-0">
+          <router-link :to="{ name: 'servicesHistory'}">
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Paslaugų istorija</button>
+          </router-link>
         </li>
         <li v-if="menuType == 'main-back'" class="m-0">
           <router-link :to="{ name: 'main'}">
@@ -49,9 +51,9 @@
           </router-link>
         </li>
         <li v-if="menuType == 'main-admin'" class="m-0">
-          <!-- <router-link :to="{ name: 'main'}"> -->
+          <router-link :to="{ name: 'laundry'}">
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Skalbykla</button>
-          <!-- </router-link> -->
+          </router-link>
         </li>
         <li v-if="menuType == 'main-admin'" class="m-0">
           <router-link :to="{ name: 'residents'}">
@@ -59,9 +61,9 @@
           </router-link>
         </li>
         <li v-if="menuType == 'main-admin'" class="m-0">
-          <!-- <router-link :to="{ name: 'main'}"> -->
+          <router-link :to="{ name: 'servicesHistory'}">
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Paslaugų istorija</button>
-          <!-- </router-link> -->
+          </router-link>
         </li>
         <li v-if="menuType == 'main-doorkeeper'" class="m-0">
           <router-link :to="{ name: 'guests'}">
@@ -76,6 +78,26 @@
         <li v-if="menuType == 'main-doorkeeper'" class="m-0">
           <router-link :to="{ name: 'changePassword'}">
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Slaptažodžio keitimas</button>
+          </router-link>
+        </li>
+        <li v-if="menuType == 'services'" class="m-0">
+          <router-link :to="{name: 'serviceHistory', params: { name:  'guests'} }">
+            <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Svečiai</button>
+          </router-link>
+        </li>
+        <li v-if="menuType == 'services'" class="m-0">
+          <router-link :to="{ name: 'serviceHistory', params: { name:  'leisureRoom'}}">
+            <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Laisvalaikio kambarys</button>
+          </router-link>
+        </li>
+        <li v-if="menuType == 'services'" class="m-0">
+          <router-link :to="{ name: 'serviceHistory', params: { name:  'washing'}}">
+            <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Skalbimai</button>
+          </router-link>
+        </li>
+        <li v-if="menuType == 'services'" class="m-0">
+          <router-link :to="{ name: 'serviceHistory', params: { name:  'machineFail'}}">
+            <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Skalbyklių gedimai</button>
           </router-link>
         </li>
             <!-- <div class="ml-auto"> -->

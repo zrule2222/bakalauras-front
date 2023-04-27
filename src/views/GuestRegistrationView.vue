@@ -89,7 +89,7 @@
             <tr>
                 <th class="has-text-centered">{{count+1}}</th>
                 <td>{{registration.guest_firstname}} {{ registration.guest_lastname }}</td>
-                <td>{{ registration.updated_at }}</td>
+                <td>{{ registration.confirmed_at }}</td>
                 <td><button class="button is-warning is-small w-2/3" @click="setRegistrationAsDone(registration.guest_id)"> Svečias išvyko</button></td>
             </tr>
         </tbody>
@@ -227,11 +227,11 @@ closeSucessMessageModal(){
         try{
            let registrations = await this.$api.getConfirmedGuestRegistrations()
            for (let index = 0; index < registrations.length; index++) {
-     let year =   new Date(registrations[index].updated_at).getUTCFullYear()
-    let month =   new Date(registrations[index].updated_at).getUTCMonth() +1
-     let day =   new Date(registrations[index].updated_at).getUTCDate()
-     let hour =   new Date(registrations[index].updated_at).getHours()
-      let minute =  new Date(registrations[index].updated_at).getMinutes()
+     let year =   new Date(registrations[index].confirmed_at).getUTCFullYear()
+    let month =   new Date(registrations[index].confirmed_at).getUTCMonth() +1
+     let day =   new Date(registrations[index].confirmed_at).getUTCDate()
+     let hour =   new Date(registrations[index].confirmed_at).getHours()
+      let minute =  new Date(registrations[index].confirmed_at).getMinutes()
 
       if(month < 10){
         month = '0' + month
@@ -246,7 +246,7 @@ closeSucessMessageModal(){
         hour = '0' + hour
       }
       let finalDate = `${year}-${month}-${day} ${hour}:${minute}`
-      registrations[index].updated_at = finalDate
+      registrations[index].confirmed_at = finalDate
      
     }
     this.acceptedRegistrations = registrations

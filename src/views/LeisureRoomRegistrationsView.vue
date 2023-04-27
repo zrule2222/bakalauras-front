@@ -30,7 +30,7 @@
             <tr>
                 <th class="has-text-centered">{{count+1}}</th>
                 <td>{{registration.firstname}} {{ registration.lastname }}</td>
-                <td>{{ registration.created_at }}</td>
+                <td>{{ registration.waiting_confirmation_at }}</td>
                 <td><button class="button is-primary is-small w-2/3" @click="confirmRegistration(registration.leisure_id)"> Tvirtinti registracija</button></td>
                 <td><button class="button is-danger is-small w-2/3" @click="rejectRegistration(registration.leisure_id)"> Atmesti registracija</button></td>
             </tr>
@@ -72,11 +72,11 @@ async getRegistrations(){
    try{
      let registrations = await this.$api.getLeisureRoomRegistrations()
      for (let index = 0; index < registrations.length; index++) {
-     let year =   new Date(registrations[index].created_at).getUTCFullYear()
-    let month =   new Date(registrations[index].created_at).getUTCMonth() +1
-     let day =   new Date(registrations[index].created_at).getUTCDate()
-     let hour =   new Date(registrations[index].created_at).getHours()
-      let minute =  new Date(registrations[index].created_at).getMinutes()
+     let year =   new Date(registrations[index].waiting_confirmation_at).getUTCFullYear()
+    let month =   new Date(registrations[index].waiting_confirmation_at).getUTCMonth() +1
+     let day =   new Date(registrations[index].waiting_confirmation_at).getUTCDate()
+     let hour =   new Date(registrations[index].waiting_confirmation_at).getHours()
+      let minute =  new Date(registrations[index].waiting_confirmation_at).getMinutes()
 
       if(month < 10){
         month = '0' + month
@@ -91,7 +91,7 @@ async getRegistrations(){
         hour = '0' + hour
       }
       let finalDate = `${year}-${month}-${day} ${hour}:${minute}`
-      registrations[index].created_at = finalDate
+      registrations[index].waiting_confirmation_at = finalDate
     }
     this.registrations = registrations
    }

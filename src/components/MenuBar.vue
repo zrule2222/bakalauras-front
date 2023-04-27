@@ -81,6 +81,9 @@
           </router-link>
         </li>
         <li v-if="menuType == 'services'" class="m-0">
+            <button @click="$router.go(-1)" class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Atgal</button>
+        </li>
+        <li v-if="menuType == 'services'" class="m-0">
           <router-link :to="{name: 'serviceHistory', params: { name:  'guests'} }">
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Svečiai</button>
           </router-link>

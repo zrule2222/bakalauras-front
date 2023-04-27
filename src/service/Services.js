@@ -408,10 +408,10 @@ api.userByName = async function (username) {
             if (res == true) {
               if(role == 'Gyventojas'){
                 if(service == 'guests'){
-
+                  response =  await this.http.get(`/guestRegResident/${id}`)
                 }
                 else if(service == 'leisureRoom'){
-
+                  response =  await this.http.get(`/leisureRegResident/${id}`)
                 }
                 else if(service == 'washing'){
 
@@ -422,13 +422,13 @@ api.userByName = async function (username) {
 
               }else if(role == 'Administratorius'){
                 if(service == 'guests'){
-
+                  response =  await this.http.get(`/guestRegAdmin`)
                 }
                 else if(service == 'leisureRoom'){
-
+                  response =  await this.http.get(`/leisureRegAdmin`)
                 }
                 else if(service == 'washing'){
-
+                  response =  await this.http.get(`/washingRegAdmin`)
                 }
                 else if(service == 'machineFail'){
                   response =  await this.http.get(`/machineFailAdmin`)

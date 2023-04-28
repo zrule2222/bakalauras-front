@@ -8,18 +8,20 @@
             <section class="modal-card-body">
                 <div class="field">
             <label class="label has-text-left">Svečio vardas</label>
-            <input class="input" :class="noGuestName || badGuestNameLenght ? 'is-danger' : ''" v-model="guestName" type="text"
+            <input class="input" :class="noGuestName || badGuestNameLenght || nameHasNumbers ? 'is-danger' : ''" v-model="guestName" type="text"
                 placeholder="Svečio vardas">
             <p v-show="noGuestName" class="help is-danger has-text-left">Svečio vardas tuščias</p>
             <p v-show="badGuestNameLenght" class="help is-danger has-text-left">Svečio vardas negali viršyti 40 simbolių</p>
+            <p v-show="nameHasNumbers" class="help is-danger has-text-left">Svečio vardas negali turėti skaičių</p>
             <!-- <p v-show="badEmail" class="help is-danger has-text-left">Netinkamas El. pašto formatas</p> -->
           </div>
           <div class="field">
             <label class="label has-text-left">Svečio pavardė</label>
-            <input class="input" :class="noGuestLastName || badGuestLastNameLenght ? 'is-danger' : ''" v-model="guestLastName" type="text"
+            <input class="input" :class="noGuestLastName || badGuestLastNameLenght || lastnameHasNumbers ? 'is-danger' : ''" v-model="guestLastName" type="text"
                 placeholder="Svečio pavardė">
             <p v-show="noGuestLastName" class="help is-danger has-text-left">Svečio pavardė tuščia</p>
             <p v-show="badGuestLastNameLenght" class="help is-danger has-text-left">Svečio pavardė negali viršyti 40 simbolių</p>
+            <p v-show="lastnameHasNumbers" class="help is-danger has-text-left">Svečio pavardėje negali būti skaičių</p>
           </div>
           <div class="field">
             <label class="label has-text-left">Svečio atvykimo laikas</label>
@@ -56,6 +58,8 @@ export default {
             guestArrival: "",
             noGuestArrival: null,
             time: Date,
+            nameHasNumbers: false,
+            lastnameHasNumbers: false
 
 
         }
@@ -78,6 +82,10 @@ export default {
           this.badGuestNameLenght = false
           this.noGuestLastName = false
           this.badGuestLastNameLenght = false
+          this.nameHasNumbers = false
+          this.lastnameHasNumbers = false
+          this.noGuestArrival = null
+          const numbers = /\d/
       if (!this.guestName) {
         this.noGuestName = true
         return false
@@ -92,6 +100,13 @@ export default {
       else{
         this.badGuestNameLenght = false
       }
+      if(numbers.test(this.guestName)){
+        this.nameHasNumbers = true
+        return false
+      }
+      else{
+        this.nameHasNumbers = false
+      }
       if (!this.guestLastName) {
         this.noGuestLastName = true
         return false
@@ -105,6 +120,13 @@ export default {
       }
       else{
         this.badGuestLastNameLenght = false
+      }
+      if(numbers.test(this.guestLastName)){
+        this.lastnameHasNumbers = true
+        return false
+      }
+      else{
+        this.lastnameHasNumbers = false
       }
       if (!this.guestArrival) {
         this.noGuestArrival = false

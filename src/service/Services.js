@@ -414,7 +414,7 @@ api.userByName = async function (username) {
                   response =  await this.http.get(`/leisureRegResident/${id}`)
                 }
                 else if(service == 'washing'){
-
+                  response =  await this.http.get(`/washingRegResident/${id}`)
                 }
                 else if(service == 'machineFail'){
                   response =  await this.http.get(`/machineFailResident/${id}`)

@@ -45,17 +45,19 @@
           </div>
           <div class="column has-text-left">
             <label for="Name">Vardas</label>
-            <input class="input " type="text" :class="noName || badNameLenght ? 'is-danger' : ''" placeholder="Vardas"
+            <input class="input " type="text" :class="noName || badNameLenght || nameHasNumbers ? 'is-danger' : ''" placeholder="Vardas"
               v-model="name">
             <p v-show="noName" class="help is-danger">Vardas tuščias</p>
             <p v-show="badNameLenght" class="help is-danger">Vardas negali viršyti 40 simbolių</p>
+            <p v-show="nameHasNumbers" class="help is-danger has-text-left">Naudotojo vardas negali turėti skaičių</p>
           </div>
           <div class="column has-text-left">
             <label for="Name">Pavardė</label>
-            <input class="input " type="text" :class="noLastName || BadLastNameLenght ? 'is-danger' : ''" placeholder="Pavardė"
+            <input class="input " type="text" :class="noLastName || BadLastNameLenght || lastnameHasNumbers ? 'is-danger' : ''" placeholder="Pavardė"
               v-model="lastName">
             <p v-show="noLastName" class="help is-danger">Pavardė tuščia</p>
             <p v-show="BadLastNameLenght" class="help is-danger">Pavardė negali viršyti 40 simbolių</p>
+            <p v-show="lastnameHasNumbers" class="help is-danger has-text-left">Naudotojo pavardė negali turėti skaičių</p>
           </div>
           <div class="column has-text-left">
           <div class="field w-fit mr-auto">
@@ -129,9 +131,11 @@ export default {
             name: "",
             noName: false,
             badNameLenght: false,
+            nameHasNumbers: false,
             lastName: "",
             noLastName: false,
             BadLastNameLenght: false,
+            lastnameHasNumbers: false,
             gender: "",
             noGender: false,
             room: "",
@@ -228,9 +232,12 @@ export default {
           this.noName = false
           this.noLastName = false
           this.badNameLenght = false
+          this.nameHasNumbers = false
           this.BadLastNameLenght = false
+          this.lastnameHasNumbers = false
           this.noGender = false
           this.noRoom = false
+          const numbers = /\d/
             if (!this.username) {
         this.noUsername = true
         return false
@@ -288,6 +295,13 @@ export default {
       else{
         this.badNameLenght = false
       }
+      if(numbers.test(this.name)){
+        this.nameHasNumbers = true
+        return false
+      }
+      else{
+        this.nameHasNumbers = false
+      }
       if (!this.lastName) {
         this.noLastName = true
         return false
@@ -301,6 +315,13 @@ export default {
       }
       else{
         this.BadLastNameLenght = false
+      }
+      if(numbers.test(this.lastName)){
+        this.lastnameHasNumbers = true
+        return false
+      }
+      else{
+        this.lastnameHasNumbers = false
       }
       if (!this.gender) {
         this.noGender = true

@@ -6,7 +6,7 @@
           <p  class="modal-card-title has-text-left">{{serviceName}}</p>
         </header>
             <section class="modal-card-body has-text-left">
-                <label class="label">{{ serviceInformation }}</label>
+                <label class="label ">{{ serviceInformation }}</label>
 
             </section>
             <footer class="modal-card-foot flex justify-end">

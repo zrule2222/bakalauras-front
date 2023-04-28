@@ -8,9 +8,9 @@
             <section class="modal-card-body">
           <div class="field">
             <label class="label has-text-left">skalbimo laikas</label>
-            <VueDatePicker :state="displayError" :minDate="new Date(new Date().setDate(new Date().getDate() - 1))"  v-model="washingTime" locale="lt" cancelText="Atšaukti" selectText="Pasirinkti" :timezone="'UTC'" :start-time="{hours: 0, minutes: 0 }" :max-time="{ hours: '5', minutes: 0 }" :teleport="true" time-picker/>
+            <VueDatePicker :state="displayError" :minDate="new Date(new Date().setDate(new Date().getDate() - 1))"  v-model="washingTime" locale="lt" cancelText="Atšaukti" selectText="Pasirinkti" :timezone="'UTC'" :start-time="{hours: 0, minutes: 0 }" :max-time="{ hours: '3', minutes: 0 }" :teleport="true" time-picker/>
             <p v-show="noWashingTime == false" class="help is-danger has-text-left">Nepasirinkta skalbimo trukmė</p>
-            <p v-show="badWashingTime == false" class="help is-danger has-text-left">Minimali skalbimo trukmė 10 minučių</p>
+            <p v-show="badWashingTime == false" class="help is-danger has-text-left">Minimali skalbimo trukmė 30 minučių</p>
           </div>
 
             </section>
@@ -94,7 +94,7 @@ export default {
         this.noWashingTime = false
         return false
       }
-      else if(time.hours == 0 && time.minutes < 10){
+      else if(time.hours == 0 && time.minutes < 30){
         this.displayError = false
        this.badWashingTime = false
        return false

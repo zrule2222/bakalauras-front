@@ -7,7 +7,7 @@
           <p  class="modal-card-title has-text-left">užimtumo keitimas</p>
         </header>
             <section class="modal-card-body">
-                <div class="field w-fit mx-auto">
+                <div v-if="allowToChangeOccupation" class="field w-fit mx-auto">
             <label class="label text-left">Naujas užimtumas</label>
             <div class="control">
               <div>
@@ -21,11 +21,19 @@
               </div>
             </div>
           </div>
+          <div v-else-if="!allowToChangeOccupation" class="field w-fit mx-auto">
+            <div class="control">
+              <div>
+                <label class="label">Šiuo metu bendrabutyje yra aktyvus budėtojas, todėl užimtumo keisti negalite</label>
+              </div>
+            </div>
+          </div>
+          
           <div></div>
 
             </section>
-            <footer class="modal-card-foot flex flex-row justify-between ">
-                <button @click="changeUserOccupation()" class="button is-success">Išsaugoti pokytį</button>
+            <footer :class="!allowToChangeOccupation ? '!justify-end':''" class="modal-card-foot flex flex-row justify-between ">
+                <button v-if="allowToChangeOccupation" @click="changeUserOccupation()" class="button is-success">Išsaugoti pokytį</button>
                 <button @click.prevent="close()" class="button is-danger">Uždaryti</button>
             </footer>
 
@@ -41,7 +49,8 @@ export default {
         return {
             userOccupation: "",
             noOccupations: false,
-            currectOccupation: ""
+            currectOccupation: "",
+            allowToChangeOccupation: true,
         }
     },
     props: {
@@ -68,10 +77,28 @@ export default {
           catch(error){
             this.$emit("occupation-fail")
           }
+        },
+      async CheckIfAllowToChangeOccupation(){
+        let data = await this.$api.getDataFromToken()
+        try{
+        if(data.role == 'Budėtojas'){
+          let response = await this.$api.getDoorkeeperOccupation()
+          if(response.user_id != data.id){
+          this.allowToChangeOccupation = false
+          }
+          else if(response.user_id == data.id){
+            this.allowToChangeOccupation = true
+          }
+        }
+      }
+      catch(error){
+        this.allowToChangeOccupation = true
+      }
         }
     },
    async created() {
         let data = await this.$api.getDataFromToken()
+        this.CheckIfAllowToChangeOccupation()
         try{
     let occupation = await this.$api.getUserOccupations(data.id)
     this.currectOccupation = occupation.occupation

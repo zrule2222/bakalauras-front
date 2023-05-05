@@ -3,7 +3,7 @@
    <div class="modal-background"></div>
       <div class="modal-content">
         <header class="modal-card-head">
-          <p  class="modal-card-title has-text-left">Pakeisti naudotojo informaciją</p>
+          <p  class="modal-card-title has-text-left">Svečio registracija</p>
         </header>
             <section class="modal-card-body">
                 <div class="field">

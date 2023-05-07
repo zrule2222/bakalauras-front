@@ -178,10 +178,10 @@ export default {
    async getWorkerOccupation(){
     let data = await this.$api.getDataFromToken()
     try{
-    let occupation = await this.$api.getUserOccupations(data.id)
+    let occupation = await this.$api.getUserOccupation(data.id)
       if(data.role == 'Administratorius'){
       this.administratorOccupation = occupation.occupation
-      this.getDoorkeeperOccupationForResident()
+      this.getDoorkeeperOccupation()
       }
       else if(data.role == 'Budėtojas'){
         this.doorkeeperOccupation = occupation.occupation
@@ -193,7 +193,7 @@ export default {
      
     },
 
-    async getDoorkeeperOccupationForResident(){
+    async getDoorkeeperOccupation(){
       try{
     let data = await this.$api.getDoorkeeperOccupation()
         this.doorkeeperOccupation = data.occupation
@@ -218,11 +218,11 @@ export default {
    if(this.role == 'Administratorius' || this.role == 'Budėtojas' ){
    this.getWorkerOccupation()
    if(this.role == 'Administratorius'){
-    this.getDoorkeeperOccupationForResident()
+    this.getDoorkeeperOccupation()
    }
    }
    else if(this.role == 'Gyventojas'){
-    this.getDoorkeeperOccupationForResident()
+    this.getDoorkeeperOccupation()
     this.getAdminOccupationForResident()
    }
   }

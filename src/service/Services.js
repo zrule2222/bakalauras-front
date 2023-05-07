@@ -356,7 +356,7 @@ api.userByName = async function (username) {
       return response.data
     },
 
-    api.getUserOccupations = async function(id){
+    api.getUserOccupation = async function(id){
       const res = await this.authenticateUser()
       let response = null
       if (res == true) {

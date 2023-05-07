@@ -85,7 +85,6 @@ export default {
           "password": this.password
         })
         localStorage.removeItem('message')
-        console.log(response)
         if(response.blocked == 0){
         localStorage.setItem('token', response.token)
         

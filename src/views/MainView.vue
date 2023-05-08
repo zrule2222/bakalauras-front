@@ -4,7 +4,7 @@
       <section class="hero is-primary is-small">
         <div class="hero-body is-justify-content-center">
           <p class="title">
-            Bendrabučio administravimo sistema
+            Bendrabučio teikiamų paslaugų administravimo informacinė sistema
           </p>
         </div>
       </section>

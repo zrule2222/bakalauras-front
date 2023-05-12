@@ -89,7 +89,7 @@ api.userByName = async function (username) {
      return response.data
    }
 
-   api.getCurrectFailRegUsers = async function (id) {
+   api.getCurrentFailRegUsers = async function (id) {
     const res = await this.authenticateUser()
      let response = null
     if (res == true) {

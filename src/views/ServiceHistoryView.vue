@@ -32,9 +32,7 @@ export default {
         MenuBar,
     },
     methods: {
-        close() {
-            this.$emit('close-action');
-        }
+
     },
     created() {
     }

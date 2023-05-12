@@ -139,7 +139,7 @@ export default {
 
             for (let index = 0; index < this.washingMachines.length; index++) {
                 try{
-                let users = await this.$api.getCurrectFailRegUsers( this.washingMachines[index].machine_id)
+                let users = await this.$api.getCurrentFailRegUsers( this.washingMachines[index].machine_id)
                 console.log(users)
                 for (let indexUser = 0; indexUser < users.length; indexUser++) {
                     if(users[indexUser].fk_user == data.id){

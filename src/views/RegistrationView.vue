@@ -138,7 +138,7 @@ export default {
             lastnameHasNumbers: false,
             gender: "",
             noGender: false,
-            room: "",
+            room: Number,
             noRoom: false,
             roomsForRegistration: [],
             noFreeRooms: false,

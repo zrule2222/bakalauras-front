@@ -92,11 +92,11 @@
     {{doorkeeperOccupation}}
   </div>
 </div>
-  <button class="button is-primary mt-2" @click="showUserStatusModal()" >Keisti užimtumą</button>
+  <button class="button is-primary mt-2" @click="showUserOccupationModal()" >Keisti užimtumą</button>
 </div>
 </div>
 </div>
-<UserOccupationModal v-if="showModal" :isActive="showModal" @close-action="closeUserStatusModal()" @occupation-sucess="occupationUpdateSucess()" @occupation-fail="occupationUpdateFail()"></UserOccupationModal>
+<UserOccupationModal v-if="showModal" :isActive="showModal" @close-action="closeUserOccupationModal()" @occupation-sucess="occupationUpdateSucess()" @occupation-fail="occupationUpdateFail()"></UserOccupationModal>
 <SucessMessageModal v-if="showSucessModal" :isActive="showSucessModal" :Message="sucessMessage" @close-action="closeSucessModal()"></SucessMessageModal>
 
     </div> 
@@ -150,10 +150,10 @@ export default {
     }
 
     },
-    showUserStatusModal(){
+    showUserOccupationModal(){
       this.showModal = true
     },
-    closeUserStatusModal(){
+    closeUserOccupationModal(){
       this.showModal = false
     },
     closeSucessModal(){

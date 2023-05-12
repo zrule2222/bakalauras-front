@@ -11,7 +11,7 @@ import LeisureRoomRegistrationsView from "../views/LeisureRoomRegistrationsView.
 import Page401 from "../views/Page401.vue"
 import RegistrationView from "../views/RegistrationView.vue"
 import UsersView from "../views/UsersView.vue"
-import doorKeeperPasswordView from "../views/doorKeeperPasswordView"
+import doorKeeperPasswordView from "../views/DoorKeeperPasswordView"
 import WashingMachineView from "../views/WashingMachineView.vue"
 import ServiceHistoryView from "../views/ServiceHistoryView.vue"
 import SpesificServiceHistoryView from "../views/SpesificServiceHistoryView.vue"

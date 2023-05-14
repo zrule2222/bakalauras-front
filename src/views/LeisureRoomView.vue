@@ -17,7 +17,7 @@
 </div>
 <div v-else-if="$route.params.role == 'Budėtojas'" class="sm:ml-6 min-w-fit">
     <router-link :to="{ name: 'leisureRegistrations'}">
-    <button class="button is-warning">Registracijos sąrašas</button>
+    <button class="button is-warning">Registracijų sąrašas</button>
 </router-link>
 </div>
 <div v-else-if="$route.params.role == 'Gyventojas' &&  userHasRegistration" class="sm:ml-6 min-w-fit">

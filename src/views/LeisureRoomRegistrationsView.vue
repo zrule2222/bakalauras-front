@@ -12,7 +12,7 @@
     <MenuBar :menu-type="'main-back'"></MenuBar>
 
     <div class="text-4xl mt-20">
-      Registracijos laukiančios patvirtinimo
+      Registracijos, laukiančios patvirtinimo
     </div>
 
     <div v-if="registrations.length > 0" class="">

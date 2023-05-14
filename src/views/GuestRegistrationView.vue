@@ -5,7 +5,7 @@
       <section class="hero is-primary is-small">
         <div class="hero-body is-justify-content-center">
           <p class="title">
-            Svečių registracijos
+            Svečių registracija
           </p>
         </div>
       </section>
@@ -14,10 +14,10 @@
     <button v-if="$route.params.role == 'Gyventojas' " @click="showRegistrationModal" class="button is-pulled-right mt-5 mr-6 is-primary">Registruoti svečią</button>
     <div>
         <div v-if="$route.params.role == 'Gyventojas'" class="text-4xl mt-20">
-      Jūsų svečių registracijos
+        Jūsų svečių registracijos
     </div>
     <div v-if="$route.params.role == 'Budėtojas'" class="text-4xl mt-20">
-      Registracijos laukiančios patvirtinimo
+      Registracijos, laukiančios patvirtinimo
     </div>
       <div v-if="$route.params.role == 'Gyventojas' && userRegistrations.length > 0" class="">
       <table class="table is-bordered is-striped is-hoverable ml-auto mr-auto mt-7">

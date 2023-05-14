@@ -3,10 +3,10 @@
         <div class="hero">
       <section class="hero is-primary is-small">
         <div class="hero-body is-justify-content-center">
-          <p v-if="$route.params.name == 'guests'" class="title">Svečių registracijos</p>
-          <p v-else-if="$route.params.name == 'leisureRoom'" class="title">Laisvalaikio kambario registracijos</p>
-          <p v-else-if="$route.params.name == 'washing'" class="title">Skalbimų registracijos</p>
-          <p v-else-if="$route.params.name == 'machineFail'" class="title">Skalbyklių gedimų registracijos</p>
+          <p v-if="$route.params.name == 'guests'" class="title">Svečių registracija</p>
+          <p v-else-if="$route.params.name == 'leisureRoom'" class="title">Laisvalaikio kambario registracija</p>
+          <p v-else-if="$route.params.name == 'washing'" class="title">Skalbimų registracija</p>
+          <p v-else-if="$route.params.name == 'machineFail'" class="title">Skalbyklių gedimų registracija</p>
         </div>
       </section>
     </div>
@@ -73,7 +73,7 @@
         <th class="has-text-centered">Svečias atvyksta</th>
         <th class="has-text-centered">Statusas</th>
         <th class="has-text-centered">Registracija pateikta</th>
-        <th class="has-text-centered">Registracija pateikė</th>
+        <th class="has-text-centered">Registraciją pateikė</th>
     </tr>
         </thead>
         <tbody v-if="filteredRecords.length == 0 && searchedValue.length == 0" v-for="(record, count) in Records" :key="record.leisure_id">
@@ -121,7 +121,7 @@
 
         <th class="has-text-centered">Statusas</th>
         <th class="has-text-centered">Registracija pateikta</th>
-        <th class="has-text-centered">Registracija pateikė</th>
+        <th class="has-text-centered">Registraciją pateikė</th>
     </tr>
         </thead>
         <tbody v-if="filteredRecords.length == 0 && searchedValue.length == 0" v-for="(record, count) in Records" :key="record.leisure_id">

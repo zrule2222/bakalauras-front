@@ -13,7 +13,7 @@
 
     <div v-if="washingMachines.length > 0" class="columns is-multiline mt-3 is-centered ">
 <div v-for="machine in washingMachines" :key="machine.machine_id" :class="machine.machine_status == 'Occupied'? '!mt-0': ''"   class="mb-3 column is-4 mt-5    has-text-centered">
-<div class="tex text-xl">Skalbyklė nr. {{ machine.machine_number  }}</div>
+<div class="tex text-xl">Skalbyklė Nr. {{ machine.machine_number  }}</div>
 <div  v-if="machine.machine_status == 'Occupied'"> skalbiama iki: {{machine.time}}</div>
 <img v-if="machine.machine_status == 'Working' || machine.machine_status == 'Occupied'"  src="../assets/washing_machine.jpg"  class="m-auto">
 <img v-else-if="machine.machine_status == 'Broken' "  src="../assets/broken_washing_machine.jpg"  class="m-auto">

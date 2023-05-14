@@ -4,7 +4,7 @@
    <div class="modal-background"></div>
       <div class="modal-content">
         <header class="modal-card-head">
-          <p  class="modal-card-title has-text-left">užimtumo keitimas</p>
+          <p  class="modal-card-title has-text-left">Užimtumo keitimas</p>
         </header>
             <section class="modal-card-body">
                 <div v-if="allowToChangeOccupation" class="field w-fit mx-auto">

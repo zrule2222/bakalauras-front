@@ -16,7 +16,6 @@ import WashingMachineView from "../views/WashingMachineView.vue"
 import ServiceHistoryView from "../views/ServiceHistoryView.vue"
 import SpesificServiceHistoryView from "../views/SpesificServiceHistoryView.vue"
 import axios from 'axios';
-//import babelPolyfill from 'babel-polyfill'
 
 const routes = [
   {
@@ -390,7 +389,6 @@ const router = createRouter({
 router.beforeEach( async (to, from, next) => {
   if (to.meta.requiresAuth) {
     if (localStorage.getItem("token") == null) {
-      // to.params.message = "Jūs neturite galiojančios sesijos"
       localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijungti")
       next({
         path: "/", 

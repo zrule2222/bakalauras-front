@@ -217,8 +217,6 @@ export default {
         }
     },
     props: {
-        // isActive: { type: Boolean, default: false, required: true },
-        // Message: {type: String, required: true},
     },
     components:{
         MenuBar,
@@ -413,11 +411,9 @@ this.Records = recordsToProcess
     }
     }
     catch(error){
-        console.log(error)
     }
     },
     filterRecords(){
-      //if (!this.filterText) return this.people
       if(this.$route.params.name == 'guests'){
 
       let searchText = this.searchedValue.toLowerCase()

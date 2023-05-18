@@ -83,13 +83,9 @@ export default {
      UserInfoModal,
   },
   props: {
-    // message: {
-    //   type: String
-    // }
   },
   methods: {
     async setPageData(){
-      //this.id = this.$route.params.id
       try{
       let user = await this.$api.getUserInfo(this.$route.params.id)
       let room = await this.$api.getUserRoom(this.$route.params.id,user.fk_room)

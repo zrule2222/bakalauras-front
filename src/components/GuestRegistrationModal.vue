@@ -13,7 +13,6 @@
             <p v-show="noGuestName" class="help is-danger has-text-left">Svečio vardas tuščias</p>
             <p v-show="badGuestNameLenght" class="help is-danger has-text-left">Svečio vardas negali viršyti 40 simbolių</p>
             <p v-show="nameHasNumbers" class="help is-danger has-text-left">Svečio vardas negali turėti skaičių</p>
-            <!-- <p v-show="badEmail" class="help is-danger has-text-left">Netinkamas El. pašto formatas</p> -->
           </div>
           <div class="field">
             <label class="label has-text-left">Svečio pavardė</label>
@@ -66,8 +65,6 @@ export default {
     },
     props: {
         isActive: { type: Boolean, default: false, required: true },
-        
-        // userId: { type: Number, required: true }
     },
     components:{
         SucessMessageModal,
@@ -141,7 +138,6 @@ export default {
         let userData = await this.$api.getDataFromToken()
         let date = JSON.parse(JSON.stringify(this.guestArrival))
         let arrival = new Date(date)
-        console.log(arrival)
         let formatedGuestArrival = {
             user_id: userData.id,
 	firstname: this.guestName,
@@ -160,7 +156,7 @@ export default {
     }
     },
     created() {
-        // this.getUserData()
+
     }
 }
 </script>

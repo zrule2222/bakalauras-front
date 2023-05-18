@@ -49,9 +49,6 @@ export default {
         }
     },
     props: {
-        // isActive: { type: Boolean, default: false, required: true },
-        // serviceInformation: {type: String, required: true},
-        // serviceName: {type: String, required: true}
     },
     components:{
         MenuBar,

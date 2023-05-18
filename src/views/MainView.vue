@@ -125,9 +125,6 @@ export default {
     SucessMessageModal,
   },
   props: {
-    // message: {
-    //   type: String
-    // }
   },
   methods: {
    async getUserInfo(){
@@ -141,12 +138,6 @@ export default {
       catch(error){
         this.room = -1
       }
-    }
-    else if(this.role == "Administratorius"){
-
-    }
-    else if(this.role == "Budėtojas"){
-
     }
 
     },
@@ -205,8 +196,8 @@ export default {
 
     async getAdminOccupationForResident(){
       try{
-        let data2 = await this.$api.getAdminOccupation()
-        this.administratorOccupation = data2.occupation
+        let data = await this.$api.getAdminOccupation()
+        this.administratorOccupation = data.occupation
       }
       catch(error){
         this.administratorOccupation = "Neprisijungęs"

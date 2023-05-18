@@ -54,13 +54,9 @@ export default {
       showMessage: false,
       message: "",
       badUsernameLenght: false,
-      //failCount: 0
     };
   },
   props: {
-    // message: {
-    //   type: String
-    // }
   },
   methods: {
     async login() {
@@ -68,18 +64,6 @@ export default {
         return
       }
       try {
-        // if(localStorage.getItem('bruteForseTimer') != null && new Date(localStorage.getItem('bruteForseTimer')) > new Date()  && this.failCount >= 5){
-        //   localStorage.setItem('bruteForseTimer', new Date(new Date().getTime() + 5 * 60000))
-        //   this.message = "Per daug bandymų prisijiungti. Pabandykite už kelių minučių"
-        // this.showMessage = true
-        // }
-        // else if(localStorage.getItem('bruteForseTimer') == null && this.failCount >= 5){
-        //   localStorage.setItem('bruteForseTimer', new Date(new Date().getTime() + 5 * 60000))
-        //   this.message = "Per daug bandymų prisijiungti. Pabandykite už kelių minučių"
-        // this.showMessage = true
-        // }
-        // else{
-        //   localStorage.removeItem('bruteForseTimer')
         const response = await this.$api.login({
           "username": this.username,
           "password": this.password
@@ -90,7 +74,6 @@ export default {
         
 
         this.message = localStorage.getItem('message')
-       // sessionStorage.setItem('reloaded', 'yes');  
         this.showMessage = true
         let data = await this.$api.getDataFromToken()
         if(data.role == 'Administratorius' || data.role == 'Budėtojas'){
@@ -103,25 +86,22 @@ export default {
         this.showMessage = true
         }
       }
-   // }
       catch (error) {
-        console.log(error)
-        if(error.response.status == 429){
+        if(error.code == 'ERR_NETWORK'){
+          this.message = 'Nepavyko susisiekti su serveriu'
+          this.showMessage = true
+        }
+        else if(error.response.status == 429){
           this.message = error.response.data
           this.showMessage = true
         
         }
-        else{
+        else if(error.response.status == 500){
         this.showMessage = false
         this.showError = true
         this.errorMessage = error.response.data
         }
-      // this.failCount = this.failCount + 1
-      // if( this.failCount >= 5){
-      //   localStorage.setItem('bruteForseTimer', new Date(new Date().getTime() + 5 * 60000))
-
-      // }
-
+       
       }
     },
     validateForm() {

@@ -24,7 +24,7 @@
           <div v-else-if="!allowToChangeOccupation" class="field w-fit mx-auto">
             <div class="control">
               <div>
-                <label class="label">Šiuo metu bendrabutyje yra aktyvus budėtojas, todėl užimtumo keisti negalite</label>
+                <label class="label">Šiuo metu bendrabutyje yra aktyvus budėtojas, todėl užimtumo keisti negalite.</label>
               </div>
             </div>
           </div>
@@ -100,7 +100,7 @@ export default {
         let data = await this.$api.getDataFromToken()
         this.CheckIfAllowToChangeOccupation()
         try{
-    let occupation = await this.$api.getUserOccupations(data.id)
+    let occupation = await this.$api.getUserOccupation(data.id)
     this.currectOccupation = occupation.occupation
         }
         catch(error){

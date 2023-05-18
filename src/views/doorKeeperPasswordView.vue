@@ -63,8 +63,6 @@ export default {
         }
     },
     props: {
-        // isActive: { type: Boolean, default: false, required: true },
-        // Message: {type: String, required: true},
     },
     components: {
         MenuBar,
@@ -78,7 +76,6 @@ export default {
             else{
               try{
                 let data = await this.$api.getDataFromToken()
-                console.log(data)
                await this.$api.updateUserPassword(data.id,this.password)
                this.sucessMessage = 'Slaptažodis pakeistas sėkmingai'
                     this.showSucessModal = true

@@ -98,7 +98,6 @@
     <div v-else-if="$route.params.role == 'Budėtojas' && acceptedRegistrations.length == 0" class="text-xl mt-2 has-text-info">
       Šiuo metu bendrabutyje nėra svečių
     </div>
-
 <GuestRegistrationModal @registration-sucess="registrationComplete()" @registration-fail="registrationFailed()" @close-action="closeRegistrationModal" v-if="showModal" :is-active="showModal" ></GuestRegistrationModal>
 <SucessMessageModal v-if="showSucessMessage" :is-active="showSucessMessage"  @close-action="closeSucessMessageModal()" :Message="sucessMessage"></SucessMessageModal>
 <ConfirmationModal @close-action="closeConfirmationModal()" @confirm-action="cancelRegistration()" :isActive="showConfirmationModal"></ConfirmationModal>
@@ -126,8 +125,6 @@ export default {
         }
     },
     props: {
-        // isActive: { type: Boolean, default: false, required: true },
-        // Message: {type: String, required: true},
     },
     components:{
         MenuBar,

@@ -10,6 +10,15 @@
       </section>
     </div>
  <MenuBar  :menu-type="'main-back'"></MenuBar>
+ <div class="modal" :class="{ 'is-active': showLoading }">
+   <div class="modal-background"></div>
+   <div class="modal-content">
+    <div class="animate-spin inline-block w-8 h-8 border-[3px] border-current border-t-transparent text-bulma-green rounded-full" role="status" aria-label="loading">
+  <span class="sr-only">Loading...</span>
+</div>
+<div class=" text-white">Paskyra yra kuriama</div>
+    </div>
+ </div>
 
  <div class="hero-body is-justify-content-center is-align-items-center">
         <div class="columns is-flex is-flex-direction-column box">
@@ -80,18 +89,14 @@
             <div class="control">
               <div v-if="!noFreeRooms">
                 <select v-model="room" :class="noRoom ? 'border-boarder-red' : ''" >
-                  <option  value="" disabled selected>Pasirinkite kambarį</option>
+                  <option  :value=0 disabled selected>Pasirinkite kambarį</option>
                   <option  v-for="rooms in roomsForRegistration" :key="rooms.room_id" :value="`${rooms.room_id}`">{{ rooms.number }}</option>
-                  <!-- <option value="Vyras"  selected>Vyras</option> -->
-                  <!-- <option value="Moteris"  selected>Moteris</option> -->
                 </select>
                 <p v-show="noRoom" class="help is-danger has-text-left">Nepasirinktas kambarys</p>
               </div>
               <div v-if="noFreeRooms">
-                <select v-model="room" :class="noRoom ? 'border-boarder-red' : ''" >
-                  <option  value="" disabled selected>Nėra laisvų kambarių</option>
-                  <!-- <option value="Vyras"  selected>Vyras</option> -->
-                  <!-- <option value="Moteris"  selected>Moteris</option> -->
+                <select :class="noRoom ? 'border-boarder-red' : ''" >
+                  <option value="" disabled selected>Nėra laisvų kambarių</option>
                 </select>
                 <p v-show="noRoom" class="help is-danger has-text-left">Nepasirinktas kambarys</p>
               </div>
@@ -101,15 +106,19 @@
           <div class="column">
             <button class="button is-primary is-fullwidth"  @click="registerUser()">Registruoti</button>
           </div>
+          <!-- <img src="../assets/Spin-1s-200px.gif" class="z-10"> -->
+
+          
 
           <SucessMessageModal v-if="showSucessModal" :isActive="showSucessModal" :Message="sucessMessage" @close-action="closeSucessMessageModal()"></SucessMessageModal>
           <SucessMessageModal v-if="showUsernameSucessModal" :isActive="showUsernameSucessModal" :Message="usernameExistsMessage" @close-action="closeUsernameMessageModal()"></SucessMessageModal>
 
         </div>
       </div>
+      </div>
 
 
-    </div>
+    <!-- </div> -->
 </template>
 
 <script>
@@ -138,7 +147,7 @@ export default {
             lastnameHasNumbers: false,
             gender: "",
             noGender: false,
-            room: Number,
+            room: 0,
             noRoom: false,
             roomsForRegistration: [],
             noFreeRooms: false,
@@ -147,6 +156,7 @@ export default {
       showUsernameSucessModal: false,
       usernameExistsMessage: "",
       randomPassword: "",
+      showLoading: false,
 
         }
     },
@@ -180,7 +190,7 @@ export default {
                 
             }
             try{
-           
+              this.showLoading = true
                if(await this.checkUsername()){
                 await this.$api.sendEmail(userData.email,userData.password,userData.username)
             await this.$api.registerUser(userData)
@@ -192,6 +202,7 @@ export default {
             this.showSucessMessageModal()
         }
         else{
+          this.showLoading = false
             this.usernameExistsMessage = "Naudotojas su nurodytu prisijungimo vardu jau egzistuoja",
             this.showUsernameSucessModal = true
         }
@@ -220,6 +231,7 @@ export default {
         }
         },
         showSucessMessageModal(){
+          this.showLoading = false
             this.showSucessModal = true
         },
         validateForm(){
@@ -358,7 +370,6 @@ export default {
             this.noFreeRooms = false
             }
             catch(error){
-                console.log(error)
                 this.noFreeRooms = true
             }
         }

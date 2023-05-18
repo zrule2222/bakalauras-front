@@ -75,7 +75,6 @@ export default {
         }
     },
     props: {
-        // isActive: { type: Boolean, default: false, required: true },
     },
     components:{
         MenuBar,
@@ -85,6 +84,7 @@ export default {
        async getServices() {
         try{
            this.services = await this.$api.getServices()
+          
         }
         catch(error){
             this.services = []

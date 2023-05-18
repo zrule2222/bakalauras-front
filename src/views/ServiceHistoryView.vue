@@ -25,8 +25,6 @@ export default {
         }
     },
     props: {
-        // isActive: { type: Boolean, default: false, required: true },
-        // Message: {type: String, required: true},
     },
     components:{
         MenuBar,

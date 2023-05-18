@@ -86,9 +86,6 @@ export default {
             if(!this.validateForm()){
                 return
             }
-            // if(!this.password){
-            //     this.password = null
-            // }
             let userinfo = {
              email: this.email,
              password: this.password,
@@ -123,10 +120,6 @@ export default {
               else{
                 this.$emit('no-changes');
               }
-            //   else if(!this.password && !this.repeatPassword){
-            // await this.$api.updateUserInfo(this.userId, userinfo)
-            // this.$emit('update-sucess');
-            //   }
             }
             catch(error){
               if(error.request.status == 500){

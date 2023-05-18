@@ -10,7 +10,6 @@
       </section>
     </div>
     <MenuBar :menu-type="'main-back'"></MenuBar>
-
     <div v-if="washingMachines.length > 0" class="columns is-multiline mt-3 is-centered ">
 <div v-for="machine in washingMachines" :key="machine.machine_id" :class="machine.machine_status == 'Occupied'? '!mt-0': ''"   class="mb-3 column is-4 mt-5    has-text-centered">
 <div class="tex text-xl">Skalbyklė Nr. {{ machine.machine_number  }}</div>
@@ -66,9 +65,6 @@ export default {
         }
     },
     props: {
-        // isActive: { type: Boolean, default: false, required: true },
-        // serviceInformation: {type: String, required: true},
-        // serviceName: {type: String, required: true}
     },
     components: {
         MenuBar,
@@ -80,7 +76,6 @@ export default {
        async getMachineData() {
         try{
         let machines = await this.$api.getWashingMachineData()
-        //this.washingMachines = machines.sort((a, b) => a.machine_number-b.machine_number)
         for (let index = 0; index <  machines.length; index++) {
             if(new Date(machines[index].time) < new Date() && machines[index].time != null){
                 try{
@@ -88,12 +83,8 @@ export default {
                await this.$api.finishWashingRegistration(machines[index].fk_wasking_registration)
                 }
                 catch(error){
-                    
-                    console.log(error)
-                }
-            }
-            else{
 
+                }
             }
             
         }
@@ -123,27 +114,11 @@ export default {
         }
         try{
             let data = await this.$api.getDataFromToken()
-            // for (let index = 0; index < this.washingMachines.length; index++) {
-            //     if(users[index].fk_user == data.id){
-            //         this.noFailRegProvided = false
-            //         this.washingMachines[index].hasFailReg = true
-
-            //     }
-            //     else{
-            //         this.washingMachines[index].hasFailReg = false
-            //     }
-
-                
-            // }
-            // console.log( this.washingMachines)
-
             for (let index = 0; index < this.washingMachines.length; index++) {
                 try{
                 let users = await this.$api.getCurrentFailRegUsers( this.washingMachines[index].machine_id)
-                console.log(users)
                 for (let indexUser = 0; indexUser < users.length; indexUser++) {
                     if(users[indexUser].fk_user == data.id){
-                        console.log(index)
                         this.washingMachines[index].hasFailReg = true
                     }
                     else{
@@ -154,7 +129,7 @@ export default {
                 }
             }
             catch(error){
-                console.log(error)
+              
             }
                 
             }
@@ -166,7 +141,7 @@ export default {
 
     }
         catch(error){
-            console.log(error)
+        
     }
     },
     showRegistrationModal(id,number){
@@ -206,7 +181,6 @@ export default {
       this.showFixSucessMessage = true
     }
     catch(error){
-        console.log(error)
         this.showFixConfirmation = false
       this.fixSucessMessage = 'Gedimo sutvarkyti nepavyko'
       this.showFixSucessMessage = true
@@ -223,31 +197,25 @@ export default {
         this.showConfirmation = false
         this.failRegMessage = 'Skalbimo mašinos gedimas užregistruotas sėkmingai'
         this.showFailRegMessage = true
-        console.log('emit sucess')
       }
       else{
         this.showConfirmation = false
         this.failRegMessage = 'Skalbimo mašinos gedimo užregistruoto nepavyko'
         this.showFailRegMessage = true
-        console.log('emit fail')
+
       }
     }
     catch(error){
-     console.log(error)
-     console.log('registration failed')
+
      this.showConfirmation = false
         this.failRegMessage = 'įvyko klaida registruojant skalbimo mašinos gedimą'
         this.showFailRegMessage = true
     }
 }
 catch(error){
-    console.log(error)
-    console.log('no data from token')
+
 }
     }
-
-
-    
 
     },
     created() {

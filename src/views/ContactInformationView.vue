@@ -12,7 +12,6 @@
     </div>
     <MenuBar :menu-type="'main-back'"></MenuBar>
     
-    <!-- <div  v-if="users.length > 0"> -->
     <div v-if="users.length > 0" v-for="user in users" :key="user.id" class="hero-body is-justify-content-center is-align-items-center">
         <div class="columns is-flex is-flex-direction-column box w-[304px] h-[220px]">
           <div class="column has-text-left">
@@ -54,13 +53,9 @@ export default {
     MenuBar
   },
   props: {
-    // message: {
-    //   type: String
-    // }
   },
   methods: {
     async getContactInfo(){
-    //   this.id = this.$route.params.id
     try{
       this.users = await this.$api.getContactInformation()
     }

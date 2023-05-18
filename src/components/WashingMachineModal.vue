@@ -40,8 +40,6 @@ export default {
         isActive: { type: Boolean, default: false, required: true },
         machineNumber: {type: Number,required: true},
         machineId: {type: Number,required: true}
-        // serviceInformation: {type: String, required: true},
-        // serviceName: {type: String, required: true}
     },
     components:{
         VueDatePicker,
@@ -60,7 +58,6 @@ export default {
                 let registrationData ={
                     user: data.id,
 	                status: "Aktyvus",
-	              // created_at: new Date(),
 	               machine: this.machineId,
                    time : `${timer.hours}:${timer.minutes}`
                 }
@@ -79,7 +76,6 @@ export default {
                   this.$emit('washing-sucess');
             }
             catch(error){
-            console.log(error)
             this.$emit('washing-fail');
             }
             

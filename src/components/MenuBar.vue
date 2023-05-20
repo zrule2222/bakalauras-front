@@ -108,7 +108,7 @@
         <div class="md:flex md:flex-wrap md:items-center md:ml-auto md:justify-end hidden ">
 
             <div>
-              prisijiungęs: {{ username }}
+              Prisijiungęs: {{ username }}
             </div>
             <button @click="logout()"  class="text-sm  text-white hover:bg-gray-700 rounded-md md:px-2 md:py-1 fa-solid fa-right-from-bracket sm:px-3 sm:py-3 "></button>
         </div>

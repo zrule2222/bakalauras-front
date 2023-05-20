@@ -20,7 +20,7 @@
           <div class="column has-text-left break-all">
             <label for="Name">{{ user.firstname }} {{ user.lastname }}</label>
           </div>
-          <div class="column has-text-left break-all">
+          <div class="column has-text-left break-words">
             <label for="Name">El. paštas: {{ user.email }}</label>
           </div>
         </div>

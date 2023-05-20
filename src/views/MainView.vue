@@ -179,7 +179,13 @@ export default {
       }
     }
     catch(error){
-      
+      if(data.role == 'Administratorius'){
+      this.administratorOccupation = `Prisijungęs`
+      this.getDoorkeeperOccupation()
+      }
+      else if(data.role == 'Budėtojas'){
+        this.doorkeeperOccupation = `Prisijungęs`
+      }
     }
      
     },

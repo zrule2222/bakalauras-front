@@ -5,12 +5,13 @@ export const api = {}
 
 
 api.http = axios.create({ baseURL: "http://localhost:5000" })
-
+// return a jwt token and the blocked status if the user logs in sucesfully
 api.login = async function (loginData) {
   let response = null
     response = await this.http.post(`/login`, loginData)
   return response.data
 },
+//retuens user's id ant role by the given name
 api.userByName = async function (username) {
    const res = await this.authenticateUser()
    let response = null
@@ -19,6 +20,7 @@ api.userByName = async function (username) {
    }
    return response.data
  }
+ //returns user's information
  api.getUserInfo = async function (id) {
    const res = await this.authenticateUser()
    let response = null
@@ -27,7 +29,7 @@ api.userByName = async function (username) {
    }
    return response.data
  }
-
+//returns information that is displayed on workers contact information page
  api.getContactInformation = async function () {
    const res = await this.authenticateUser()
    let response = null
@@ -36,6 +38,7 @@ api.userByName = async function (username) {
    }
    return response.data
  }
+ //returns user's room number
  api.getUserRoom = async function (id, fk_room) {
    const res = await this.authenticateUser()
     let response = null
@@ -44,34 +47,37 @@ api.userByName = async function (username) {
     }
     return response.data.number
   }
+  //registers a guest for a stay at the dormitary
   api.registerGuest = async function (guestData) {
     const res = await this.authenticateUser()
      if (res == true) {
       await this.http.post(`/registerGuest`,guestData)
      }
    }
+   //block a residents account
   api.blockUser = async function (id) {
    const res = await this.authenticateUser()
     if (res == true) {
     await this.http.put(`/block/${id}`)
     }
   }
-
+//update user's email and blocked status
   api.updateUserInfo = async function (id,userinfo) {
    const res = await this.authenticateUser()
    if (res == true) {
      await this.http.put(`/updateUser/${id}`, userinfo)
    }
   }
-
+//returns information about all washing machines
   api.getWashingMachineData = async function () {
     const res = await this.authenticateUser()
+    let response = null
     if (res == true) {
-     await this.http.get(`/machineData`)
+      response = await this.http.get(`/machineData`)
     }
      return response.data
    }
-
+//registers a new washing for a spesific washing machine
    api.registerWashing = async function (registrationData) {
     const res = await this.authenticateUser()
      let response = null
@@ -80,7 +86,7 @@ api.userByName = async function (username) {
     }
      return response.data
    }
-
+//get users that currectly have an active washing machine failure registration
    api.getCurrentFailRegUsers = async function (id) {
     const res = await this.authenticateUser()
      let response = null
@@ -89,14 +95,14 @@ api.userByName = async function (username) {
     }
      return response.data
    }
-
+//repair a broken washing mashine
    api.fixWashingMachine = async function (id) {
     const res = await this.authenticateUser()
     if (res == true) {
       await this.http.put(`/fixMachine/${id}`)
     }
    }
-
+//update washing machine with the washing registration data
    api.updateWashingMachine = async function (id, updateData) {
     const res = await this.authenticateUser()
     if (res == true) {
@@ -104,14 +110,14 @@ api.userByName = async function (username) {
     }
   
    }
-
+//resident cancels his guest registration
   api.cancelGuestRegistration = async function (id) {
     const res = await this.authenticateUser()
     if (res == true) {
       await this.http.put(`/cancelGuest/${id}`)
     }
    }
-
+//get guest registrations that are waiting confirmation
    api.getActiveGuestRegistrations = async function () {
     const res = await this.authenticateUser()
      let response = null
@@ -120,6 +126,7 @@ api.userByName = async function (username) {
     }
      return response.data
    }
+ //doorkeeper accepts user's guest registration  
    api.acceptGuestRegistration = async function (id) {
     const res = await this.authenticateUser()
      let response = null
@@ -129,7 +136,7 @@ api.userByName = async function (username) {
     }
      return response.data
    }
-
+//doorkeeper rejects user's guest registration
    api.rejectGuestRegistration = async function (id) {
     const res = await this.authenticateUser()
     if (res == true) {
@@ -137,7 +144,7 @@ api.userByName = async function (username) {
       await this.http.put(`/updateGuest/${id}`, {	status : "Atmesta",doorKeeper_id: data.id})
     }
    }
-
+//return guest registrations that are already confirmed
    api.getConfirmedGuestRegistrations = async function () {
     const res = await this.authenticateUser()
      let response = null
@@ -146,7 +153,7 @@ api.userByName = async function (username) {
     }
      return response.data
    }
-
+//return the doorkeeper's occupation
    api.getDoorkeeperOccupation = async function () {
     const res = await this.authenticateUser()
      let response = null
@@ -155,7 +162,7 @@ api.userByName = async function (username) {
     }
      return response.data
    }
-
+//return the admin's occupation
    api.getAdminOccupation = async function () {
     const res = await this.authenticateUser()
      let response = null
@@ -164,7 +171,7 @@ api.userByName = async function (username) {
     }
      return response.data
    }
-
+//return rooms that are available to register a resident in
    api.getRoomsForRegistration = async function (roomType) {
     const res = await this.authenticateUser()
      let response = null
@@ -173,28 +180,28 @@ api.userByName = async function (username) {
     }
      return response.data
    }
-
+//create a new user's account
    api.registerUser = async function (userData) {
     const res = await this.authenticateUser()
     if (res == true) {
     await this.http.post(`/register`,userData)
     }
    }
-
+//update the amout of free spaces left in the room
    api.updateRoomSpace = async function (id) {
     const res = await this.authenticateUser()
     if (res == true) {
      await this.http.put(`/updateRoomSpace/${id}`)
     }
    }
-
+//check if an account with the given username exists
    api.checkUsername = async function (username) {
     const res = await this.authenticateUser()
     if (res == true) {
       await this.http.post(`/checkUsername`, {username: username})
     }
    }
-
+//return the name and surname of all the residents in the system
    api.getAllResidents = async function () {
     const res = await this.authenticateUser()
      let response = null
@@ -203,7 +210,7 @@ api.userByName = async function (username) {
     }
      return response.data
    }
-
+//update room status if the room has no more free space
    api.updateRoomstatus = async function () {
     const res = await this.authenticateUser()
     if (res == true) {
@@ -211,7 +218,7 @@ api.userByName = async function (username) {
     }
    }
 
-
+ //doorkeeper ends user's guest registration  
    api.setGuestRegistrationAsDone = async function (id) {
     const res = await this.authenticateUser()
     if (res == true) {
@@ -219,20 +226,21 @@ api.userByName = async function (username) {
       await this.http.put(`/updateGuest/${id}`, {	status : "Užbaigta",doorKeeper_id: data.id})
     }
    }
-
+//save resident's leisure room registration
    api.leisureRoomRegistration = async function (id) {
     const res = await this.authenticateUser()
     if (res == true) {
       await this.http.post(`/registerLeisure/${id}`)
     }
    }
-
+//update washing machine status when the washing registration is finished
    api.finishWashingMachine = async function (id) {
     const res = await this.authenticateUser()
     if (res == true) {
      await this.http.put(`/finishMachine/${id}`)
     }
    }
+//resident register's that the washing machine is broken
    api.registerMachineFailure = async function (id, userId) {
     const res = await this.authenticateUser()
     if (res == true) {
@@ -262,14 +270,14 @@ api.userByName = async function (username) {
 
    }
 
-
+//set the washing registrations status to 'Užbaikta'
    api.finishWashingRegistration = async function (id) {
     const res = await this.authenticateUser()
     if (res == true) {
        await this.http.put(`/finishWashing/${id}`)
     }
    }
-   
+   //check if user's jwt token is still valid
  api.authenticateUser = async function () {
    if (localStorage.getItem("token") != null){
     try{
@@ -296,17 +304,18 @@ api.userByName = async function (username) {
       return false
    }
   }
-
+//sets the occupation of the worker
   api.setWorkerOccupation = async function(occupation, id){
     if(occupation == 'Neprisijungęs'){
       sessionStorage.removeItem('id')
       sessionStorage.removeItem('role')
+      localStorage.removeItem('token')
     }
    await this.http.put(`/occupation/${id}`,{occupation: occupation})
     },
 
 
-
+//return all the information about all the services
   api.getServices = async function(){
     const res = await this.authenticateUser()
     let response = null
@@ -315,7 +324,7 @@ api.userByName = async function (username) {
     }
       return response.data
     },
-
+//return the occupation of the user with the given id
     api.getUserOccupation = async function(id){
       const res = await this.authenticateUser()
       let response = null
@@ -324,6 +333,7 @@ api.userByName = async function (username) {
       }
         return response.data
       },
+//return all user guest registrations that are waiting confirmation
     api.getuserGuestRegistrations = async function(id){
       const res = await this.authenticateUser()
       let response = null
@@ -332,7 +342,7 @@ api.userByName = async function (username) {
       }
         return response.data
       },
-
+//return leiure room registrations that are waiting confirmation
       api.getLeisureRoomRegistrations = async function(){
         const res = await this.authenticateUser()
         let response = null
@@ -341,21 +351,21 @@ api.userByName = async function (username) {
         }
           return response.data
         },
-
+//update the password of a user with the given id
         api.updateUserPassword = async function(id,password){
           const res = await this.authenticateUser()
           if (res == true) {
         await this.http.put(`/userPass/${id}`, {password: password})
           }
           },
-
+//send an email to a user with the login credentials
         api.sendEmail = async function(email,password,username){
           const res = await this.authenticateUser()
           if (res == true) {
             await this.http.post(`/sendMail`, {userMail: email,password: password,username: username})
           }
           },
-
+//return the history of a requested service according to the user's role
           api.getServiceHistory = async function(id,role,service){
             const res = await this.authenticateUser()
             let response = null
@@ -392,7 +402,7 @@ api.userByName = async function (username) {
               return response.data
             },
 
-        
+       //doorkeeper accepts user's leisure room registration  
       api.acceptLeisureRoomRegistration = async function(id){
         const res = await this.authenticateUser()
         if (res == true) {
@@ -400,7 +410,7 @@ api.userByName = async function (username) {
           await this.http.put(`/updateLeisure/${id}`,{status: "Patvirtinta", doorKeeper_id: data.id})
         }
         },
-
+      //doorkeeper rejects user's leisure room registration
         api.rejectLeisureRoomRegistration = async function(id){
           const res = await this.authenticateUser()
           if (res == true) {
@@ -408,7 +418,7 @@ api.userByName = async function (username) {
             await this.http.put(`/updateLeisure/${id}`,{status: "Atmesta", doorKeeper_id: data.id})
           }
           },
-
+         //return the name and surname of the resident's that currently have a confirmed registration
           api.getLeisureRoomData = async function(){
             const res = await this.authenticateUser()
             let response = null
@@ -417,7 +427,7 @@ api.userByName = async function (username) {
             }
               return response.data
             },
-
+            //return a user's leisure room registration that is waiting confirmation or is confirmed
             api.getuserLeisureRegistration = async function(id){
               const res = await this.authenticateUser()
               let response = null
@@ -426,14 +436,14 @@ api.userByName = async function (username) {
               }
                 return response.data
               },
-
+              //resident cancels his leisure room registration
               api.cancelLeisureRegistration = async function(id){
                 const res = await this.authenticateUser()
                 if (res == true) {
                 await this.http.put(`/updateUserLeisure/${id}`,{status: "Atšaukta"})
                 }
                 },
-
+                //resident finishes his leisure room registration
                 api.finishLeisureRegistration = async function(id){
                   const res = await this.authenticateUser()
                   if (res == true) {
@@ -441,7 +451,7 @@ api.userByName = async function (username) {
                   }
                   },
 
-
+//return the username, role and id of the user that is encoded on the jwt token
   api.getDataFromToken = async function(){
     if (localStorage.getItem("token") != null){
       try{

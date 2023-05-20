@@ -17,7 +17,7 @@
 <img v-if="machine.machine_status == 'Working' || machine.machine_status == 'Occupied'"  src="../assets/washing_machine.jpg"  class="m-auto">
 <img v-else-if="machine.machine_status == 'Broken' "  src="../assets/broken_washing_machine.jpg"  class="m-auto">
 <div class=" justify-between mt-2">
-<button  v-if="machine.machine_status == 'Working' && machine.hasFailReg != true && $route.params.role == 'Gyventojas'" class="button is-primary m-1" @click="showRegistrationModal(machine.machine_id,machine.machine_number)">Registruoti skalbimą</button>
+<button  v-if="machine.machine_status == 'Working' && machine.hasFailReg != true && $route.params.role == 'Gyventojas'" class="button is-primary m-1" @click="showRegistrationModal(machine.machine_id,machine.machine_number)" >Registruoti skalbimą</button>
 <button  v-if="machine.machine_status == 'Working' && machine.hasFailReg != true && $route.params.role == 'Gyventojas'" class="button is-danger m-1" @click="showRegistrationConfirmationModal(machine.machine_id)">Registruoti gedimą</button>
 <button  v-if="machine.machine_status == 'Broken' &&  $route.params.role == 'Administratorius'" class="button is-warning m-1" @click="showFixConfirmation = true, fixingId = machine.machine_id">Gedimas sutvarkytas</button>
 </div>

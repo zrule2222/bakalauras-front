@@ -6,7 +6,8 @@
           <p  class="modal-card-title has-text-left">{{serviceName}}</p>
         </header>
             <section class="modal-card-body has-text-left">
-                <label class="label whitespace-pre-wrap ">{{ serviceInformation }}</label>
+                <label v-if="serviceInformation.length > 0" class="label whitespace-pre-wrap ">{{ serviceInformation }}</label>
+                <label v-else class="label whitespace-pre-wrap ">Paslauga aprašymas.</label>
 
             </section>
             <footer class="modal-card-foot flex justify-end">

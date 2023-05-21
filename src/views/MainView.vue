@@ -16,6 +16,7 @@
 <div v-if="role == 'Gyventojas'" class="  ml-6 min-w-fit">
  Jūsų kambarys: {{ room }}
 </div>
+<!-- display workers occupation to the resident -->
 <div v-if="role == 'Gyventojas'" class="mr-6">
   <div class=" sm:ml-6 min-w-fit text-left sm:text-center">
   Darbuotojų užimtumas
@@ -56,6 +57,7 @@
   <div class=" sm:ml-6 min-w-fit text-left sm:text-center">
   Užimtumas
 </div>
+<!-- display the occupation for the admin -->
 <div class="has-text-left is-flex is-flex-direction-column min-w-fit">
     <div class="has-text-left is-flex is-flex-direction-row items-center">
     Jūsų užimtumas:
@@ -68,6 +70,7 @@
   <div v-else-if="role == 'Administratorius' && administratorOccupation == 'Prisijungęs'" class="has-text-info ml-2">
     {{administratorOccupation}}
   </div>
+  <!-- display the occupation for the doorkeeper -->
   <div v-if="role == 'Budėtojas' && doorkeeperOccupation == 'Užimtas'" class="has-text-danger ml-2">
     {{doorkeeperOccupation}}
   </div>
@@ -127,6 +130,7 @@ export default {
   props: {
   },
   methods: {
+    //return the resident's information
    async getUserInfo(){
     let data = await this.$api.getDataFromToken()
     this.role = data.role
@@ -166,6 +170,7 @@ export default {
       this.showSucessModal = true
 
     },
+    //return the occupation for the workers
    async getWorkerOccupation(){
     let data = await this.$api.getDataFromToken()
     try{
@@ -189,7 +194,7 @@ export default {
     }
      
     },
-
+     //return the doorkeeper's occupation
     async getDoorkeeperOccupation(){
       try{
     let data = await this.$api.getDoorkeeperOccupation()
@@ -199,7 +204,7 @@ export default {
         this.doorkeeperOccupation = "Neprisijungęs"
       }
     },
-
+   //return admin's occupation
     async getAdminOccupationForResident(){
       try{
         let data = await this.$api.getAdminOccupation()
@@ -212,12 +217,14 @@ export default {
   },
  async created(){
    await this.getUserInfo()
+   //return the occupation for the worker based on his role
    if(this.role == 'Administratorius' || this.role == 'Budėtojas' ){
    this.getWorkerOccupation()
    if(this.role == 'Administratorius'){
     this.getDoorkeeperOccupation()
    }
    }
+   //get the occupasion of the admin and doorkeeper for the resident on page load
    else if(this.role == 'Gyventojas'){
     this.getDoorkeeperOccupation()
     this.getAdminOccupationForResident()

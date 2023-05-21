@@ -45,9 +45,11 @@ export default {
         VueDatePicker,
     },
     methods: {
+        //close this modal
         closeModal() {
             this.$emit('close-action');
         },
+        //register a washing for the selected washing machine
        async registerWashing(){
             if(!this.validateForm()){
                 return
@@ -55,12 +57,14 @@ export default {
             try{
                 let data = await this.$api.getDataFromToken()
                 let timer = JSON.parse(JSON.stringify(this.washingTime))
+                //object that hold the registration data
                 let registrationData ={
                     user: data.id,
 	                status: "Aktyvus",
 	               machine: this.machineId,
                    time : `${timer.hours}:${timer.minutes}`
                 }
+                //format washing time
                 let washingFinishDate = new Date()
                  washingFinishDate.setHours(washingFinishDate.getHours() + timer.hours)
                  washingFinishDate.setMinutes(washingFinishDate.getMinutes() + timer.minutes)
@@ -80,6 +84,7 @@ export default {
             }
             
         },
+        //check if the selected time is valid
         validateForm(){
             this.noWashingTime = null
             this.badWashingTime = null

@@ -3,6 +3,7 @@
         <div class="hero">
       <section class="hero is-primary is-small">
         <div class="hero-body is-justify-content-center">
+          <!-- display the service name -->
           <p v-if="$route.params.name == 'guests'" class="title">Svečių registracija</p>
           <p v-else-if="$route.params.name == 'leisureRoom'" class="title">Laisvalaikio kambario registracija</p>
           <p v-else-if="$route.params.name == 'washing'" class="title">Skalbimų registracija</p>
@@ -24,7 +25,7 @@
  </p>
 </div>
     </div>
-        
+        <!-- display the washine machine fail registration's history based on if there are registrations for this service and if the path of this page is pointing to this service -->
     <div v-if="(Records.length > 0 && $route.params.name == 'machineFail' && searchedValue.length == 0) || ($route.params.name == 'machineFail' && Records.length > 0 && filteredRecords.length > 0)" class="">
       <table class="table is-bordered is-striped is-hoverable ml-auto mr-auto mt-7">
         <thead>
@@ -38,11 +39,13 @@
         <tbody v-if="filteredRecords.length == 0 && searchedValue.length == 0" v-for="(record, count) in Records" :key="record.leisure_id">
             <tr>
                 <th class="has-text-centered">{{count+1}}</th>
+                <!-- show difrent data depending on the user's role -->
                 <td v-if="$route.params.role == 'Administratorius' ">{{record.firstname}} {{ record.lastname }}</td>
                 <td>{{ record.created_at }}</td>
                 <td>Nr. {{record.machine_number }}</td>
             </tr>
         </tbody>
+        <!-- show filtered records -->
         <tbody v-if="filteredRecords.length > 0" v-for="(record, count) in filteredRecords" :key="record.leisure_id">
           <tr>
                 <th class="has-text-centered">{{count+1}}</th>
@@ -62,7 +65,7 @@
     <div v-else-if="searchedValue.length >= 0 &&  $route.params.name == 'machineFail' && filteredRecords.length == 0" class="text-xl mt-5 has-text-info">
       Nepavyko rasti įrašų pagal jūsų pateiktus kriterijus
     </div>
-
+        <!-- display the guest registration history based on if there are registrations for this service and if the path of this page is pointing to this service -->
     <div v-if="(Records.length > 0 && $route.params.name == 'guests' && searchedValue.length == 0) || ($route.params.name == 'guests' && Records.length > 0 && filteredRecords.length > 0)" class="">
       <table class="table is-bordered is-striped is-hoverable ml-auto mr-auto mt-7">
         <thead>
@@ -76,9 +79,11 @@
         <th class="has-text-centered">Registraciją pateikė</th>
     </tr>
         </thead>
+        
         <tbody v-if="filteredRecords.length == 0 && searchedValue.length == 0" v-for="(record, count) in Records" :key="record.leisure_id">
             <tr>
                 <th class="has-text-centered">{{count+1}}</th>
+                <!-- show difrent data depending on the user's role -->
                 <td v-if="$route.params.role == 'Administratorius' ">{{record.firstname}} {{ record.lastname }}</td>
                 <td>{{record.guest_firstname}} {{ record.guest_lastname }}</td>
                 <td>{{record.guest_arrival }}</td>
@@ -87,7 +92,7 @@
                 <td>{{record.action_firstname }} {{record.action_lastname }}</td>
             </tr>
         </tbody>
-
+         <!-- show filtered records -->
         <tbody  v-else-if="filteredRecords.length > 0"  v-for="(recordFiltered, count) in filteredRecords" :key="recordFiltered.leisure_id">
         <tr>
                 <th class="has-text-centered">{{count+1}}</th>
@@ -111,7 +116,7 @@
     <div v-else-if="searchedValue.length >= 0 &&  $route.params.name == 'guests' && filteredRecords.length == 0" class="text-xl mt-5 has-text-info">
       Nepavyko rasti įrašų pagal jūsų pateiktus kriterijus
     </div>
-
+ <!-- display the leisure room registration history based on if there are registrations for this service and if the path of this page is pointing to this service -->
     <div v-if="(Records.length > 0 && $route.params.name == 'leisureRoom' && searchedValue.length == 0) || ($route.params.name == 'leisureRoom' && Records.length > 0 && filteredRecords.length > 0)" class="">
       <table class="table is-bordered is-striped is-hoverable ml-auto mr-auto mt-7">
         <thead>
@@ -124,15 +129,18 @@
         <th class="has-text-centered">Registraciją pateikė</th>
     </tr>
         </thead>
+        
         <tbody v-if="filteredRecords.length == 0 && searchedValue.length == 0" v-for="(record, count) in Records" :key="record.leisure_id">
             <tr>
                 <th class="has-text-centered">{{count+1}}</th>
+                 <!-- show difrent data depending on the user's role -->
                 <td v-if="$route.params.role == 'Administratorius' ">{{record.firstname}} {{ record.lastname }}</td>
                 <td>{{record.statusas }}</td>
                 <td>{{record.happened_at }}</td>
                 <td>{{record.action_firstname }} {{record.action_lastname }}</td>
             </tr>
         </tbody>
+         <!-- show filtered records -->
         <tbody v-if="filteredRecords.length > 0" v-for="(record, count) in filteredRecords" :key="record.leisure_id">
         <tr>
                 <th class="has-text-centered">{{count+1}}</th>
@@ -153,7 +161,7 @@
     <div v-else-if="searchedValue.length >= 0 &&  $route.params.name == 'leisureRoom' && filteredRecords.length == 0" class="text-xl mt-5 has-text-info">
       Nepavyko rasti įrašų pagal jūsų pateiktus kriterijus
     </div>
-
+<!-- display the washing registration history based on if there are registrations for this service and if the path of this page is pointing to this service -->
     <div v-if="(Records.length > 0 && $route.params.name == 'washing' && searchedValue.length == 0) || ($route.params.name == 'washing' && Records.length > 0 && filteredRecords.length > 0)" class="">
       <table class="table is-bordered is-striped is-hoverable ml-auto mr-auto mt-7">
         <thead>
@@ -170,6 +178,7 @@
         <tbody v-if="filteredRecords.length == 0 && searchedValue.length == 0" v-for="(record, count) in Records" :key="record.leisure_id">
             <tr>
                 <th class="has-text-centered">{{count+1}}</th>
+                <!-- show difrent data depending on the user's role -->
                 <td v-if="$route.params.role == 'Administratorius' ">{{record.firstname}} {{ record.lastname }}</td>
                 <td>{{record.statusas }}</td>
                 <td>Nr. {{record.machine_number }}</td>
@@ -179,6 +188,7 @@
                 <td v-else>N/A</td>
             </tr>
         </tbody>
+         <!-- show filtered records -->
         <tbody v-if="filteredRecords.length > 0" v-for="(record, count) in filteredRecords" :key="record.leisure_id">
           <tr>
                 <th class="has-text-centered">{{count+1}}</th>
@@ -223,11 +233,11 @@ export default {
     },
     methods: {
         async getRecords() {
-
+            //return washing machine failure registration history
             try{
               if(this.$route.params.name == 'machineFail'){
          let recordsToProcess =   await this.$api.getServiceHistory(this.$route.params.id,this.$route.params.role,this.$route.params.name)
-
+    //format the washing registration creation time
          for (let index = 0; index < recordsToProcess.length; index++) {
           
 
@@ -258,8 +268,10 @@ export default {
         }
         this.Records = recordsToProcess
     }
+     //return guest registration history
     else if(this.$route.params.name == 'guests'){
       let recordsToProcess = await this.$api.getServiceHistory(this.$route.params.id,this.$route.params.role,this.$route.params.name)
+      //format the guest arrival time
       for (let index = 0; index < recordsToProcess.length; index++) {
      let year =   new Date(recordsToProcess[index].guest_arrival).getUTCFullYear()
     let month =   new Date(recordsToProcess[index].guest_arrival).getUTCMonth() +1
@@ -313,9 +325,10 @@ export default {
         }
         this.Records = recordsToProcess
     }
+    //return leisure room registration history
     else if(this.$route.params.name == 'leisureRoom'){
       let recordsToProcess = await this.$api.getServiceHistory(this.$route.params.id,this.$route.params.role,this.$route.params.name)
-
+//format leisure room registration time
 for (let index = 0; index < recordsToProcess.length; index++) {
 let year =   new Date(recordsToProcess[index].happened_at).getUTCFullYear()
 let month =   new Date(recordsToProcess[index].happened_at).getUTCMonth() +1
@@ -346,9 +359,10 @@ recordsToProcess[index].happened_at = finalDate
 }
 this.Records = recordsToProcess
     }
+    //get washing registration history
     else if(this.$route.params.name == 'washing'){
       let recordsToProcess =   await this.$api.getServiceHistory(this.$route.params.id,this.$route.params.role,this.$route.params.name)
-
+//format registration time
 for (let index = 0; index < recordsToProcess.length; index++) {
   let time = recordsToProcess[index].washing_time.slice(0,-3)
 let year =   new Date(recordsToProcess[index].started_at).getUTCFullYear()
@@ -413,6 +427,7 @@ this.Records = recordsToProcess
     catch(error){
     }
     },
+    //filter records based on the provided input
     filterRecords(){
       if(this.$route.params.name == 'guests'){
 

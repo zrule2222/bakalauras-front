@@ -31,6 +31,7 @@ export default {
         Message: {type: String, required: true},
     },
     methods: {
+        //close this modal
         close() {
             this.$emit('close-action');
         }

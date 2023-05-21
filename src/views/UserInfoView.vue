@@ -10,6 +10,7 @@
       </section>
     </div>
     <MenuBar :menu-type="'main-back'"></MenuBar>
+    <!-- display resident's information only if the route parameter is set -->
     <div v-if="$route.params.id" class=" flex flex-col items-center">
      <div class="text-4xl mt-5">
       {{ name }} {{ lastname }}
@@ -85,22 +86,25 @@ export default {
   props: {
   },
   methods: {
+    //set the data that is displayed on this page
     async setPageData(){
       try{
       let user = await this.$api.getUserInfo(this.$route.params.id)
-      let room = await this.$api.getUserRoom(this.$route.params.id,user.fk_room)
       this.name = user.firstname
       this.lastname = user.lastname
       this.role = user.role
       this.gender = user.gender
-      this.room = room
       this.email = user.email
       this.blocked = user.blocked
+      let room = await this.$api.getUserRoom(this.$route.params.id,user.fk_room)
+      this.room = room
      let UserRole = await this.$api.getDataFromToken()
       this.userRole = UserRole.role
       }
       catch(error){
         this.room = -1
+        let UserRole = await this.$api.getDataFromToken()
+      this.userRole = UserRole.role
       }
     },
     showConfirmationModal(){
@@ -109,6 +113,7 @@ export default {
     closeConfirmationModal(){
       this.displayConfirmationModal = false
     },
+    //block the resident
     async blockUser(id){
       try{
       await this.$api.blockUser(id)

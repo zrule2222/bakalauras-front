@@ -21,7 +21,9 @@
 </router-link>
 </div>
 <div v-else-if="$route.params.role == 'Gyventojas' &&  userHasRegistration" class="sm:ml-6 min-w-fit">
+  <!-- show this button after the resident had provided a registration -->
  <button v-if="registrationStatus == 'Laukiama patvirtinimo'" class="button is-danger" @click="showCancelConfirmationModal()">Atšaukti</button>
+ <!-- show this button after the residents registration has been confirmed -->
  <button v-else-if="registrationStatus == 'Patvirtinta'" class="button is-danger" @click="showCancelConfirmationModal()">Išsiregistruoti</button>
 </div>
 <div class="mr-6">
@@ -53,7 +55,7 @@
 <div v-if="$route.params.role == 'Budėtojas'" class="text-4xl mt-20">
       Kambaryje esantys gyventojai
     </div>
-
+  <!-- display residents that are in the leisure room -->
     <div v-if="$route.params.role == 'Budėtojas' && users.length > 0" class="">
       <table class="table is-bordered is-striped is-hoverable ml-auto mr-auto mt-7">
         <thead>
@@ -123,6 +125,7 @@ closeConfirmationModal(){
 closeCancelConfirmationModal(){
    this.showCancelConfirmation = false
 },
+//resident registers being in this room
 async register(){
 try{
     let data = await this.$api.getDataFromToken()
@@ -147,6 +150,7 @@ closeSucessMessageModal(){
         this.getUserRegistration()
       }
 },
+//return the residents that are currently in the room
 async getleisureRoomData(){
 try{
  this.users = await this.$api.getLeisureRoomData()
@@ -157,6 +161,7 @@ this.users = []
 this.numberOfUsers = 0
 }
 },
+//get the resident's registration
 async getUserRegistration(){
 try{
     let data = await this.$api.getDataFromToken()
@@ -171,11 +176,12 @@ catch(error){
 this.userHasRegistration = false
 }
 },
+//register out of the room
 async unregister(id){
   if(this.registrationStatus == 'Laukiama patvirtinimo'){
   try{
   await this.$api.cancelLeisureRegistration(id)
-  this.sucessMessage = "Laisvalaikio kambario registracija atšaukta teisingai"
+  this.sucessMessage = "Laisvalaikio kambario registracija atšaukta sėkmingai"
     this.showCancelConfirmation = false
     this.showSucessMessageModal()
 
@@ -202,6 +208,7 @@ else if(this.registrationStatus == 'Patvirtinta'){
 }
     },
     created() {
+      //on page load get resident's registration
       this.getleisureRoomData()
       if(this.$route.params.role == 'Gyventojas'){
         this.getUserRegistration()

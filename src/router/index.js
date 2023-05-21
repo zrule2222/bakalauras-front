@@ -18,22 +18,26 @@ import SpesificServiceHistoryView from "../views/SpesificServiceHistoryView.vue"
 import axios from 'axios';
 
 const routes = [
+  //route to login page
   {
     path: '/',
     name: 'login',
     component: LoginView
   },
+  //route to 401 page
   {
     path: '/401',
     name: '401',
     component: Page401
   },
+  //route to main page
   {
     path: '/main',
     name: 'main',
     component: MainView,
     meta: { requiresAuth: true }
   },
+  //route to spesific service history
   {
     path: '/serviceHistory/:name',
     name: 'serviceHistory',
@@ -47,6 +51,7 @@ const routes = [
                 Authorization: 'Bearer ' + localStorage.getItem('token')
               }
             })
+            //only alow residents and the administrator to enter this page
             if (response.data.role == "Administratorius" || response.data.role == "Gyventojas"){
               if( to.params.name == 'guests' || to.params.name == 'leisureRoom' || to.params.name == 'washing' || to.params.name == 'machineFail'){
             to.params.role=response.data.role
@@ -67,6 +72,7 @@ const routes = [
       }
   }
   },
+  //route to service history page
   {
     path: '/servicesHistory',
     name: 'servicesHistory',
@@ -80,6 +86,7 @@ const routes = [
                 Authorization: 'Bearer ' + localStorage.getItem('token')
               }
             })
+             //only alow residents and the administrator to enter this page
             if (response.data.role == "Administratorius" || response.data.role == "Gyventojas"){
             to.params.role=response.data.role
               next()
@@ -94,6 +101,7 @@ const routes = [
       }
   }
   },
+  //route to the washing machine page
   {
     path: '/laundry',
     name: 'laundry',
@@ -107,6 +115,7 @@ const routes = [
                 Authorization: 'Bearer ' + localStorage.getItem('token')
               }
             })
+             //only alow residents and the administrator to enter this page
             if (response.data.role == "Administratorius" || response.data.role == "Gyventojas"){
             to.params.role=response.data.role
               next()
@@ -120,6 +129,7 @@ const routes = [
           next('/404')
       }
   }
+  //route to the dorkeepers pasword change page
   },
   {
     path: '/changePassword',
@@ -134,6 +144,7 @@ const routes = [
                 Authorization: 'Bearer ' + localStorage.getItem('token')
               }
             })
+             //only alow doorkeepers to enter this page
             if (response.data.role == "Budėtojas"){
             to.params.role=response.data.role
               next()
@@ -148,6 +159,7 @@ const routes = [
       }
   }
   },
+  //route to the residents list page
   {
     path: '/residents',
     name: 'residents',
@@ -161,6 +173,7 @@ const routes = [
                 Authorization: 'Bearer ' + localStorage.getItem('token')
               }
             })
+              //only alow the admin to enter this page
             if (response.data.role == "Administratorius"){
             to.params.role=response.data.role
               next()
@@ -175,7 +188,7 @@ const routes = [
       }
   }
     
-    
+  //route to the users registration page
   },
   {
     path: '/registration',
@@ -190,6 +203,7 @@ const routes = [
                 Authorization: 'Bearer ' + localStorage.getItem('token')
               }
             })
+            //only alow the admin to enter this page
             if (response.data.role == "Administratorius"){
             to.params.role=response.data.role
               next()
@@ -203,6 +217,7 @@ const routes = [
           next('/404')
       }
   }
+  //route to the resident's information page
   },
   {
     path: '/user/:name',
@@ -211,7 +226,7 @@ const routes = [
     props: true,
     meta: { requiresAuth: true },
     beforeEnter: async (to, from, next) => {
-
+      //check if the resident with the given name exists
       try {
           const response = await axios.post(`http://localhost:5000/userByName`, {"name": to.params.name})
           if (response.status == 200) {
@@ -220,7 +235,7 @@ const routes = [
                 Authorization: 'Bearer ' + localStorage.getItem('token')
               }
             })
-
+            //only allow the admin and the owner of this information to see this page
             if(response2.data.username == to.params.name && response2.data.role == "Gyventojas" || response2.data.role == "Administratorius" && response.data.role == "Gyventojas" ){
             to.params.id=response.data.user_id
               next()
@@ -234,6 +249,7 @@ const routes = [
           next('/404')
       }
   }
+  //route to contacts information page
 },
 {
   path: '/contacts',
@@ -248,6 +264,7 @@ const routes = [
               Authorization: 'Bearer ' + localStorage.getItem('token')
             }
           })
+          //allow resident to go to this page
           if (response.data.role == "Gyventojas"){
           to.params.role=response.data.role
             next()
@@ -261,6 +278,7 @@ const routes = [
         next('/404')
     }
 }
+ //route to the services page
 },
 {
   path: '/services',
@@ -275,6 +293,7 @@ const routes = [
               Authorization: 'Bearer ' + localStorage.getItem('token')
             }
           })
+          //allow resident to go to this page
           if (response.data.role == "Gyventojas"){
           to.params.role=response.data.role
             next()
@@ -288,6 +307,7 @@ const routes = [
         next('/404')
     }
 }
+//route to the guests registration page
 },
 {
   path: '/guests',
@@ -303,6 +323,7 @@ const routes = [
               Authorization: 'Bearer ' + localStorage.getItem('token')
             }
           })
+          //only allow residents and doorkeepers to go to this page
           if (response.data.role == "Gyventojas" || response.data.role == "Budėtojas"){
           to.params.role=response.data.role
             next()
@@ -316,6 +337,7 @@ const routes = [
         next('/404')
     }
 }
+//route to the leisure room page
 },
 {
   path: '/leisureRoom',
@@ -331,6 +353,7 @@ const routes = [
               Authorization: 'Bearer ' + localStorage.getItem('token')
             }
           })
+          //only allow residents and doorkeepers to go to this page
           if (response.data.role == "Gyventojas" || response.data.role == "Budėtojas"){
           to.params.role=response.data.role
             next()
@@ -344,6 +367,7 @@ const routes = [
         next('/404')
     }
 }
+//route to leisure room registration page
 },
 {
   path: '/leisureRegistrations',
@@ -358,6 +382,7 @@ const routes = [
               Authorization: 'Bearer ' + localStorage.getItem('token')
             }
           })
+          //only allow doorkeepers to go to this page
           if ( response.data.role == "Budėtojas"){
           to.params.role=response.data.role
             next()
@@ -371,6 +396,7 @@ const routes = [
         next('/404')
     }
 }
+// route to 404 page
 },
 
   
@@ -380,12 +406,12 @@ const routes = [
     component: Page404
   }
 ]
-
+//create the router
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
-
+//authenticate the user before goiing to a route that requires authentification
 router.beforeEach( async (to, from, next) => {
   if (to.meta.requiresAuth) {
     if (localStorage.getItem("token") == null) {

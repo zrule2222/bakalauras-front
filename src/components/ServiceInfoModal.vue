@@ -7,7 +7,8 @@
         </header>
             <section class="modal-card-body has-text-left">
                 <label v-if="serviceInformation.length > 0" class="label whitespace-pre-wrap ">{{ serviceInformation }}</label>
-                <label v-else class="label whitespace-pre-wrap ">Paslauga aprašymas.</label>
+                <!-- display this text if service description is not found -->
+                <label v-else class="label whitespace-pre-wrap ">Paslaugos aprašymas.</label>
 
             </section>
             <footer class="modal-card-foot flex justify-end">
@@ -33,6 +34,7 @@ export default {
         serviceName: {type: String, required: true}
     },
     methods: {
+        //close this modal
         closeModal() {
             this.$emit('close-action');
         }

@@ -10,15 +10,19 @@
       </section>
     </div>
     <MenuBar :menu-type="'main-back'"></MenuBar>
+    <!-- display washing machines only if there are registered washing machned in the database -->
     <div v-if="washingMachines.length > 0" class="columns is-multiline mt-3 is-centered ">
 <div v-for="machine in washingMachines" :key="machine.machine_id" :class="machine.machine_status == 'Occupied'? '!mt-0': ''"   class="mb-3 column is-4 mt-5    has-text-centered">
 <div class="tex text-xl">Skalbyklė Nr. {{ machine.machine_number  }}</div>
 <div  v-if="machine.machine_status == 'Occupied'"> skalbiama iki: {{machine.time}}</div>
 <img v-if="machine.machine_status == 'Working' || machine.machine_status == 'Occupied'"  src="../assets/washing_machine.jpg"  class="m-auto">
+<!-- display a picture of a washing machine with an "X" if the washing machinr is broken-->
 <img v-else-if="machine.machine_status == 'Broken' "  src="../assets/broken_washing_machine.jpg"  class="m-auto">
 <div class=" justify-between mt-2">
+  <!-- do not display this buttons to the resident if the washing machine is not working or the resident has provided a registration that the washing machine is broken -->
 <button  v-if="machine.machine_status == 'Working' && machine.hasFailReg != true && $route.params.role == 'Gyventojas'" class="button is-primary m-1" @click="showRegistrationModal(machine.machine_id,machine.machine_number)" >Registruoti skalbimą</button>
 <button  v-if="machine.machine_status == 'Working' && machine.hasFailReg != true && $route.params.role == 'Gyventojas'" class="button is-danger m-1" @click="showRegistrationConfirmationModal(machine.machine_id)">Registruoti gedimą</button>
+<!-- display this button to the administrator when the washing machine is broken -->
 <button  v-if="machine.machine_status == 'Broken' &&  $route.params.role == 'Administratorius'" class="button is-warning m-1" @click="showFixConfirmation = true, fixingId = machine.machine_id">Gedimas sutvarkytas</button>
 </div>
 </div>
@@ -28,10 +32,13 @@
     </div>
 
 <WashingMachineModal v-if="showModal" :isActive="showModal" :machineId="machineId" :machineNumber="washingNumber" @close-action="closeMachineModal()" @washing-sucess="washingSucess()" @washing-fail="washingFail()"></WashingMachineModal>
+<!-- show a message when the resident has provided a washing registration  -->
 <SucessMessageModal v-if="showSucessMessage" :isActive="showSucessMessage" :Message="messageSucess" @close-action="showSucessMessage = false, messageSucess = '', getMachineData()"></SucessMessageModal>
 <ConfirmationModal  v-if="showConfirmation" :isActive="showConfirmation" @close-action="closeFailRegModal()" @confirm-action="registerFailure(brokenMachineRegistrationId)"></ConfirmationModal>
+<!-- show a message when the resident has provided a registration for a broken washing machine  -->
 <SucessMessageModal v-if="showFailRegMessage" :isActive="showFailRegMessage" :Message="failRegMessage" @close-action="showFailRegMessage = false, failRegMessage = '', getMachineData()"></SucessMessageModal>
 <ConfirmationModal  v-if="showFixConfirmation" :isActive="showFixConfirmation" @close-action="showFixConfirmation = false, fixingId = Number" @confirm-action="fixMachine(fixingId)"></ConfirmationModal>
+<!-- show a message when the admin fixes a washing machine  -->
 <SucessMessageModal v-if="showFixSucessMessage" :isActive="showFixSucessMessage" :Message="fixSucessMessage" @close-action="showFixSucessMessage = false, fixSucessMessage = '', getMachineData()"></SucessMessageModal>
     </div>
 </template>
@@ -73,9 +80,11 @@ export default {
         ConfirmationModal,
     },
     methods: {
+      //return the washing macine information
        async getMachineData() {
         try{
         let machines = await this.$api.getWashingMachineData()
+        //end the washing machine registration id the current time is greater then the time when the washing registration ends
         for (let index = 0; index <  machines.length; index++) {
             if(new Date(machines[index].time) < new Date() && machines[index].time != null){
                 try{
@@ -88,9 +97,10 @@ export default {
             }
             
         }
-
+       // sort washing machines in order of their number
         this.washingMachines = await this.$api.getWashingMachineData()
         this.washingMachines = this.washingMachines.sort((a, b) => a.machine_number-b.machine_number)
+        //format washing machine washing time
         for (let index = 0; index <   this.washingMachines.length; index++) {
         let month =   new Date(this.washingMachines[index].time).getUTCMonth() +1
      let day =   new Date(this.washingMachines[index].time).getUTCDate()
@@ -116,6 +126,7 @@ export default {
             let data = await this.$api.getDataFromToken()
             for (let index = 0; index < this.washingMachines.length; index++) {
                 try{
+                  //check if a user has provided a registration for a broken washing machine and if so do not allow the user to register a washing machine failure again
                 let users = await this.$api.getCurrentFailRegUsers( this.washingMachines[index].machine_id)
                 for (let indexUser = 0; indexUser < users.length; indexUser++) {
                     if(users[indexUser].fk_user == data.id){
@@ -173,6 +184,7 @@ export default {
         this.showConfirmation = false
         this.brokenMachineRegistrationId = Number
     },
+    //fix a broken washing machine
    async fixMachine(id){
     try{
       await this.$api.fixWashingMachine(id)
@@ -187,7 +199,7 @@ export default {
 
     }
     },
-
+    //register a washing machine failure
     async registerFailure(id){
         try{
         let data = await this.$api.getDataFromToken()
@@ -200,7 +212,7 @@ export default {
       }
       else{
         this.showConfirmation = false
-        this.failRegMessage = 'Skalbimo mašinos gedimo užregistruoto nepavyko'
+        this.failRegMessage = 'Skalbimo mašinos gedimo užregistruoti nepavyko'
         this.showFailRegMessage = true
 
       }
@@ -208,7 +220,7 @@ export default {
     catch(error){
 
      this.showConfirmation = false
-        this.failRegMessage = 'įvyko klaida registruojant skalbimo mašinos gedimą'
+        this.failRegMessage = 'Įvyko klaida registruojant skalbimo mašinos gedimą'
         this.showFailRegMessage = true
     }
 }
@@ -219,6 +231,7 @@ catch(error){
 
     },
     created() {
+      //get washing machine data on page load
         this.getMachineData()
     }
 }

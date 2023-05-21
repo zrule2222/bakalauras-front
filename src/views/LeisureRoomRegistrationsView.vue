@@ -14,7 +14,7 @@
     <div class="text-4xl mt-20">
       Registracijos, laukiančios patvirtinimo
     </div>
-
+     <!-- show registrations only if there are active registrations -->
     <div v-if="registrations.length > 0" class="">
       <table class="table is-bordered is-striped is-hoverable ml-auto mr-auto mt-7">
         <thead>
@@ -66,7 +66,9 @@ export default {
         
     },
     methods: {
+      //return leisure room registrations
 async getRegistrations(){
+  //format registration date
    try{
      let registrations = await this.$api.getLeisureRoomRegistrations()
      for (let index = 0; index < registrations.length; index++) {
@@ -97,6 +99,7 @@ async getRegistrations(){
   this.registrations = []
    }
 },
+//confirm the leisure room registration
 async confirmRegistration(id){
     try{
       await this.$api.acceptLeisureRoomRegistration(id)
@@ -112,6 +115,7 @@ closeSucessModal(){
     this.showSucessMessage= false
     this.getRegistrations()
 },
+//reject the leisure room registration
 async rejectRegistration(id){
     try{
       await this.$api.rejectLeisureRoomRegistration(id)

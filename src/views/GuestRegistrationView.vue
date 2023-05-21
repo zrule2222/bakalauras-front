@@ -19,6 +19,7 @@
     <div v-if="$route.params.role == 'Budėtojas'" class="text-4xl mt-20">
       Registracijos, laukiančios patvirtinimo
     </div>
+    <!-- display user guest registration if the user has regisred guests -->
       <div v-if="$route.params.role == 'Gyventojas' && userRegistrations.length > 0" class="">
       <table class="table is-bordered is-striped is-hoverable ml-auto mr-auto mt-7">
         <thead>
@@ -44,7 +45,7 @@
       Šiuo metu neturite užregistravę svečių
     </div>
 
-
+   <!-- display the guest registrations that are waitinf confirmation to the doorkeeper -->
     <div v-if="$route.params.role == 'Budėtojas'  && registrations.length > 0" class="">
       <table class="table is-bordered is-striped is-hoverable ml-auto mr-auto mt-7">
         <thead>
@@ -70,7 +71,7 @@
     <div v-else-if="$route.params.role == 'Budėtojas' && registrations.length == 0" class="text-xl mt-2 has-text-info">
       Šiuo metu nėra svečių laukiančių patvirtinimo
     </div>
-
+ <!-- display registrations that the doorkeeper has to end -->
     <div v-if="$route.params.role == 'Budėtojas'" class="text-4xl mt-14">
       Svečio išvykimo patvirtinimas
     </div>
@@ -133,24 +134,30 @@ export default {
         ConfirmationModal,
     },
     methods: {
+  //show registration modal
 showRegistrationModal(){
     this.showModal = true
 },
+//close registration modal
 closeRegistrationModal(){
     this.showModal = false
 },
+//display that the guest registration was sucesfull
 registrationComplete(){
 this.sucessMessage = "Svečias užregistruotas sėkmingai"
 this.showModal = false
 this.showSucessMessage = true
 },
+//display that the guest registration has failed
 registrationFailed(){
 this.sucessMessage = "Svečio registracija nebuvo sėkminga"
 this.showModal = false
 this.showSucessMessage = true
 },
+// return the user's guest registratons
  async getActiveUserRegistrations(){
   try{
+    // format guesr arrival date
     let userData = await this.$api.getDataFromToken()
     let registrations = await this.$api.getuserGuestRegistrations(userData.id)
     for (let index = 0; index < registrations.length; index++) {
@@ -181,6 +188,7 @@ this.showSucessMessage = true
     this.userRegistrations = []
   }
  },
+ // close the sucess message modal
 closeSucessMessageModal(){
       this.showSucessMessage = false
       if(this.$route.params.role == 'Gyventojas'){
@@ -191,6 +199,7 @@ closeSucessMessageModal(){
         this.getConfirmedRegistrations()
       }
     },
+    //cancel the guest registration
    async cancelRegistration(){
     try{
   await this.$api.cancelGuestRegistration(this.selectedRegistrationId)
@@ -204,6 +213,7 @@ closeSucessMessageModal(){
         this.showSucessMessage = true
     }
     },
+    //doorkeeper mars the registration as done
    async setRegistrationAsDone(id){
        try{
          await this.$api.setGuestRegistrationAsDone(id)
@@ -212,16 +222,19 @@ closeSucessMessageModal(){
   this.showSucessMessage = true
        }
        catch(error){
-          this.sucessMessage = "Nepavyko pažymėti Svečio išvykimo"
+          this.sucessMessage = "Nepavyko pažymėti svečio išvykimo"
   this.showConfirmationModal = false
   this.showSucessMessage = true
        }
     },
+    //close confirmation modal
     closeConfirmationModal(){
       this.showConfirmationModal = false
     },
+    //return the confirmed registrations for the doorkeeper
   async  getConfirmedRegistrations(){
         try{
+          //formar registration confirmation date
            let registrations = await this.$api.getConfirmedGuestRegistrations()
            for (let index = 0; index < registrations.length; index++) {
      let year =   new Date(registrations[index].confirmed_at).getUTCFullYear()
@@ -253,10 +266,11 @@ closeSucessMessageModal(){
             this.acceptedRegistrations = []
         }
     },
+    //return active registrations for the doorkeeper
   async getActiveRegistrations(){
     try{
      
-
+     //format the registration guest arrival date
      let registrations = await this.$api.getActiveGuestRegistrations()
     for (let index = 0; index < registrations.length; index++) {
      let year =   new Date(registrations[index].guest_arrival).getUTCFullYear()
@@ -286,6 +300,7 @@ closeSucessMessageModal(){
         this.registrations = []
     }
     },
+    //confirm guest registration
    async confirmRegistration(id){
    try{
       await this.$api.acceptGuestRegistration(id)
@@ -297,7 +312,7 @@ closeSucessMessageModal(){
       this.showSucessMessage = true
    }
     },
-
+   //reject guest registration
     async declineRegistration(id){
    try{
       await this.$api.rejectGuestRegistration(id)
@@ -310,7 +325,7 @@ closeSucessMessageModal(){
    }
     },
 
-    
+    //open confirmation modal
    openConfirmationModal(id){
     this.selectedRegistrationId = id
       this.showConfirmationModal = true

@@ -5,12 +5,12 @@
       <span class="sr-only h-full">Open main menu</span>
       <svg class="w-7 h-full" aria-hidden="true" fill="white" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
     </button>
-    <div class="flex flex-wrap items-center   ml-auto justify-end md:hidden h-full">
+    <div class="flex flex-wrap items-center ml-auto justify-end md:hidden h-full">
     
             <div>
               Prisijungęs: {{ username }}
             </div>
-            <button  class="text-sm  text-white hover:bg-gray-700 rounded-md px-3 py-2 fa-solid fa-right-from-bracket"></button>
+            <button @click="logout()"  class="text-sm text-white hover:bg-gray-700 rounded-md px-3 py-2 fa-solid fa-right-from-bracket"></button>
         </div>
 </div>
     <div class="hidden w-1/3 min-w-fit  md:block md:w-auto" id="navbar-default-target">
@@ -18,53 +18,64 @@
     
      
             <li v-if="menuType == 'main-resident' && username" class="m-0 ">
+              <!-- redirect resident to the reisident's information page -->
                 <router-link :to="{ name: 'spesificUser', params: { name:  username} }">
             <button class="self-center font-normal block text-sm w-full text-left whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Mano duomenys</button>
         </router-link>
         </li>
+        <!-- redirect resident to the services page -->
         <li v-if="menuType == 'main-resident'" class="m-0 ">
           <router-link :to="{ name: 'services'}">
             <button class="self-center block text-sm w-full font-normal text-left  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Paslaugos</button>
           </router-link>
         </li>
+        <!-- redirect resident to the dormitory workers contact information page -->
         <li v-if="menuType == 'main-resident'" class="m-0">
             <router-link :to="{ name: 'contacts'}">
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Bendrabučio personalas</button>
         </router-link>
         </li>
+        <!-- redirect resident to the service history page -->
         <li v-if="menuType == 'main-resident'" class="m-0">
           <router-link :to="{ name: 'servicesHistory'}">
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Paslaugų istorija</button>
           </router-link>
         </li>
+        <!-- redirect the user to the main page -->
         <li v-if="menuType == 'main-back'" class="m-0">
           <router-link :to="{ name: 'main'}">
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Pradžia</button>
           </router-link>
         </li>
+        <!-- redirect user to the previous page -->
         <li v-if="menuType == 'main-back'" class="m-0">
             <button @click="$router.go(-1)" class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Atgal</button>
         </li>
+        <!-- redirect admin to the user registration page -->
         <li v-if="menuType == 'main-admin'" class="m-0">
           <router-link :to="{ name: 'registration'}">
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Registracija</button>
           </router-link>
         </li>
+        <!-- redirect admin to the washing machine page -->
         <li v-if="menuType == 'main-admin'" class="m-0">
           <router-link :to="{ name: 'laundry'}">
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Skalbykla</button>
           </router-link>
         </li>
+        <!-- redirect admin to the residents list page -->
         <li v-if="menuType == 'main-admin'" class="m-0">
           <router-link :to="{ name: 'residents'}">
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Gyventojai</button>
           </router-link>
         </li>
+        <!-- redirect admin to the service history page -->
         <li v-if="menuType == 'main-admin'" class="m-0">
           <router-link :to="{ name: 'servicesHistory'}">
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Paslaugų istorija</button>
           </router-link>
         </li>
+        <!-- redirect the doorkeeper to the guest registration page -->
         <li v-if="menuType == 'main-doorkeeper'" class="m-0">
           <router-link :to="{ name: 'guests'}">
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Svečiai</button>
@@ -75,29 +86,35 @@
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Laisvalaikio kambarys</button>
           </router-link>
         </li>
+        <!-- redirect the doorkeeper to the doorkeeper's pasword changing page -->
         <li v-if="menuType == 'main-doorkeeper'" class="m-0">
           <router-link :to="{ name: 'changePassword'}">
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Slaptažodžio keitimas</button>
           </router-link>
         </li>
+        <!-- redirect resident to the previous page -->
         <li v-if="menuType == 'services'" class="m-0">
             <button @click="$router.go(-1)" class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Atgal</button>
         </li>
+        <!-- redirect resident to the guests registration page -->
         <li v-if="menuType == 'services'" class="m-0">
           <router-link :to="{name: 'serviceHistory', params: { name:  'guests'} }">
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Svečiai</button>
           </router-link>
         </li>
+        <!-- redirect resident to the leisure room page -->
         <li v-if="menuType == 'services'" class="m-0">
           <router-link :to="{ name: 'serviceHistory', params: { name:  'leisureRoom'}}">
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Laisvalaikio kambarys</button>
           </router-link>
         </li>
+        <!-- redirect resident to the washing machine page -->
         <li v-if="menuType == 'services'" class="m-0">
           <router-link :to="{ name: 'serviceHistory', params: { name:  'washing'}}">
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Skalbimai</button>
           </router-link>
         </li>
+        <!-- redirect resident to the servce history page -->
         <li v-if="menuType == 'services'" class="m-0">
           <router-link :to="{ name: 'serviceHistory', params: { name:  'machineFail'}}">
             <button class="self-center block text-sm w-full text-left font-normal  whitespace-nowrap text-white hover:bg-gray-700 rounded-md px-2 py-1">Skalbyklių gedimai</button>
@@ -110,7 +127,7 @@
             <div>
               Prisijiungęs: {{ username }}
             </div>
-            <button @click="logout()"  class="text-sm  text-white hover:bg-gray-700 rounded-md md:px-2 md:py-1 fa-solid fa-right-from-bracket sm:px-3 sm:py-3 "></button>
+            <button @click="logout()"  class="text-sm text-white hover:bg-gray-700 rounded-md md:px-2 md:py-1 fa-solid fa-right-from-bracket sm:px-3 sm:py-3 "></button>
         </div>
     </li>
 
@@ -139,15 +156,15 @@ export default {
      }
   },
   methods: {
-    
+    //sets user's username to the menu bar
   async  setMenuData(){
       let data = await this.$api.getDataFromToken()
        sessionStorage.setItem('id',data.id)
        sessionStorage.setItem('role',data.role)
     this.username = data.username
     },
+    //colapses the menu bar on a small screen
     navCollapse(){
-
         const $triggerEl = document.getElementById('navbar-default');
         const $targetEl = document.getElementById('navbar-default-target');
         const collapse = new Collapse($targetEl, $triggerEl);
@@ -160,6 +177,7 @@ export default {
         this.navOpen = true
         }
     },
+    //log out the user and if the user is a worker change the user's occupation
    async logout(){
       try{
     if(sessionStorage.getItem('role')  == 'Administratorius' || sessionStorage.getItem('role')  == 'Budėtojas'){

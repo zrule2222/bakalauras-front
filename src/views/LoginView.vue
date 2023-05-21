@@ -59,6 +59,7 @@ export default {
   props: {
   },
   methods: {
+    //login the user
     async login() {
       if (!this.validateForm()) {
         return
@@ -87,15 +88,18 @@ export default {
         }
       }
       catch (error) {
+        //check if there was a connection error
         if(error.code == 'ERR_NETWORK'){
           this.message = 'Nepavyko susisiekti su serveriu'
           this.showMessage = true
         }
+        //check if too many requests
         else if(error.response.status == 429){
           this.message = error.response.data
           this.showMessage = true
         
         }
+        //check if imputed data does not belong to a user
         else if(error.response.status == 500){
         this.showMessage = false
         this.showError = true
@@ -104,6 +108,7 @@ export default {
        
       }
     },
+    //check the form field data
     validateForm() {
       this.showError = false
       this.showMessage = false
@@ -142,6 +147,7 @@ export default {
 
       return true
     },
+    //check if there is a message to display and display it
     checkAndShowMessage() {
       if (localStorage.getItem('message') != null) {
         this.message = localStorage.getItem('message')

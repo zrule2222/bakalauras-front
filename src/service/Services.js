@@ -270,7 +270,7 @@ api.userByName = async function (username) {
 
    }
 
-//set the washing registrations status to 'Užbaikta'
+//set the washing registrations status to 'Užbaigta'
    api.finishWashingRegistration = async function (id) {
     const res = await this.authenticateUser()
     if (res == true) {

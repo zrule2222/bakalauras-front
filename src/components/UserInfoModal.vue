@@ -29,7 +29,7 @@
             <p v-show="repeatBadPasswordLength" class="help is-danger has-text-left ">Pakartotas slaptažodis negali viršyti 100 simbolių</p>
             <p v-show="passwordsDontMatch" class="help is-danger has-text-left">Pakartotas slaptažodis nesutampa su įvestu slaptažodžiu</p>
           </div>
-          
+          <!-- this checkbox only apears if the resident is blocked -->
           <div v-if="blocked == true"  class="field has-text-left">
             <label class="label">Užblokuotas</label>
             <input class="ml-[1px]" type="checkbox" v-model="newBlocked">
@@ -79,13 +79,16 @@ export default {
         SucessMessageModal,
     },
     methods: {
+      //close this modal
         closeModal() {
             this.$emit('close-action');
         },
+        //update user data
         async setUserData() {
             if(!this.validateForm()){
                 return
             }
+            //create a variable that hold all the data that is in the form
             let userinfo = {
              email: this.email,
              password: this.password,
@@ -130,6 +133,7 @@ export default {
               }
             }
         },
+        //get the data of the user whose data is being changed
        async getUserData(){
         try{
         let userData = await this.$api.getUserInfo(this.userId)
@@ -150,6 +154,7 @@ export default {
             this.newBlocked = false
         }
         },
+        //check all the form fields
         validateForm() {
           this.badEmail = false
           this.noEmail = false

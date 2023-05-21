@@ -57,9 +57,11 @@ export default {
         isActive: { type: Boolean, default: false, required: true },
     },
     methods: {
+      //close this modal
         close() {
             this.$emit('close-action');
         },
+        //change the occupation of the user
         async changeUserOccupation(){
           if(!this.userOccupation){
             this.noOccupations = true
@@ -78,6 +80,7 @@ export default {
             this.$emit("occupation-fail")
           }
         },
+        //check if the doorkeeper is allowed to change occupation
       async CheckIfAllowToChangeOccupation(){
         let data = await this.$api.getDataFromToken()
         try{
@@ -99,6 +102,7 @@ export default {
    async created() {
         let data = await this.$api.getDataFromToken()
         this.CheckIfAllowToChangeOccupation()
+        //on page load get the occupation of the worker
         try{
     let occupation = await this.$api.getUserOccupation(data.id)
     this.currectOccupation = occupation.occupation

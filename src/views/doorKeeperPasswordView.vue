@@ -69,6 +69,7 @@ export default {
         SucessMessageModal,
     },
     methods: {
+      //change the doorkeepers password
        async changePassword() {
             if(!this.validateForm()){
               return
@@ -96,6 +97,7 @@ export default {
               }
             }
         },
+        //close sucess message modal
         closeSucessModal(){
             this.showSucessModal = false
             if(this.changeSucess == true){
@@ -110,6 +112,7 @@ export default {
             this.sucessMessage = ""
             }
         },
+        //check if form data is correct
         validateForm(){
             this.noPassword = false
             this.badPasswordLength = false

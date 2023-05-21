@@ -10,7 +10,7 @@
       </section>
     </div>
  <MenuBar  :menu-type="'main-back'"></MenuBar>
-
+ <!-- show the residents list only if there are registered resident accounts in the database -->
  <div v-if="users.length > 0">
       <table class="table is-bordered is-striped is-hoverable ml-auto mr-auto mt-7">
         <thead>
@@ -54,6 +54,7 @@ export default {
         MenuBar,
     },
     methods: {
+      //get all the residents names and lastnames that are registered in the database
        async getUserInfo() {
         try{
           this.users =  await this.$api.getAllResidents()

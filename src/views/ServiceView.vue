@@ -11,7 +11,7 @@
       </section>
     </div>
  <MenuBar :menu-type="'main-back'"></MenuBar>
-
+<!-- display services if there are regisrete services in the database -->
  <div v-if="services.length > 0" v-for="service in services" :key="service.id" class="hero-body is-justify-content-center is-align-items-center  ">
     <div class="box is-radiusless border-2 border-bulma-green  w-[700px]">
         <div class=" flex flex-row">
@@ -24,6 +24,7 @@
         <div v-else-if="service.name == 'Svečiai'" class="min-w-[213px] min-h-[160px]">
             <img src="../assets/guests.jpg" class=" object-cover min-w-[213px] min-h-[160px]  h-40" >
         </div>
+        <!-- display a place holder image if the service is not one of the above mentioned services -->
         <div v-else class="min-w-[213px] min-h-[160px]">
             <img src="../assets/placeholder_service.jpg" class=" object-cover min-w-[213px] min-h-[160px]  h-40" >
         </div>
@@ -31,12 +32,14 @@
         <div v-if="service.name.length > 0" class=" ml-3 font-bold text-3xl">
             {{service.name}}
         </div>
+         <!-- display a place holder name for the service -->
         <div v-else class=" ml-3 font-bold text-3xl">
             Paslaugos pavadinimas
         </div>
         <div v-if="service.information.length > 0" class=" ml-3 mt-4 font-semibold  break-all text-left">
             {{service.information}}  
         </div>
+         <!-- display a place holder service information for the service -->
         <div v-else class=" ml-3 mt-4 font-semibold  break-all text-left">
            Paslaugos trumpa informacija.
         </div>
@@ -90,6 +93,7 @@ export default {
         ServiceInfoModal,
     },
     methods: {
+        //return information about the services
        async getServices() {
         try{
            this.services = await this.$api.getServices()
@@ -99,6 +103,7 @@ export default {
             this.services = []
         }
         },
+        //display service description
        async openInfoModal(name,description){
          await this.$api.authenticateUser()
            this.showInfoModal = true

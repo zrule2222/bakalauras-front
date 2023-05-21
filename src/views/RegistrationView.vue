@@ -94,6 +94,7 @@
                 </select>
                 <p v-show="noRoom" class="help is-danger has-text-left">Nepasirinktas kambarys</p>
               </div>
+              <!-- thisplay this select when there are no rooms for the resident -->
               <div v-if="noFreeRooms">
                 <select :class="noRoom ? 'border-boarder-red' : ''" >
                   <option value="" disabled selected>Nėra laisvų kambarių</option>
@@ -106,7 +107,6 @@
           <div class="column">
             <button class="button is-primary is-fullwidth"  @click="registerUser()">Registruoti</button>
           </div>
-          <!-- <img src="../assets/Spin-1s-200px.gif" class="z-10"> -->
 
           
 
@@ -117,8 +117,6 @@
       </div>
       </div>
 
-
-    <!-- </div> -->
 </template>
 
 <script>
@@ -168,6 +166,7 @@ export default {
         SucessMessageModal,
     },
     methods: {
+      //register a new user's account
        async registerUser() {
             if(!this.validateForm()){
                 return
@@ -190,10 +189,13 @@ export default {
                 
             }
             try{
+              //show a loading screen while the user's account is being created
               this.showLoading = true
+              //check if a user with the given username already exists
                if(await this.checkUsername()){
                 await this.$api.sendEmail(userData.email,userData.password,userData.username)
             await this.$api.registerUser(userData)
+            //update room space if creating a resident's account
             if(this.role == 'Gyventojas'){
             await this.$api.updateRoomSpace(this.room)
             await this.$api.updateRoomstatus()
@@ -221,6 +223,7 @@ export default {
         closeUsernameMessageModal(){
             this.showUsernameSucessModal = false
         },
+        //check if an account with the given username already exists
       async  checkUsername(){
         try{
             await this.$api.checkUsername(this.username)
@@ -234,6 +237,7 @@ export default {
           this.showLoading = false
             this.showSucessModal = true
         },
+        //check if the data imputed into the form is correct
         validateForm(){
           this.noUsername = false
           this.badUsernameLenght = false
@@ -353,6 +357,7 @@ export default {
     }
       return true
         },
+        //get the available rooms for the registration
        async getRooms(){
         this.noRoom = false
         let roomType
@@ -374,6 +379,7 @@ export default {
             }
         }
     },
+    //generate a user's password
     generatePassword(){
       const length = Math.floor(Math.random() * (10 - 5 + 1)) + 5
       const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~!@-#$'

@@ -59,8 +59,6 @@ export default {
             time: Date,
             nameHasNumbers: false,
             lastnameHasNumbers: false
-
-
         }
     },
     props: {
@@ -71,9 +69,11 @@ export default {
         VueDatePicker,
     },
     methods: {
+      //close this modal
         closeModal() {
             this.$emit('close-action');
         },
+        //check all registration for imputs
         validateForm() {
           this.noGuestName = false
           this.badGuestNameLenght = false
@@ -131,6 +131,7 @@ export default {
       }
       return true
     },
+    //register the guest
     async registerGuest(){
         if(!this.validateForm()){
             return
@@ -142,6 +143,7 @@ export default {
             user_id: userData.id,
 	firstname: this.guestName,
 	lastname: this.guestLastName,
+  //format registration time
 	arrival: `${arrival.getUTCFullYear()}-${arrival.getMonth() + 1}-${arrival.getUTCDate()} ${arrival.getUTCHours()}:${arrival.getUTCMinutes()}`
         }
         try{
@@ -151,8 +153,7 @@ export default {
         catch(error){
             this.$emit("registration-fail")
         }
-       
-        
+
     }
     },
     created() {

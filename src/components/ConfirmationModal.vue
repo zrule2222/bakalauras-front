@@ -31,9 +31,11 @@ export default {
         isActive: { type: Boolean, default: false, required: true },
     },
     methods: {
+        // user does not confirm again
         reject() {
             this.$emit('close-action');
         },
+        //user confirms again
         accept() {
             this.$emit('confirm-action');
         }

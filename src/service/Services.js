@@ -358,6 +358,13 @@ api.userByName = async function (username) {
         await this.http.put(`/userPass/${id}`, {password: password})
           }
           },
+          //update the password of a user with the given id
+        api.updateGuestArrival = async function(id,updateData){
+          const res = await this.authenticateUser()
+          if (res == true) {
+        await this.http.put(`/updateGuestArrival/${id}`, updateData)
+          }
+          },
 //send an email to a user with the login credentials
         api.sendEmail = async function(email,password,username){
           const res = await this.authenticateUser()

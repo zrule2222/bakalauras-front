@@ -431,7 +431,7 @@ this.Records = recordsToProcess
     filterRecords(){
       if(this.$route.params.name == 'guests'){
 
-      let searchText = this.searchedValue.toLowerCase()
+      let searchText = this.searchedValue.toLowerCase().trim()
      this.filteredRecords = this.Records.filter(p => {
       if(this.$route.params.role == 'Administratorius'){
        return p.firstname.toLowerCase().includes(searchText) ||
@@ -462,7 +462,7 @@ this.Records = recordsToProcess
       })
     }
     else if(this.$route.params.name == 'leisureRoom'){
-      let searchText = this.searchedValue.toLowerCase()
+      let searchText = this.searchedValue.toLowerCase().trim()
      this.filteredRecords = this.Records.filter(p => {
       if(this.$route.params.role == 'Administratorius'){
        return p.firstname.toLowerCase().includes(searchText) ||
@@ -484,7 +484,7 @@ this.Records = recordsToProcess
       })
     }
     else if(this.$route.params.name == 'washing'){
-      let searchText = this.searchedValue.toLowerCase()
+      let searchText = this.searchedValue.toLowerCase().trim()
      this.filteredRecords = this.Records.filter(p => {
       if( p.ended_at == null){
       p.ended_at = 'N/A'
@@ -510,7 +510,7 @@ this.Records = recordsToProcess
       })
     }
     else if(this.$route.params.name == 'machineFail'){
-      let searchText = this.searchedValue.toLowerCase()
+      let searchText = this.searchedValue.toLowerCase().trim()
       this.filteredRecords = this.Records.filter(p => {
         let number =  `Nr. ${p.machine_number}`
       if(this.$route.params.role == 'Administratorius'){

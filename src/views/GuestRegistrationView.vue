@@ -28,6 +28,7 @@
         <th class="has-text-centered">Svečias</th>
         <th class="has-text-centered">Svečias atvyksta</th>
         <th class="has-text-centered">Registracijos atšaukimas</th>
+        <th class="has-text-centered">Registracijos redagavimas</th>
     </tr>
         </thead>
         <tbody v-for="(registration, count) in userRegistrations" :key="registration.guest_id">
@@ -36,6 +37,7 @@
                 <td>{{registration.guest_firstname}} {{ registration.guest_lastname }}</td>
                 <td>{{ registration.guest_arrival }}</td>
                 <td><button class="button is-danger is-small w-2/3" @click="openConfirmationModal(registration.guest_id)"> Atšaukti</button></td>
+                <td><button class="button is-warning is-small w-2/3" @click="openRegistrationEditModal(registration.guest_id, registration.guest_arrival)"> Redaguoti</button></td>
                 
             </tr>
         </tbody>
@@ -102,6 +104,8 @@
 <GuestRegistrationModal @registration-sucess="registrationComplete()" @registration-fail="registrationFailed()" @close-action="closeRegistrationModal" v-if="showModal" :is-active="showModal" ></GuestRegistrationModal>
 <SucessMessageModal v-if="showSucessMessage" :is-active="showSucessMessage"  @close-action="closeSucessMessageModal()" :Message="sucessMessage"></SucessMessageModal>
 <ConfirmationModal @close-action="closeConfirmationModal()" @confirm-action="cancelRegistration()" :isActive="showConfirmationModal"></ConfirmationModal>
+<GuestRegistrationEditModal v-if="showEditModal" :is-active="showEditModal" :regId="registrationEditId" :time="registrationEditTime" @close-action="showEditModal = false, registrationEditTime = ''" @time-update-sucess="sucessfulTimeEdit()" @time-update-fail="failTimeEdit()"></GuestRegistrationEditModal>
+<SucessMessageModal v-if="showEditMessage" :is-active="showEditMessage" @close-action="closeEditSucessMessage()" :Message="editTimeMessage"></SucessMessageModal>
     </div>
     </div>
 </template>
@@ -111,6 +115,7 @@ import MenuBar from "../components/MenuBar.vue"
 import GuestRegistrationModal from "../components/GuestRegistrationModal.vue"
 import SucessMessageModal from "../components/SucessMessageModal.vue"
 import ConfirmationModal from "../components/ConfirmationModal.vue"
+import GuestRegistrationEditModal from "../components/GuestRegistrationEditModal.vue"
 export default {
     name: 'GuestRegistrationView',
     data() {
@@ -123,6 +128,11 @@ export default {
             selectedRegistrationId: Number,
             registrations: [],
             acceptedRegistrations: [],
+            showEditModal: false,
+            registrationEditTime: "",
+            registrationEditId: Number,
+            showEditMessage: false,
+            editTimeMessage: ""
         }
     },
     props: {
@@ -132,6 +142,7 @@ export default {
         GuestRegistrationModal,
         SucessMessageModal,
         ConfirmationModal,
+        GuestRegistrationEditModal,
     },
     methods: {
   //show registration modal
@@ -329,6 +340,26 @@ closeSucessMessageModal(){
    openConfirmationModal(id){
     this.selectedRegistrationId = id
       this.showConfirmationModal = true
+    },
+    openRegistrationEditModal(id,arrivalTime){
+      this.registrationEditId = id
+    this.registrationEditTime =arrivalTime
+    this.showEditModal = true
+    },
+    sucessfulTimeEdit(){
+      this.editTimeMessage = "Svečio atvykimo laikas atnaujintas sėkmingai"
+      this.showEditModal = false
+      this.showEditMessage = true
+    },
+    failTimeEdit(){
+      this.editTimeMessage = "Svečio atvykimo laiko atnaujinti nepavyko"
+      this.showEditModal = false
+      this.showEditMessage = true
+    },
+    closeEditSucessMessage(){
+      this.showEditMessage = false
+      this.editTimeMessage = ""
+      this.getActiveUserRegistrations()
     }
     },
     created() {

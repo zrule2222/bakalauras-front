@@ -159,8 +159,8 @@ export default {
     //sets user's username to the menu bar
   async  setMenuData(){
       let data = await this.$api.getDataFromToken()
-       sessionStorage.setItem('id',data.id)
-       sessionStorage.setItem('role',data.role)
+      //  sessionStorage.setItem('id',data.id)
+      //  sessionStorage.setItem('role',data.role)
     this.username = data.username
     },
     //colapses the menu bar on a small screen
@@ -188,6 +188,8 @@ export default {
       }
     }
       localStorage.removeItem('token')
+      sessionStorage.removeItem('id')
+      sessionStorage.removeItem('role')
       this.$router.push('/')
   }
   catch(error){

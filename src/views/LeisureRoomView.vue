@@ -25,6 +25,12 @@
  <button v-if="registrationStatus == 'Laukiama patvirtinimo'" class="button is-danger" @click="showCancelConfirmationModal()">Atšaukti</button>
  <!-- show this button after the residents registration has been confirmed -->
  <button v-else-if="registrationStatus == 'Patvirtinta'" class="button is-danger" @click="showCancelConfirmationModal()">Išsiregistruoti</button>
+ <div  v-if="registrationStatus == 'Laukiama patvirtinimo'">
+  Registracija pateikta: {{ registrationWaitingConfirmTime }}
+ </div>
+ <div  v-else-if="registrationStatus == 'Patvirtinta'">
+  Registracija patvirtinta: {{ RegistrationConfirmTime }}
+ </div>
 </div>
 <div class="mr-6">
   <div class="  sm:ml-6 min-w-fit text-left sm:text-center">
@@ -101,7 +107,9 @@ export default {
             users: [],
             numberOfUsers: Number,
             userHasRegistration: false,
-            registrationStatus: ""
+            registrationStatus: "",
+            registrationWaitingConfirmTime: "",
+            RegistrationConfirmTime: "",
         }
     },
     props: {
@@ -167,9 +175,56 @@ try{
     let data = await this.$api.getDataFromToken()
   let response = await this.$api.getuserLeisureRegistration(data.id)
   if(response.length > 0){
+    console.log(response)
     this.userHasRegistration = true
     this.registrationId = response[0].leisure_id
     this.registrationStatus = response[0].leisure_status
+    if(this.registrationStatus =='Laukiama patvirtinimo'){
+    let registrationTime = new Date(response[0].waiting_confirmation_at)
+    let year =   registrationTime.getUTCFullYear()
+    let month =   registrationTime.getUTCMonth() +1
+     let day =   registrationTime.getUTCDate()
+     let hour =   registrationTime.getHours()
+      let minute =  registrationTime.getMinutes()
+
+      if(month < 10){
+        month = '0' + month
+      }
+      if(day < 10){
+        day = '0' + day
+      }
+      if(minute < 10){
+        minute = '0' + minute
+      }
+      if(hour < 10){
+        hour = '0' + hour
+      }
+      let finalDate = `${year}-${month}-${day} ${hour}:${minute}`
+    this.registrationWaitingConfirmTime = finalDate
+    }
+    else if(this.registrationStatus =='Patvirtinta'){
+      let registrationTime = new Date(response[0].confirmed_at)
+    let year =   registrationTime.getUTCFullYear()
+    let month =   registrationTime.getUTCMonth() +1
+     let day =   registrationTime.getUTCDate()
+     let hour =   registrationTime.getHours()
+      let minute =  registrationTime.getMinutes()
+
+      if(month < 10){
+        month = '0' + month
+      }
+      if(day < 10){
+        day = '0' + day
+      }
+      if(minute < 10){
+        minute = '0' + minute
+      }
+      if(hour < 10){
+        hour = '0' + hour
+      }
+      let finalDate = `${year}-${month}-${day} ${hour}:${minute}`
+    this.RegistrationConfirmTime = finalDate
+    }
   }
 }
 catch(error){

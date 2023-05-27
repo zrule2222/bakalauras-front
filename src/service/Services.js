@@ -286,7 +286,18 @@ api.userByName = async function (username) {
           Authorization: 'Bearer ' + localStorage.getItem('token')
         }
       })
-    return true
+       let blocked = await this.getUserBlockedStatus()
+   if(blocked == 0){
+     return true
+   }
+   else{
+    localStorage.removeItem('token')
+    sessionStorage.removeItem('id')
+    sessionStorage.removeItem('role')
+     localStorage.setItem('message',"Jūsų paskyra užblokuota")
+     router.push({ path: '/' })
+   }
+   // return true
     }
     catch(error){
       if(sessionStorage.getItem('role')  == 'Administratorius' || sessionStorage.getItem('role')  == 'Budėtojas'){
@@ -362,6 +373,7 @@ api.userByName = async function (username) {
         api.updateGuestArrival = async function(id,updateData){
           const res = await this.authenticateUser()
           if (res == true) {
+           
         await this.http.put(`/updateGuestArrival/${id}`, updateData)
           }
           },
@@ -457,6 +469,20 @@ api.userByName = async function (username) {
                   await this.http.put(`/updateUserLeisure/${id}`,{status: "Užbaigta"})
                   }
                   },
+                  //resident finishes his leisure room registration
+                api.getUserBlockedStatus = async function(){
+                  //const res = await this.authenticateUser()
+                  let response = null
+                  //if (res == true) {
+                    try{
+                 response = await this.http.get(`/getUserBlockedStatus/${sessionStorage.getItem('id')}`)
+                    }
+                    catch(error){
+                    }
+                 // }
+                  return response.data[0].blocked
+                  },
+                  
 
 //return the username, role and id of the user that is encoded on the jwt token
   api.getDataFromToken = async function(){
@@ -467,6 +493,7 @@ api.userByName = async function (username) {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
     })
+
     return response.data
   }
   catch(error){

@@ -8,10 +8,10 @@
           </p>
         </div>
       </section>
-      <div v-if="showError" class="notification is-danger has-text-centered">
+      <div v-if="showError" class="notification is-danger has-text-centered text-xl">
         <p>{{ errorMessage }}</p>
       </div>
-      <div v-if="showMessage" class="notification is-info has-text-centered">
+      <div v-if="showMessage" class="notification is-info has-text-centered text-xl">
         <p>{{ message }}</p>
       </div>
       <div class="hero-body is-justify-content-center is-align-items-center">
@@ -77,6 +77,8 @@ export default {
         this.message = localStorage.getItem('message')
         this.showMessage = true
         let data = await this.$api.getDataFromToken()
+        sessionStorage.setItem('id',data.id)
+       sessionStorage.setItem('role',data.role)
         if(data.role == 'Administratorius' || data.role == 'Budėtojas'){
         await this.$api.setWorkerOccupation("Prisijungęs",data.id)
         }

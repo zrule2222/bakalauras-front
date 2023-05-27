@@ -15,15 +15,17 @@
 <div v-for="machine in washingMachines" :key="machine.machine_id" :class="machine.machine_status == 'Occupied'? '!mt-0': ''"   class="mb-3 column is-4 mt-5    has-text-centered">
 <div class="tex text-xl">Skalbyklė Nr. {{ machine.machine_number  }}</div>
 <div  v-if="machine.machine_status == 'Occupied'"> skalbiama iki: {{machine.time}}</div>
-<img v-if="machine.machine_status == 'Working' || machine.machine_status == 'Occupied'"  src="../assets/washing_machine.jpg"  class="m-auto">
+<img v-if="machine.machine_status == 'Working' && machine.hasFailReg != true"  src="../assets/washing_machine.jpg"  class="m-auto">
+<img v-else-if="machine.machine_status == 'Occupied'"  src="../assets/washing_machine_washing.jpg"  class="m-auto">
 <!-- display a picture of a washing machine with an "X" if the washing machinr is broken-->
 <img v-else-if="machine.machine_status == 'Broken' "  src="../assets/broken_washing_machine.jpg"  class="m-auto">
+<img v-else-if="machine.hasFailReg == true "  src="../assets/washing_machine_self_broken.jpg"  class="m-auto">
 <div class=" justify-between mt-2">
   <!-- do not display this buttons to the resident if the washing machine is not working or the resident has provided a registration that the washing machine is broken -->
-<button  v-if="machine.machine_status == 'Working' && machine.hasFailReg != true && $route.params.role == 'Gyventojas'" class="button is-primary m-1" @click="showRegistrationModal(machine.machine_id,machine.machine_number)" >Registruoti skalbimą</button>
-<button  v-if="machine.machine_status == 'Working' && machine.hasFailReg != true && $route.params.role == 'Gyventojas'" class="button is-danger m-1" @click="showRegistrationConfirmationModal(machine.machine_id)">Registruoti gedimą</button>
+<button v-if="$route.params.role == 'Gyventojas'" class="button is-primary m-1" @click="showRegistrationModal(machine.machine_id,machine.machine_number)" :disabled="machine.machine_status == 'Working' && machine.hasFailReg != true ? false : true">Registruoti skalbimą</button>
+<button v-if="$route.params.role == 'Gyventojas'" class="button is-danger m-1" @click="showRegistrationConfirmationModal(machine.machine_id)" :disabled="machine.machine_status == 'Working' && machine.hasFailReg != true  ? false : true">Registruoti gedimą</button>
 <!-- display this button to the administrator when the washing machine is broken -->
-<button  v-if="machine.machine_status == 'Broken' &&  $route.params.role == 'Administratorius'" class="button is-warning m-1" @click="showFixConfirmation = true, fixingId = machine.machine_id">Gedimas sutvarkytas</button>
+<button  v-if="$route.params.role == 'Administratorius'" class="button is-warning m-1" @click="showFixConfirmation = true, fixingId = machine.machine_id" :disabled="machine.machine_status == 'Broken' ? false : true">Gedimas sutvarkytas</button>
 </div>
 </div>
     </div>

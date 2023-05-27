@@ -7,10 +7,11 @@
         </header>
             <section class="modal-card-body">
           <div class="field">
-            <label class="label has-text-left">skalbimo laikas</label>
-            <VueDatePicker :state="displayError" :minDate="new Date(new Date().setDate(new Date().getDate() - 1))"  v-model="washingTime" locale="lt" cancelText="Atšaukti" selectText="Pasirinkti" :timezone="'UTC'" :start-time="{hours: 0, minutes: 0 }" :max-time="{ hours: '3', minutes: 0 }" :teleport="true" time-picker/>
+            <label class="label has-text-left">Skalbimo laikas</label>
+            <VueDatePicker :state="displayError" :minDate="new Date(new Date().setDate(new Date().getDate() - 1))"  v-model="washingTime" locale="lt" cancelText="Atšaukti" selectText="Pasirinkti" :timezone="'UTC'" :start-time="{hours: 0, minutes: 0 }" :max-time="{ hours: '3', minutes: 0 }" :min-time="{ hours: '00'}" :teleport="true" time-picker placeholder="Skalbimo laikas"/>
             <p v-show="noWashingTime == false" class="help is-danger has-text-left">Nepasirinkta skalbimo trukmė</p>
             <p v-show="badWashingTime == false" class="help is-danger has-text-left">Minimali skalbimo trukmė 30 minučių</p>
+            <p v-show="overTimeLimitError == false" class="help is-danger has-text-left">Skalbimo trukmė negali viršyti 3 valandų</p>
           </div>
 
             </section>
@@ -34,6 +35,7 @@ export default {
             noWashingTime: null,
             badWashingTime: null,
             displayError: null,
+            overTimeLimitError: null,
         }
     },
     props: {
@@ -99,6 +101,11 @@ export default {
         this.displayError = false
        this.badWashingTime = false
        return false
+      }
+      else if(time.hours > 3 || (time.hours == 3 && time.minutes > 0) ){
+        this.displayError = false
+        this.overTimeLimitError = false
+        return false
       }
       return true
         }

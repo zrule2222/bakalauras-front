@@ -37,7 +37,7 @@
                 <td>{{registration.guest_firstname}} {{ registration.guest_lastname }}</td>
                 <td>{{ registration.guest_arrival }}</td>
                 <td><button class="button is-danger is-small w-2/3" @click="openConfirmationModal(registration.guest_id)"> Atšaukti</button></td>
-                <td><button class="button is-warning is-small w-2/3" @click="openRegistrationEditModal(registration.guest_id, registration.guest_arrival)"> Redaguoti</button></td>
+                <td><button class="button is-warning is-small w-2/3" @click="openRegistrationEditModal(registration.guest_id, registration.guest_arrival, registration.guest_firstname,registration.guest_lastname)"> Redaguoti</button></td>
                 
             </tr>
         </tbody>
@@ -101,10 +101,10 @@
     <div v-else-if="$route.params.role == 'Budėtojas' && acceptedRegistrations.length == 0" class="text-xl mt-2 has-text-info">
       Šiuo metu bendrabutyje nėra svečių
     </div>
-<GuestRegistrationModal @registration-sucess="registrationComplete()" @registration-fail="registrationFailed()" @close-action="closeRegistrationModal" v-if="showModal" :is-active="showModal" ></GuestRegistrationModal>
+<GuestRegistrationModal @registration-sucess="registrationComplete()" :activeRegistrations="userRegistrations" @registration-fail="registrationFailed()" @close-action="closeRegistrationModal" v-if="showModal" :is-active="showModal" ></GuestRegistrationModal>
 <SucessMessageModal v-if="showSucessMessage" :is-active="showSucessMessage"  @close-action="closeSucessMessageModal()" :Message="sucessMessage"></SucessMessageModal>
 <ConfirmationModal @close-action="closeConfirmationModal()" @confirm-action="cancelRegistration()" :isActive="showConfirmationModal"></ConfirmationModal>
-<GuestRegistrationEditModal v-if="showEditModal" :is-active="showEditModal" :regId="registrationEditId" :time="registrationEditTime" @close-action="showEditModal = false, registrationEditTime = ''" @time-update-sucess="sucessfulTimeEdit()" @time-update-fail="failTimeEdit()"></GuestRegistrationEditModal>
+<GuestRegistrationEditModal v-if="showEditModal" :is-active="showEditModal" :regId="registrationEditId" :time="registrationEditTime" @close-action="showEditModal = false, registrationEditTime = ''" @time-update-sucess="sucessfulTimeEdit()" @time-update-fail="failTimeEdit()" :timeArray="timeEditArray"></GuestRegistrationEditModal>
 <SucessMessageModal v-if="showEditMessage" :is-active="showEditMessage" @close-action="closeEditSucessMessage()" :Message="editTimeMessage"></SucessMessageModal>
     </div>
     </div>
@@ -132,7 +132,8 @@ export default {
             registrationEditTime: "",
             registrationEditId: Number,
             showEditMessage: false,
-            editTimeMessage: ""
+            editTimeMessage: "",
+            timeEditArray: []
         }
     },
     props: {
@@ -341,7 +342,15 @@ closeSucessMessageModal(){
     this.selectedRegistrationId = id
       this.showConfirmationModal = true
     },
-    openRegistrationEditModal(id,arrivalTime){
+    openRegistrationEditModal(id,arrivalTime, firstname, lastname){
+      let registrationArray = [...this.userRegistrations]
+      registrationArray.splice(registrationArray.findIndex(registration => registration.guest_id === id), 1)
+      for (let index = 0; index < registrationArray.length; index++) {
+        if (registrationArray[index].guest_firstname == firstname && registrationArray[index].guest_lastname == lastname) {
+          this.timeEditArray.push(registrationArray[index].guest_arrival)
+        }
+        
+      }
       this.registrationEditId = id
     this.registrationEditTime =arrivalTime
     this.showEditModal = true

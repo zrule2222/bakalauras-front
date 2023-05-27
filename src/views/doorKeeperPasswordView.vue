@@ -16,10 +16,11 @@
         <div class="columns is-flex is-flex-direction-column box">
           <div class="column has-text-left">
             <label for="password">Slaptažodis</label>
-            <input class="input " type="password" :class=" noPassword || badPasswordLength ? 'is-danger' : ''"
+            <input class="input " type="password" :class=" noPassword || badPasswordLength || passwordTooShort ? 'is-danger' : ''"
               placeholder="Slaptažodis" v-model="password">
             <p v-show="noPassword" class="help is-danger">Slaptažodis tuščias</p>
             <p v-show="badPasswordLength" class="help is-danger">Slaptažodis negali viršyti 100 simbolių</p>
+            <p v-show="passwordTooShort" class="help is-danger has-text-left">Minimalus slaptažodžio ilgis yra 6 simboliai</p>
           </div>
           <div class="column has-text-left">
             <label for="repeatPassword">Slaptažio pakartojimas</label>
@@ -60,6 +61,7 @@ export default {
             showSucessModal: false,
             sucessMessage: "",
             changeSucess: false,
+            passwordTooShort: false
         }
     },
     props: {
@@ -119,6 +121,7 @@ export default {
             this.repeatNoPassword = false
             this.repeatBadPasswordLength = false
             this.passwordsDontMatch = false
+            this.passwordTooShort = false
             if (!this.password) {
         this.noPassword = true
         return false
@@ -132,6 +135,13 @@ export default {
       }
       else{
         this.badPasswordLength = false
+      }
+      if(this.password.length < 6 ){
+        this.passwordTooShort = true
+        return false
+      }
+      else{
+        this.passwordTooShort = false
       }
       if (!this.repeatPassword) {
         this.repeatNoPassword = true

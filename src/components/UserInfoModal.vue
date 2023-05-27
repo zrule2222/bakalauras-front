@@ -16,10 +16,11 @@
           </div>
           <div class="field">
             <label class="label has-text-left">Naujas slaptažodis</label>
-            <input class="input" :class="noPassword || badPasswordLenght ? 'is-danger' : ''" v-model="password" type="password"
+            <input class="input" :class="noPassword || badPasswordLenght || passwordTooShort ? 'is-danger' : ''" v-model="password" type="password"
                 placeholder="Slaptažodis">
                 <p v-show="noPassword" class="help is-danger has-text-left">Slaptažodis tuščias</p>
             <p v-show="badPasswordLenght" class="help is-danger has-text-left">Slaptažodis negali viršyti 100 simbolių</p>
+            <p v-show="passwordTooShort" class="help is-danger has-text-left">Minimalus slaptažodžio ilgis yra 6 simboliai</p>
           </div>
           <div class="field">
             <label class="label has-text-left">Slaptažio pakartojimas</label>
@@ -66,6 +67,7 @@ export default {
             repeatNoPassword: false,
             repeatBadPasswordLength: false,
             passwordsDontMatch: false,
+            passwordTooShort: false,
             
 
 
@@ -163,6 +165,7 @@ export default {
           this.repeatNoPassword = false
           this.repeatBadPasswordLength = false
           this.passwordsDontMatch = false
+          this.passwordTooShort = false
       if (!this.email) {
         this.noEmail = true
         return false
@@ -199,6 +202,14 @@ export default {
       else{
         this.badPasswordLenght = false
       }
+      if(this.password.length < 6){
+        this.passwordTooShort = true
+        return false
+      }
+      else{
+        this.passwordTooShort = false
+      }
+
       if (!this.repeatPassword && this.password) {
         this.repeatNoPassword = true
         return false

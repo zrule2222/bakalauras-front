@@ -28,7 +28,8 @@ const routes = [
   {
     path: '/401',
     name: '401',
-    component: Page401
+    component: Page401,
+    meta: { requiresAuth: true }
   },
   //route to main page
   {
@@ -422,13 +423,34 @@ router.beforeEach( async (to, from, next) => {
     }
     else{
       try{
-        await axios.get(`http://localhost:5000/authenticate`, {
+       await axios.get(`http://localhost:5000/authenticate`, {
           headers: {
             Authorization: 'Bearer ' + localStorage.getItem('token')
           }
   
         })
+       // next();
+        try{
+        let blockedStatus =  await axios.get(`http://localhost:5000/getUserBlockedStatus/${sessionStorage.getItem('id')}`)
+        if(blockedStatus.data[0].blocked == 0){
       next();
+        }
+        else{
+          localStorage.removeItem('token')
+          sessionStorage.removeItem('id')
+          sessionStorage.removeItem('role')
+          localStorage.setItem('message',"Jūsų paskyra užblokuota")
+          next({
+            path: "/", 
+          });
+        }
+        }
+      catch(error){
+        localStorage.setItem('message',"Jūsų paskyra užblokuota")
+        next({
+          path: "/", 
+        });
+      }
       }
       catch(error){
         if(sessionStorage.getItem('role')  == 'Administratorius' || sessionStorage.getItem('role')  == 'Budėtojas'){

@@ -14,9 +14,10 @@
 
             </div>
             <p v-show="noTime == false" class="help is-danger has-text-left">Nepasirinktas svečio atvykimo laikas</p>
-            <p v-show="incorrectTime == false" class="help is-danger has-text-left">Svečias negali atvykti laiko tarpu 00:00-8:00</p>
+            <p v-show="incorrectTime == false" class="help is-danger has-text-left">Svečias negali atvykti laiko tarpu 00:00-08:00</p>
             <p v-show="sameTimeRrror == false" class="help is-danger has-text-left">Nebuvo pasirinktas naujas svečio atvykimo laikas</p>
             <p v-show="bellowCurrentTimeError == false" class="help is-danger has-text-left">Svečio atvykimo laikas yra praeityje</p>
+            <p v-show="sameTimeError == false" class="help is-danger has-text-left">Jūs jau esate užregistravę šį svečia nurodytam laikui</p>
           </div>
 
             </section>
@@ -42,6 +43,7 @@ export default {
             incorrectTime: null,
             sameTimeRrror: null,
             bellowCurrentTimeError: null,
+            sameTimeError: null,
             displayError: null,
 
         }
@@ -50,6 +52,7 @@ export default {
         isActive: { type: Boolean, default: false, required: true },
         time: {type: String, required: true},
         regId: {type: Number, required: true},
+        timeArray: {type: Array, required: true}
     },
     components:{
         VueDatePicker,
@@ -77,13 +80,14 @@ export default {
             this.displayError = null
             this.sameTimeRrror = null
             this.bellowCurrentTimeError = null
+            this.sameTimeError = null
             let time = new Date(this.registrationTime)
             if (!this.registrationTime) {
                 this.displayError = false
         this.noTime = false
         return false
       }
-      else if(time.getHours() > 0  && time.getHours()  < 8){
+      else if(time.getHours() >= 0  && time.getHours()  < 8){
         this.displayError = false
        this.incorrectTime = false
        return false
@@ -98,11 +102,22 @@ export default {
         this.bellowCurrentTimeError = false
         return false
       }
+      for (let index = 0; index < this.timeArray.length; index++) {
+        console.log(time)
+        console.log(new Date(this.timeArray[index]))
+        if(+time == +new Date(this.timeArray[index])){
+            this.sameTimeError = false
+            this.displayError = false
+            return false
+        }
+        
+      }
+      
       return true
         }
     },
     created() {
-        console.log(new Date().getDate())
+        console.log(this.regId)
         this.registrationTime = this.time
         this.originalRegistrationTime = this.time
     }

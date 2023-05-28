@@ -15,19 +15,19 @@
      <div class="text-4xl mt-5">
       {{ name }} {{ lastname }}
      </div>
-     <div  v-if="userRole == 'Administratorius'">
+     <div  v-if="userRole == 'Administratorius'" class="text-lg">
       Rolė: {{ role }}
      </div>
-     <div>
+     <div class="text-lg">
       Lytis: {{ gender }}
      </div>
-     <div>
+     <div class="text-lg">
       Kambarys: {{ room }}
      </div>
-     <div :class="userRole == 'Administratorius' ? '' : 'pb-4'">
+     <div :class="userRole == 'Administratorius' ? '' : 'pb-4'" class="text-lg">
       El. paštas: {{ email }}
      </div>
-     <div  v-if="userRole == 'Administratorius'" class="flex flex-row pb-4">
+     <div  v-if="userRole == 'Administratorius'" class="flex flex-row pb-4 text-lg">
       Užblokuotas:
       <div v-if="blocked != -1 && blocked == 0" class="has-text-success">
        Ne
@@ -37,8 +37,9 @@
       </div>
      </div>
      <div class="buttons">
-       <button @click="showEditModal()" class="button is-warning">Redaguoti informaciją</button>
-       <button @click="showConfirmationModal()" v-if="userRole == 'Administratorius' && blocked != -1 && blocked == 0" class="button is-danger ml-3">Blokuoti paskyrą</button>
+       <button v-if="userRole == 'Administratorius'" @click="showEditModal()" class="button is-warning" :disabled="administratorOccupation == 'Laisvas' || administratorOccupation == 'Užimtas' ? false : true">Redaguoti informaciją</button>
+       <button v-else-if="userRole == 'Gyventojas'" @click="showEditModal()" class="button is-warning" >Redaguoti informaciją</button>
+       <button @click="showConfirmationModal()" v-if="userRole == 'Administratorius' && blocked != -1 && blocked == 0" class="button is-danger ml-3" :disabled="administratorOccupation == 'Laisvas' || administratorOccupation == 'Užimtas' ? false : true">Blokuoti paskyrą</button>
      </div>
     </div>
     <div v-else class="text-xl mt-7 has-text-info">
@@ -73,6 +74,7 @@ export default {
       room: 0,
       userRole: "",
       displayConfirmationModal: false,
+      administratorOccupation: "",
       
 
     };
@@ -100,6 +102,9 @@ export default {
       this.room = room
      let UserRole = await this.$api.getDataFromToken()
       this.userRole = UserRole.role
+      if(this.userRole == 'Administratorius'){
+      this.getAdminOccupation()
+    }
       }
       catch(error){
         this.room = -1
@@ -146,6 +151,15 @@ export default {
       this.messageSucess = "Naudotojo duomenys nebuvo atnaujinti"
       this.showModal = false
       this.showSucessMessage = true
+    },
+    async getAdminOccupation(){
+      try{
+        let data = await this.$api.getAdminOccupation()
+        this.administratorOccupation = data.occupation
+      }
+      catch(error){
+        this.administratorOccupation = "Prisijungęs"
+      }
     }
 
   },

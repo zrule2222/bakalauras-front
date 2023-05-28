@@ -105,7 +105,7 @@
           </div>
           </div>
           <div class="column">
-            <button class="button is-primary is-fullwidth"  @click="registerUser()">Registruoti</button>
+            <button class="button is-primary is-fullwidth"  @click="registerUser()" :disabled="administratorOccupation == 'Laisvas' || administratorOccupation == 'Užimtas' ? false : true">Registruoti</button>
           </div>
 
           
@@ -155,6 +155,7 @@ export default {
       usernameExistsMessage: "",
       randomPassword: "",
       showLoading: false,
+      administratorOccupation: "",
 
         }
     },
@@ -181,8 +182,8 @@ export default {
 	            role: this.role,
                 blocked: 0,
 	            email: this.email,
-                firstname: this.name,
-	            lastname: this.lastName,
+                firstname: this.name.charAt(0).toUpperCase() + this.name.slice(1),
+	            lastname: this.lastName.charAt(0).toUpperCase() + this.lastName.slice(1),
 	            gender: this.gender,
                 room: this.room,
 	            occupation: "",
@@ -391,10 +392,20 @@ export default {
     secret += charset[index % charset.length];
   }
   this.randomPassword = secret
-        }
+        },
+        async getAdminOccupation(){
+      try{
+        let data = await this.$api.getAdminOccupation()
+        this.administratorOccupation = data.occupation
+      }
+      catch(error){
+        this.administratorOccupation = "Prisijungęs"
+      }
+    }
     
     },
     created() {
+      this.getAdminOccupation()
     }
 }
 </script>

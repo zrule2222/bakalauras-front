@@ -300,9 +300,9 @@ api.userByName = async function (username) {
    // return true
     }
     catch(error){
-      if(sessionStorage.getItem('role')  == 'Administratorius' || sessionStorage.getItem('role')  == 'Budėtojas'){
+     // if(sessionStorage.getItem('role')  == 'Administratorius' || sessionStorage.getItem('role')  == 'Budėtojas'){
         this.setWorkerOccupation("Neprisijungęs",sessionStorage.getItem('id'))
-      }
+      //}
       localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijungti")
       router.push({ path: '/' })
       return false
@@ -497,9 +497,9 @@ api.userByName = async function (username) {
     return response.data
   }
   catch(error){
-    if(sessionStorage.getItem('role')  == 'Administratorius' || sessionStorage.getItem('role')  == 'Budėtojas'){
+    //if(sessionStorage.getItem('role')  == 'Administratorius' || sessionStorage.getItem('role')  == 'Budėtojas'){
       this.setWorkerOccupation("Neprisijungęs",sessionStorage.getItem('id'))
-    }
+    //}
     localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijungti")
     router.push({ path: '/' })
   }

@@ -25,7 +25,7 @@
 <button v-if="$route.params.role == 'Gyventojas'" class="button is-primary m-1" @click="showRegistrationModal(machine.machine_id,machine.machine_number)" :disabled="machine.machine_status == 'Working' && machine.hasFailReg != true ? false : true">Registruoti skalbimą</button>
 <button v-if="$route.params.role == 'Gyventojas'" class="button is-danger m-1" @click="showRegistrationConfirmationModal(machine.machine_id)" :disabled="machine.machine_status == 'Working' && machine.hasFailReg != true  ? false : true">Registruoti gedimą</button>
 <!-- display this button to the administrator when the washing machine is broken -->
-<button  v-if="$route.params.role == 'Administratorius'" class="button is-warning m-1" @click="showFixConfirmation = true, fixingId = machine.machine_id" :disabled="machine.machine_status == 'Broken' ? false : true">Gedimas sutvarkytas</button>
+<button  v-if="$route.params.role == 'Administratorius'" class="button is-warning m-1" @click="showFixConfirmation = true, fixingId = machine.machine_id" :disabled="machine.machine_status == 'Broken' && (administratorOccupation == 'Laisvas' || administratorOccupation == 'Užimtas') ? false : true">Gedimas sutvarkytas</button>
 </div>
 </div>
     </div>
@@ -70,6 +70,7 @@ export default {
             fixingId: Number,
             showFixSucessMessage: false, 
             fixSucessMessage: '',
+            administratorOccupation: "",
 
         }
     },
@@ -178,6 +179,15 @@ export default {
         this.showSucessMessage = true
 
     },
+    async getAdminOccupation(){
+      try{
+        let data = await this.$api.getAdminOccupation()
+        this.administratorOccupation = data.occupation
+      }
+      catch(error){
+        this.administratorOccupation = "Prisijungęs"
+      }
+    },
     showRegistrationConfirmationModal(id){
         this.showConfirmation = true
         this.brokenMachineRegistrationId = id
@@ -235,6 +245,7 @@ catch(error){
     created() {
       //get washing machine data on page load
         this.getMachineData()
+        this.getAdminOccupation()
     }
 }
 </script>

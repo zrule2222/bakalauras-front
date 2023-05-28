@@ -75,14 +75,23 @@ export default {
         
 
         this.message = localStorage.getItem('message')
+        if(this.message != null){
         this.showMessage = true
+        }
         let data = await this.$api.getDataFromToken()
         sessionStorage.setItem('id',data.id)
        sessionStorage.setItem('role',data.role)
-        if(data.role == 'Administratorius' || data.role == 'Budėtojas'){
+      let occupaton = await this.$api.getUserOccupation(sessionStorage.getItem('id'))
+      if(occupaton.occupation == "Neprisijungęs"){
+       // if(data.role == 'Administratorius' || data.role == 'Budėtojas'){
         await this.$api.setWorkerOccupation("Prisijungęs",data.id)
-        }
+       // }
         this.$router.push('/main')
+       }
+       else{
+        this.message = "Naudotojas jau yra prisijungęs prie paskyros"
+          this.showMessage = true
+       }
         }
         else{
           this.message = "Jūsų paskyra užblokuota"

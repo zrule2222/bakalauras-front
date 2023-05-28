@@ -64,8 +64,8 @@
                 <th class="has-text-centered">{{count+1}}</th>
                 <td>{{registration.guest_firstname}} {{ registration.guest_lastname }}</td>
                 <td>{{ registration.guest_arrival }}</td>
-                <td><button class="button is-primary is-small w-2/3" @click="confirmRegistration(registration.guest_id)"> Tvirtinti registraciją</button></td>
-                <td><button class="button is-danger is-small w-2/3" @click="declineRegistration(registration.guest_id)"> Atmesti registraciją</button></td>
+                <td><button class="button is-primary is-small " @click="confirmRegistration(registration.guest_id)" :disabled="doorkeeperOccupation == 'Laisvas' || doorkeeperOccupation == 'Užimtas' ? false : true"> Tvirtinti registraciją</button></td>
+                <td><button class="button is-danger is-small " @click="declineRegistration(registration.guest_id)" :disabled="doorkeeperOccupation == 'Laisvas' || doorkeeperOccupation == 'Užimtas' ? false : true"> Atmesti registraciją</button></td>
             </tr>
         </tbody>
       </table>
@@ -93,7 +93,7 @@
                 <th class="has-text-centered">{{count+1}}</th>
                 <td>{{registration.guest_firstname}} {{ registration.guest_lastname }}</td>
                 <td>{{ registration.confirmed_at }}</td>
-                <td><button class="button is-warning is-small w-2/3" @click="setRegistrationAsDone(registration.guest_id)"> Svečias išvyko</button></td>
+                <td><button class="button is-warning is-small " @click="setRegistrationAsDone(registration.guest_id)" :disabled="doorkeeperOccupation == 'Laisvas' || doorkeeperOccupation == 'Užimtas' ? false : true"> Svečias išvyko</button></td>
             </tr>
         </tbody>
       </table>
@@ -133,7 +133,8 @@ export default {
             registrationEditId: Number,
             showEditMessage: false,
             editTimeMessage: "",
-            timeEditArray: []
+            timeEditArray: [],
+            doorkeeperOccupation: "",
         }
     },
     props: {
@@ -369,6 +370,17 @@ closeSucessMessageModal(){
       this.showEditMessage = false
       this.editTimeMessage = ""
       this.getActiveUserRegistrations()
+    },
+   async getDoorkeeperOccupation(){
+    try{
+      let data = await this.$api.getDoorkeeperOccupation()
+        this.doorkeeperOccupation = data.occupation
+        console.log( this.doorkeeperOccupation)
+    }
+    catch(error){
+      this.doorkeeperOccupation = 'Prisijungęs'
+    }
+        
     }
     },
     created() {
@@ -378,6 +390,7 @@ closeSucessMessageModal(){
         else{
           this.getActiveRegistrations()
           this.getConfirmedRegistrations()
+          this.getDoorkeeperOccupation()
         }
     }
 }

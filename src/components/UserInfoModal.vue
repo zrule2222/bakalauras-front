@@ -202,7 +202,7 @@ export default {
       else{
         this.badPasswordLenght = false
       }
-      if(this.password.length < 6){
+      if(this.password && this.password.length < 6){
         this.passwordTooShort = true
         return false
       }
@@ -238,6 +238,7 @@ return false
     },
     created() {
         this.getUserData()
+       
     }
 }
 </script>

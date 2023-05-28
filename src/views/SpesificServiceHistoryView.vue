@@ -76,7 +76,7 @@
         <th class="has-text-centered">Svečias atvyksta</th>
         <th class="has-text-centered">Statusas</th>
         <th class="has-text-centered">Registracija pateikta</th>
-        <th class="has-text-centered">Registraciją pateikė</th>
+        <th class="has-text-centered">Veiksmą atliko</th>
     </tr>
         </thead>
         
@@ -126,7 +126,7 @@
 
         <th class="has-text-centered">Statusas</th>
         <th class="has-text-centered">Registracija pateikta</th>
-        <th class="has-text-centered">Registraciją pateikė</th>
+        <th class="has-text-centered">Veiksmą atliko</th>
     </tr>
         </thead>
         

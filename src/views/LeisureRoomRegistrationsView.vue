@@ -31,8 +31,8 @@
                 <th class="has-text-centered">{{count+1}}</th>
                 <td>{{registration.firstname}} {{ registration.lastname }}</td>
                 <td>{{ registration.waiting_confirmation_at }}</td>
-                <td><button class="button is-primary is-small w-2/3" @click="confirmRegistration(registration.leisure_id)"> Tvirtinti registracija</button></td>
-                <td><button class="button is-danger is-small w-2/3" @click="rejectRegistration(registration.leisure_id)"> Atmesti registracija</button></td>
+                <td><button class="button is-primary is-small " @click="confirmRegistration(registration.leisure_id)" :disabled="doorkeeperOccupation == 'Laisvas' || doorkeeperOccupation == 'Užimtas' ? false : true"> Tvirtinti registracija</button></td>
+                <td><button class="button is-danger is-small " @click="rejectRegistration(registration.leisure_id)" :disabled="doorkeeperOccupation == 'Laisvas' || doorkeeperOccupation == 'Užimtas' ? false : true"> Atmesti registracija</button></td>
             </tr>
         </tbody>
       </table>
@@ -56,6 +56,7 @@ export default {
             registrations: [],
             showSucessMessage: false,
             sucessMessage: "",
+            doorkeeperOccupation: "",
         }
     },
     props: {
@@ -126,10 +127,22 @@ async rejectRegistration(id){
   this.sucessMessage = "Nepavyko atmesti laisvalaikio kambario registracijos"
       this.showSucessMessage = true
    }
-}
+},
+async getDoorkeeperOccupation(){
+    try{
+      let data = await this.$api.getDoorkeeperOccupation()
+        this.doorkeeperOccupation = data.occupation
+        console.log( this.doorkeeperOccupation)
+    }
+    catch(error){
+      this.doorkeeperOccupation = 'Prisijungęs'
+    }
+        
+    }
     },
     created() {
      this.getRegistrations()
+     this.getDoorkeeperOccupation()
     }
 }
 </script>

@@ -9,7 +9,7 @@
             <section class="modal-card-body">
           <div class="field">
             <label class="label has-text-left">Atvykimo laikas</label>
-            <VueDatePicker :state="displayError" :minDate="new Date(new Date().setDate(new Date().getDate()))" :min-time="{ hours: 8, minutes: 0 }"   v-model="registrationTime"   locale="lt" cancelText="Atšaukti" selectText="Pasirinkti" :timezone="'Europe/Minsk'"  :teleport="true" :format="`yyyy/MM/dd HH:mm`"/>
+            <VueDatePicker :state="displayError" :minDate="new Date(new Date().setDate(new Date().getDate()))" :min-time="{ hours: 8, minutes: 0 }"   v-model="registrationTime"   locale="lt" cancelText="Atšaukti" selectText="Pasirinkti" :timezone="'Europe/Minsk'"  :teleport="true" :format="`yyyy/MM/dd HH:mm`" placeholder="Atvykimo laikas"/>
             <div class="">
 
             </div>

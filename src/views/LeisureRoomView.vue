@@ -25,18 +25,18 @@
  <button v-if="registrationStatus == 'Laukiama patvirtinimo'" class="button is-danger" @click="showCancelConfirmationModal()">Atšaukti</button>
  <!-- show this button after the residents registration has been confirmed -->
  <button v-else-if="registrationStatus == 'Patvirtinta'" class="button is-danger" @click="showCancelConfirmationModal()">Išsiregistruoti</button>
- <div  v-if="registrationStatus == 'Laukiama patvirtinimo'">
+ <div  v-if="registrationStatus == 'Laukiama patvirtinimo'" class="sm:text-xl mr-2">
   Registracija pateikta: {{ registrationWaitingConfirmTime }}
  </div>
- <div  v-else-if="registrationStatus == 'Patvirtinta'">
+ <div  v-else-if="registrationStatus == 'Patvirtinta'" class="sm:text-xl mr-2">
   Registracija patvirtinta: {{ RegistrationConfirmTime }}
  </div>
 </div>
 <div class="mr-6">
-  <div class="  sm:ml-6 min-w-fit text-left sm:text-center">
+  <div class="  sm:ml-6 min-w-fit text-left sm:text-center sm:text-xl">
   Informacija apie laisvalaikio kambarį
 </div>
-  <div class="has-text-left is-flex is-flex-direction-column min-w-fit">
+  <div class="has-text-left is-flex is-flex-direction-column min-w-fit sm:text-xl">
     <div class="has-text-left is-flex is-flex-direction-row items-center justify-center">
       Užimtumas:
     <div v-if="numberOfUsers >= 1" class="has-text-danger ml-2">

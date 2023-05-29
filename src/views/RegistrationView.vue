@@ -186,7 +186,7 @@ export default {
 	            lastname: this.lastName.charAt(0).toUpperCase() + this.lastName.slice(1),
 	            gender: this.gender,
                 room: this.room,
-	            occupation: "",
+	            occupation: "Neprisijungęs",
                 
             }
             try{
@@ -383,7 +383,7 @@ export default {
     //generate a user's password
     generatePassword(){
       const length = Math.floor(Math.random() * (10 - 5 + 1)) + 5
-      const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~!@-#$'
+      const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~!@#$'
       const indexes = crypto.getRandomValues(new Uint32Array(length));
 
   let secret = '';

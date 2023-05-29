@@ -453,12 +453,12 @@ router.beforeEach( async (to, from, next) => {
       }
       }
       catch(error){
-        if(sessionStorage.getItem('role')  == 'Administratorius' || sessionStorage.getItem('role')  == 'Budėtojas'){
-          await axios.put(`http://localhost:5000/occupation/${sessionStorage.getItem('id')}`,{occupation: "Neprisijiungęs"})
+        //if(sessionStorage.getItem('role')  == 'Administratorius' || sessionStorage.getItem('role')  == 'Budėtojas'){
+          await axios.put(`http://localhost:5000/occupation/${sessionStorage.getItem('id')}`,{occupation: "Neprisijungęs"})
           sessionStorage.removeItem('id')
           sessionStorage.removeItem('role')
           localStorage.removeItem('token')
-        }
+      //  }
         localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijungti")
         next({
           path: "/", 

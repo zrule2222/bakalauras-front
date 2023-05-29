@@ -68,12 +68,14 @@
     <tr>
         <th class="has-text-centered">Numeris</th>
         <th class="has-text-centered">Gyventojas</th>
+        <th class="has-text-centered">Gyventojas kambaryje nuo</th>
     </tr>
         </thead>
         <tbody v-for="(registration, count) in users" :key="registration.leisure_id">
             <tr>
                 <th class="has-text-centered">{{count+1}}</th>
                 <td>{{registration.firstname}} {{ registration.lastname }}</td>
+                <td>{{registration.confirmed_at}}</td>
             
             </tr>
         </tbody>
@@ -163,8 +165,38 @@ async getleisureRoomData(){
 try{
  this.users = await this.$api.getLeisureRoomData()
  this.numberOfUsers =  this.users.length
+ for (let index = 0; index < this.users.length; index++) {
+  let userDate = new Date(this.users[index].confirmed_at)
+  console.log(userDate)
+  let year =   userDate.getUTCFullYear()
+    let month =  userDate.getUTCMonth() +1
+     let day =   userDate.getUTCDate()
+     let hour =  userDate.getHours()
+      let minute =  userDate.getMinutes()
+      let seconds = userDate.getSeconds()
+
+      if(month < 10){
+        month = '0' + month
+      }
+      if(day < 10){
+        day = '0' + day
+      }
+      if(minute < 10){
+        minute = '0' + minute
+      }
+      if(hour < 10){
+        hour = '0' + hour
+      }
+      if(seconds < 10){
+        seconds = '0' + seconds
+      }
+      let finalDate = `${year}-${month}-${day} ${hour}:${minute}:${seconds}`
+      this.users[index].confirmed_at = finalDate
+ }
+
 }
 catch(error){
+  console.log(error)
 this.users = []
 this.numberOfUsers = 0
 }
@@ -175,7 +207,6 @@ try{
     let data = await this.$api.getDataFromToken()
   let response = await this.$api.getuserLeisureRegistration(data.id)
   if(response.length > 0){
-    console.log(response)
     this.userHasRegistration = true
     this.registrationId = response[0].leisure_id
     this.registrationStatus = response[0].leisure_status

@@ -16,11 +16,12 @@
           </div>
           <div class="field">
             <label class="label has-text-left">Naujas slaptažodis</label>
-            <input class="input" :class="noPassword || badPasswordLenght || passwordTooShort ? 'is-danger' : ''" v-model="password" type="password"
+            <input class="input" :class="noPassword || badPasswordLenght || passwordTooShort || notStrongPassword ? 'is-danger' : ''" v-model="password" type="password"
                 placeholder="Slaptažodis">
                 <p v-show="noPassword" class="help is-danger has-text-left">Slaptažodis tuščias</p>
             <p v-show="badPasswordLenght" class="help is-danger has-text-left">Slaptažodis negali viršyti 100 simbolių</p>
             <p v-show="passwordTooShort" class="help is-danger has-text-left">Minimalus slaptažodžio ilgis yra 6 simboliai</p>
+            <p v-show="notStrongPassword" class="help is-danger has-text-left">Slaptažotis privalo turėti mažaja, didžiają raidę, skaičių ir specialų simbolį</p>
           </div>
           <div class="field">
             <label class="label has-text-left">Slaptažio pakartojimas</label>
@@ -68,6 +69,7 @@ export default {
             repeatBadPasswordLength: false,
             passwordsDontMatch: false,
             passwordTooShort: false,
+            notStrongPassword: false,
             
 
 
@@ -166,6 +168,8 @@ export default {
           this.repeatBadPasswordLength = false
           this.passwordsDontMatch = false
           this.passwordTooShort = false
+          this.notStrongPassword = false
+          var passwordCheck = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{6,}$/
       if (!this.email) {
         this.noEmail = true
         return false
@@ -209,7 +213,15 @@ export default {
       else{
         this.passwordTooShort = false
       }
-
+     
+     if(this.password && this.password.match(passwordCheck)){
+        this.notStrongPassword = false
+        
+      }
+      else if (this.password && !this.password.match(passwordCheck)){
+        this.notStrongPassword = true
+        return false
+      }
       if (!this.repeatPassword && this.password) {
         this.repeatNoPassword = true
         return false

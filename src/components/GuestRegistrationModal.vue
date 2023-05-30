@@ -97,44 +97,6 @@ export default {
           this.bellowCurrentTimeError = false
           this.timeError = null
           let currentDate = new Date()
-          let year =   this.guestArrival.getUTCFullYear()
-    let month =   this.guestArrival.getUTCMonth() +1
-     let day =   this.guestArrival.getUTCDate()
-     let hour =  this.guestArrival.getUTCHours()
-      let minute =  this.guestArrival.getUTCMinutes()
-
-      if(month < 10){
-        month = '0' + month
-      }
-      if(day < 10){
-        day = '0' + day
-      }
-      if(minute < 10){
-        minute = '0' + minute
-      }
-      if(hour < 10){
-        hour = '0' + hour
-      }
-          let selectedData = `${year}-${month}-${day} ${hour}:${minute}`
-          let currentYear =   currentDate.getUTCFullYear()
-    let curreentMonth =   currentDate.getUTCMonth() +1
-     let currentDay =   currentDate.getUTCDate()
-     let currentHour = currentDate.getHours()
-      let currentMinute =  currentDate.getMinutes()
-
-      if(curreentMonth < 10){
-        curreentMonth = '0' + curreentMonth
-      }
-      if(currentDay < 10){
-        currentDay = '0' + currentDay
-      }
-      if(currentMinute < 10){
-        currentMinute = '0' + currentMinute
-      }
-      if(currentHour < 10){
-        currentHour = '0' + currentHour
-      }
-       let FormatedCurrentDate = `${currentYear}-${curreentMonth}-${currentDay} ${currentHour}:${currentMinute}`
       //  console.log(selectedData)
       //  console.log(FormatedCurrentDate)
       //  console.log(selectedData < FormatedCurrentDate)
@@ -187,6 +149,44 @@ export default {
         this.noTimeEror = true
         return false
       }
+      let year =   this.guestArrival.getUTCFullYear()
+    let month =   this.guestArrival.getUTCMonth() +1
+     let day =   this.guestArrival.getUTCDate()
+     let hour =  this.guestArrival.getUTCHours()
+      let minute =  this.guestArrival.getUTCMinutes()
+
+      if(month < 10){
+        month = '0' + month
+      }
+      if(day < 10){
+        day = '0' + day
+      }
+      if(minute < 10){
+        minute = '0' + minute
+      }
+      if(hour < 10){
+        hour = '0' + hour
+      }
+          let selectedData = `${year}-${month}-${day} ${hour}:${minute}`
+          let currentYear =   currentDate.getUTCFullYear()
+    let curreentMonth =   currentDate.getUTCMonth() +1
+     let currentDay =   currentDate.getUTCDate()
+     let currentHour = currentDate.getHours()
+      let currentMinute =  currentDate.getMinutes()
+
+      if(curreentMonth < 10){
+        curreentMonth = '0' + curreentMonth
+      }
+      if(currentDay < 10){
+        currentDay = '0' + currentDay
+      }
+      if(currentMinute < 10){
+        currentMinute = '0' + currentMinute
+      }
+      if(currentHour < 10){
+        currentHour = '0' + currentHour
+      }
+       let FormatedCurrentDate = `${currentYear}-${curreentMonth}-${currentDay} ${currentHour}:${currentMinute}`
       if(selectedData < FormatedCurrentDate){
         this.timeError = false
         this.bellowCurrentTimeError = true

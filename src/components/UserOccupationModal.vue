@@ -24,7 +24,7 @@
           <div v-else-if="!allowToChangeOccupation" class="field w-fit mx-auto">
             <div class="control">
               <div>
-                <label class="label">Šiuo metu bendrabutyje yra aktyvus budėtojas, todėl užimtumo keisti negalite.</label>
+                <label class="label">Šiuo metu bendrabutyje yra aktyvus budėtojas, todėl užimtumo keisti negalite</label>
               </div>
             </div>
           </div>

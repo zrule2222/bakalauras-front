@@ -291,6 +291,7 @@ api.userByName = async function (username) {
      return true
    }
    else{
+    await axios.put(`http://localhost:5000/occupation/${sessionStorage.getItem('id')}`,{occupation: "Neprisijungęs"})
     localStorage.removeItem('token')
     sessionStorage.removeItem('id')
     sessionStorage.removeItem('role')

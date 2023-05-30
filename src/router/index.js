@@ -436,6 +436,7 @@ router.beforeEach( async (to, from, next) => {
       next();
         }
         else{
+          await axios.put(`http://localhost:5000/occupation/${sessionStorage.getItem('id')}`,{occupation: "Neprisijungęs"})
           localStorage.removeItem('token')
           sessionStorage.removeItem('id')
           sessionStorage.removeItem('role')

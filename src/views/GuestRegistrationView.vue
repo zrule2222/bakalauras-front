@@ -99,7 +99,7 @@
       </table>
     </div>
     <div v-else-if="$route.params.role == 'Budėtojas' && acceptedRegistrations.length == 0" class="text-xl mt-2 has-text-info">
-      Šiuo metu bendrabutyje nėra svečių
+      Šiuo metu bendrabutyje svečių nėra
     </div>
 <GuestRegistrationModal @registration-sucess="registrationComplete()" :activeRegistrations="userRegistrations" @registration-fail="registrationFailed()" @close-action="closeRegistrationModal" v-if="showModal" :is-active="showModal" ></GuestRegistrationModal>
 <SucessMessageModal v-if="showSucessMessage" :is-active="showSucessMessage"  @close-action="closeSucessMessageModal()" :Message="sucessMessage"></SucessMessageModal>
@@ -373,7 +373,7 @@ closeSucessMessageModal(){
     },
    async getDoorkeeperOccupation(){
     try{
-      let data = await this.$api.getDoorkeeperOccupation()
+      let data = await this.$api.getUserOccupation(sessionStorage.getItem('id'))
         this.doorkeeperOccupation = data.occupation
         console.log( this.doorkeeperOccupation)
     }

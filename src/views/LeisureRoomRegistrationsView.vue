@@ -130,7 +130,7 @@ async rejectRegistration(id){
 },
 async getDoorkeeperOccupation(){
     try{
-      let data = await this.$api.getDoorkeeperOccupation()
+      let data = await this.$api.getUserOccupation(sessionStorage.getItem('id'))
         this.doorkeeperOccupation = data.occupation
         console.log( this.doorkeeperOccupation)
     }

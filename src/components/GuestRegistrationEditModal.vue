@@ -1,6 +1,6 @@
 <template>
        <div class="modal" :class="{ 'is-active': isActive }">
-        <div class="h-2"></div>
+        <div class="h-12"></div>
    <div class="modal-background"></div>
       <div class="modal-content">
         <header class="modal-card-head">

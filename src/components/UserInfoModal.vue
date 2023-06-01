@@ -6,6 +6,7 @@
           <p  class="modal-card-title has-text-left">Pakeisti naudotojo informaciją</p>
         </header>
             <section class="modal-card-body">
+              <div v-if="(userRole == 'Administratorius' && adminCanOpenForm == true) || (userRole == 'Gyventojas' && residentCanOpenForm == true)">
                 <div class="field">
             <label class="label has-text-left">El. paštas</label>
             <input class="input" :class="noEmail || badEmail || badEmailLenght ? 'is-danger' : ''" v-model="email" type="email"
@@ -36,7 +37,13 @@
             <label class="label">Užblokuotas</label>
             <input class="ml-[1px]" type="checkbox" v-model="newBlocked">
           </div>
-
+           </div>
+           <div v-else-if="userRole == 'Administratorius' && adminCanOpenForm == false" class="label">
+            Gyventojas šiuo metu atnaujina savo informaciją. Prašome palaukti
+           </div>
+           <div v-else-if="userRole == 'Gyventojas' && residentCanOpenForm == false" class="label">
+            Administratorius šiuo metu atnaujina jūsų informaciją. Prašome palaukti
+           </div>
             </section>
             <footer class="modal-card-foot flex justify-between">
                 <button @click="setUserData()" class="button is-success">Tvirtinti</button>
@@ -70,6 +77,9 @@ export default {
             passwordsDontMatch: false,
             passwordTooShort: false,
             notStrongPassword: false,
+            residentCanOpenForm: true,
+            adminCanOpenForm: true,
+            userRole: "",
             
 
 
@@ -84,7 +94,8 @@ export default {
     },
     methods: {
       //close this modal
-        closeModal() {
+       async closeModal() {
+        await this.$api.setEditStatus(sessionStorage.getItem('id'), {status: null})
             this.$emit('close-action');
         },
         //update user data
@@ -109,19 +120,23 @@ export default {
                 }
 
                 if(this.email == this.ckeckEmail){
+                  await this.$api.setEditStatus(sessionStorage.getItem('id'), {status: null})
                   this.$emit('update-sucess');
                 }
                 if(this.email != this.ckeckEmail || this.blocked != this.newBlocked){
                   await this.$api.updateUserInfo(this.userId, userinfo)
+                  await this.$api.setEditStatus(sessionStorage.getItem('id'), {status: null})
              this.$emit('update-sucess');
                 }
               }
               else if(this.email != this.ckeckEmail){
              await this.$api.updateUserInfo(this.userId, userinfo)
+             await this.$api.setEditStatus(sessionStorage.getItem('id'), {status: null})
              this.$emit('update-sucess');
               }
               else if(this.blocked != this.newBlocked){
                 await this.$api.updateUserInfo(this.userId, userinfo)
+                await this.$api.setEditStatus(sessionStorage.getItem('id'), {status: null})
                 this.$emit('update-sucess');
               }
               else{
@@ -139,6 +154,9 @@ export default {
         },
         //get the data of the user whose data is being changed
        async getUserData(){
+        if(!this.checkIfUserCanOpenForm()){
+          return
+        }
         try{
         let userData = await this.$api.getUserInfo(this.userId)
         this.email = userData.email
@@ -156,6 +174,39 @@ export default {
             this.email = ""
             this.blocked = false
             this.newBlocked = false
+        }
+        },
+       async checkIfUserCanOpenForm(){
+          try{
+          if(sessionStorage.getItem('role') == "Administratorius"){
+         var status = await this.$api.getEditStatus(this.userId)
+         console.log(status)
+         if(status.editing_data != null){
+           this.adminCanOpenForm = false
+           return false
+         }
+         else{
+          this.adminCanOpenForm = true
+          await this.$api.setEditStatus(sessionStorage.getItem('id'), {status: this.userId})
+          return true
+         }
+
+          }
+          else if(sessionStorage.getItem('role') == "Gyventojas"){
+            var status = await this.$api.getEditStatus(29)
+            if(status.editing_data != null){
+           this.residentCanOpenForm = false
+           return false
+         }
+         else{
+          this.residentCanOpenForm = true
+          await this.$api.setEditStatus(sessionStorage.getItem('id'), {status: this.userId})
+          return true
+          }
+        }
+      }
+        catch(error){
+
         }
         },
         //check all the form fields
@@ -249,6 +300,7 @@ return false
     }
     },
     created() {
+      this.userRole = sessionStorage.getItem('role')
         this.getUserData()
        
     }

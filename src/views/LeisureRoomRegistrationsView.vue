@@ -100,8 +100,31 @@ async getRegistrations(){
   this.registrations = []
    }
 },
+async checkForRegStatusChange(id){
+try{
+  let registrations = await this.$api.getLeisureRoomRegistrations()
+  console.log(registrations)
+  let reg =  registrations.find(registration => registration.leisure_id == id)
+  console.log(reg)
+  if(reg.leisure_status == "Laukiama patvirtinimo"){
+    return false
+  }
+  else{ 
+    return true
+  }
+}
+catch(error){
+  return true
+}
+},
 //confirm the leisure room registration
 async confirmRegistration(id){
+  if(await this.checkForRegStatusChange(id)){
+    this.sucessMessage = "Registracija nebuvo patvirtinta, dėl registracijos statuso pokyčio"
+      this.showSucessMessage = true
+      this.getRegistrations()
+      return
+  }
     try{
       await this.$api.acceptLeisureRoomRegistration(id)
      this.sucessMessage = "Laisvalaikio kambario registracija patvirtinta sėkmingai"
@@ -118,6 +141,12 @@ closeSucessModal(){
 },
 //reject the leisure room registration
 async rejectRegistration(id){
+  if(await this.checkForRegStatusChange(id)){
+    this.sucessMessage = "Registracija nebuvo atmesta, dėl registracijos statuso pokyčio"
+      this.showSucessMessage = true
+      this.getRegistrations()
+      return
+  }
     try{
       await this.$api.rejectLeisureRoomRegistration(id)
      this.sucessMessage = "Laisvalaikio kambario registracija atmesta sėkmingai"

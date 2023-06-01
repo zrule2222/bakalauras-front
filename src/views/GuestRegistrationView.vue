@@ -104,7 +104,7 @@
 <GuestRegistrationModal @registration-sucess="registrationComplete()" :activeRegistrations="userRegistrations" @registration-fail="registrationFailed()" @close-action="closeRegistrationModal" v-if="showModal" :is-active="showModal" ></GuestRegistrationModal>
 <SucessMessageModal v-if="showSucessMessage" :is-active="showSucessMessage"  @close-action="closeSucessMessageModal()" :Message="sucessMessage"></SucessMessageModal>
 <ConfirmationModal @close-action="closeConfirmationModal()" @confirm-action="cancelRegistration()" :isActive="showConfirmationModal"></ConfirmationModal>
-<GuestRegistrationEditModal v-if="showEditModal" :is-active="showEditModal" :regId="registrationEditId" :time="registrationEditTime" @close-action="showEditModal = false, registrationEditTime = ''" @time-update-sucess="sucessfulTimeEdit()" @time-update-fail="failTimeEdit()" :timeArray="timeEditArray"></GuestRegistrationEditModal>
+<GuestRegistrationEditModal v-if="showEditModal" :is-active="showEditModal" :regId="registrationEditId" :time="registrationEditTime" @close-action="showEditModal = false, registrationEditTime = ''" @time-update-sucess="sucessfulTimeEdit()" @time-update-fail="failTimeEdit()" @time-update-canceled="canceledTimeEdit()" :timeArray="timeEditArray"></GuestRegistrationEditModal>
 <SucessMessageModal v-if="showEditMessage" :is-active="showEditMessage" @close-action="closeEditSucessMessage()" :Message="editTimeMessage"></SucessMessageModal>
     </div>
     </div>
@@ -214,17 +214,36 @@ closeSucessMessageModal(){
     },
     //cancel the guest registration
    async cancelRegistration(){
+    if(await this.checkForRegStatusChange(this.selectedRegistrationId)){
+        this.sucessMessage = "Svečio registracija nebuvo atšaukta, dėl registracijos statuso pokyčio "
+  this.showConfirmationModal = false
+  this.showSucessMessage = true
+  return
+      }
     try{
+
   await this.$api.cancelGuestRegistration(this.selectedRegistrationId)
   this.sucessMessage = "Svečio registracija atšaukta sėkmingai"
   this.showConfirmationModal = false
   this.showSucessMessage = true
+      
     }
     catch(error){
         this.sucessMessage = "Nepavyko atšaukti svečio registracijos"
         this.showConfirmationModal = false
         this.showSucessMessage = true
     }
+    },
+    async checkForRegStatusChange(id){
+      let registrations = await this.$api.getuserGuestRegistrations(sessionStorage.getItem('id'))
+      console.log(registrations)
+  let reg =  registrations.find(registration => registration.guest_id == id)
+if(reg == undefined){
+ return true
+}
+else{
+  return false
+}
     },
     //doorkeeper mars the registration as done
    async setRegistrationAsDone(id){
@@ -315,6 +334,11 @@ closeSucessMessageModal(){
     },
     //confirm guest registration
    async confirmRegistration(id){
+    if(await this.checkForActiveRegStatusChange(id)){
+        this.sucessMessage = "Svečio registracija nebuvo patvirtinta, dėl registracijos statuso pokyčio"
+      this.showSucessMessage = true
+      return
+      }
    try{
       await this.$api.acceptGuestRegistration(id)
      this.sucessMessage = "Svečio registracija patvirtinta sėkmingai"
@@ -325,8 +349,33 @@ closeSucessMessageModal(){
       this.showSucessMessage = true
    }
     },
+  async checkForActiveRegStatusChange(id){
+    try{
+      let registrations = await this.$api.getActiveGuestRegistrations()
+      console.log(registrations)
+      let reg =  registrations.find(registration => registration.guest_id == id)
+      console.log(reg)
+      if(reg == undefined){
+        return true
+      }
+      else if(reg.status == "Laukiama patvirtinimo"){
+      return false
+      }
+      else{
+        return true
+      }
+    }
+    catch(error){
+    return true
+    }
+    },
    //reject guest registration
     async declineRegistration(id){
+      if(await this.checkForActiveRegStatusChange(id)){
+        this.sucessMessage = "Svečio registracija nebuvo atmesta, dėl registracijos statuso pokyčio"
+      this.showSucessMessage = true
+      return
+      }
    try{
       await this.$api.rejectGuestRegistration(id)
      this.sucessMessage = "Svečio registracija atmesta sėkmingai"
@@ -358,6 +407,11 @@ closeSucessMessageModal(){
     },
     sucessfulTimeEdit(){
       this.editTimeMessage = "Svečio atvykimo laikas atnaujintas sėkmingai"
+      this.showEditModal = false
+      this.showEditMessage = true
+    },
+    canceledTimeEdit(){
+      this.editTimeMessage = "Laikas nepakeistas, dėl registracijos statuso pokyčio"
       this.showEditModal = false
       this.showEditMessage = true
     },

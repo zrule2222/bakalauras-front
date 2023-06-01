@@ -67,8 +67,15 @@ export default {
             return
         }
         try{
+    let registrations = await this.$api.getuserGuestRegistrations(sessionStorage.getItem('id'))
+  let reg =  registrations.find(registration => registration.guest_id == this.regId)
+if(reg == undefined){
+  this.$emit('time-update-canceled');
+}
+else{
             await this.$api.updateGuestArrival(this.regId,{arrival: this.registrationTime})
             this.$emit('time-update-sucess');
+}
         }
         catch(error){
             this.$emit('time-update-fail');
@@ -117,7 +124,7 @@ export default {
         }
     },
     created() {
-        console.log(this.regId)
+      console.log(this.regId)
         this.registrationTime = this.time
         this.originalRegistrationTime = this.time
     }

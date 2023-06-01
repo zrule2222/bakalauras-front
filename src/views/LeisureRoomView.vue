@@ -265,6 +265,12 @@ this.userHasRegistration = false
 //register out of the room
 async unregister(id){
   if(this.registrationStatus == 'Laukiama patvirtinimo'){
+    if(await this.checkForRegCancelStatusChange()){
+      this.sucessMessage = "Registracija nebuvo atšaukta, dėl registracijos statuso pokyčio "
+    this.showCancelConfirmation = false
+    this.showSucessMessageModal()
+    return
+    }
   try{
   await this.$api.cancelLeisureRegistration(id)
   this.sucessMessage = "Laisvalaikio kambario registracija atšaukta sėkmingai"
@@ -291,6 +297,21 @@ else if(this.registrationStatus == 'Patvirtinta'){
     this.showSucessMessageModal()
   }
 }
+},
+async checkForRegCancelStatusChange(){
+  try{
+  let response = await this.$api.getuserLeisureRegistration(sessionStorage.getItem('id'))
+  console.log(response[0].leisure_status)
+  if(response[0].leisure_status == 'Laukiama patvirtinimo'){
+  return false
+  }
+  else{
+    return true
+  }
+  }
+  catch(error){
+    return true
+  }
 }
     },
     created() {

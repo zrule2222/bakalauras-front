@@ -33,7 +33,7 @@
     Šiuo metu bendrabutyje nėra skalbyklių
     </div>
 
-<WashingMachineModal v-if="showModal" :isActive="showModal" :machineId="machineId" :machineNumber="washingNumber" @close-action="closeMachineModal()" @washing-sucess="washingSucess()" @washing-fail="washingFail()"></WashingMachineModal>
+<WashingMachineModal v-if="showModal" :isActive="showModal" :machineId="machineId" :machineNumber="washingNumber" @close-action="closeMachineModal()" @washing-sucess="washingSucess()" @washing-fail="washingFail()" @washing-occupied="washingOccupied()"></WashingMachineModal>
 <!-- show a message when the resident has provided a washing registration  -->
 <SucessMessageModal v-if="showSucessMessage" :isActive="showSucessMessage" :Message="messageSucess" @close-action="showSucessMessage = false, messageSucess = '', getMachineData()"></SucessMessageModal>
 <ConfirmationModal  v-if="showConfirmation" :isActive="showConfirmation" @close-action="closeFailRegModal()" @confirm-action="registerFailure(brokenMachineRegistrationId)"></ConfirmationModal>
@@ -178,6 +178,11 @@ export default {
         this.messageSucess= 'Nepavyko užregistruoti skalbimo'
         this.showSucessMessage = true
 
+    },
+    washingOccupied(){
+      this.showModal = false
+        this.messageSucess= 'Skalbimo mašinoje jau yra užregistruotas skalbimas'
+        this.showSucessMessage = true
     },
     async getAdminOccupation(){
       try{

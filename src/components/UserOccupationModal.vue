@@ -51,6 +51,7 @@ export default {
             noOccupations: false,
             currectOccupation: "",
             allowToChangeOccupation: true,
+            allowToChangeAfterOpen: true,
         }
     },
     props: {
@@ -73,10 +74,21 @@ export default {
           }
           try{
           let data = await this.$api.getDataFromToken()
+        await this.CheckIfAllowToChangeOccupationAfterOpen(data.role,data.id)
+        if(data.role == 'Budėtojas' && this.allowToChangeAfterOpen){
            await this.$api.setWorkerOccupation(this.userOccupation,data.id)
            this.$emit("occupation-sucess")
           }
+          else if(data.role == 'Administratorius'){
+            await this.$api.setWorkerOccupation(this.userOccupation,data.id)
+           this.$emit("occupation-sucess")
+          }
+          else{
+              this.$emit("occupation-cantChange")
+          }
+          }
           catch(error){
+            console.log(error)
             this.$emit("occupation-fail")
           }
         },
@@ -97,7 +109,25 @@ export default {
       catch(error){
         this.allowToChangeOccupation = true
       }
+        },
+        async CheckIfAllowToChangeOccupationAfterOpen(role, id){
+        try{
+          if(role == 'Budėtojas'){
+          let response = await this.$api.getDoorkeeperOccupation()
+          console.log(response.user_id)
+          console.log(id)
+          if(response.user_id != id){
+          this.allowToChangeAfterOpen = false
+          }
+          else if(response.user_id == id){
+            this.allowToChangeAfterOpen = true
+          }
         }
+        }
+      catch(error){
+        this.allowToChangeAfterOpen = true
+      }
+    },
     },
    async created() {
         let data = await this.$api.getDataFromToken()

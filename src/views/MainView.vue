@@ -99,7 +99,7 @@
 </div>
 </div>
 </div>
-<UserOccupationModal v-if="showModal" :isActive="showModal" @close-action="closeUserOccupationModal()" @occupation-sucess="occupationUpdateSucess()" @occupation-fail="occupationUpdateFail()"></UserOccupationModal>
+<UserOccupationModal v-if="showModal" :isActive="showModal" @close-action="closeUserOccupationModal()" @occupation-sucess="occupationUpdateSucess()" @occupation-fail="occupationUpdateFail()" @occupation-cantChange="occupationUpdateCantChange()"></UserOccupationModal>
 <SucessMessageModal v-if="showSucessModal" :isActive="showSucessModal" :Message="sucessMessage" @close-action="closeSucessModal()"></SucessMessageModal>
 
     </div> 
@@ -163,6 +163,11 @@ export default {
       this.showModal = false
       this.showSucessModal = true
 
+    },
+    occupationUpdateCantChange(){
+      this.sucessMessage = "Šiuo metu bendrabutyje yra aktyvus budėtojas, todėl užimtumo keisti negalite"
+      this.showModal = false
+      this.showSucessModal = true
     },
     occupationUpdateFail(){
       this.sucessMessage = "Nepavyko atnaujinti užimtumo"

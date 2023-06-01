@@ -378,6 +378,23 @@ api.userByName = async function (username) {
         await this.http.put(`/updateGuestArrival/${id}`, updateData)
           }
           },
+          //get user's information editing status
+          api.setEditStatus = async function(id,updateData){
+            const res = await this.authenticateUser()
+            if (res == true) {
+             
+          await this.http.put(`/setEditStatus/${id}`, updateData)
+            }
+            },
+            //get user's information editing status
+            api.getEditStatus = async function(id){
+              const res = await this.authenticateUser()
+              let response = null
+              if (res == true) {
+              response =  await this.http.get(`/getEditStatus/${id}`)
+              }
+                return response.data
+              },
 //send an email to a user with the login credentials
         api.sendEmail = async function(email,password,username){
           const res = await this.authenticateUser()
@@ -385,6 +402,7 @@ api.userByName = async function (username) {
             await this.http.post(`/sendMail`, {userMail: email,password: password,username: username})
           }
           },
+
 //return the history of a requested service according to the user's role
           api.getServiceHistory = async function(id,role,service){
             const res = await this.authenticateUser()

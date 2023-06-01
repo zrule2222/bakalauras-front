@@ -71,6 +71,11 @@ export default {
                  washingFinishDate.setHours(washingFinishDate.getHours() + timer.hours)
                  washingFinishDate.setMinutes(washingFinishDate.getMinutes() + timer.minutes)
                  washingFinishDate.setSeconds(0)
+                 let machines = await this.$api.getWashingMachineData()
+                 let thisMachine = machines.filter(obj => {
+                 return obj.machine_id === this.machineId
+                })
+                if(thisMachine[0].machine_status == "Working"){
                let response =  await this.$api.registerWashing(registrationData)
                let updateData ={
                     status: "Occupied",
@@ -80,6 +85,10 @@ export default {
                 }
                   await this.$api.updateWashingMachine(this.machineId,updateData)
                   this.$emit('washing-sucess');
+              }
+              else{
+                this.$emit('washing-occupied');
+              }
             }
             catch(error){
             this.$emit('washing-fail');
@@ -110,7 +119,7 @@ export default {
       return true
         }
     },
-    created() {
+   async created() {
     }
 }
 </script>

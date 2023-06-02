@@ -33,7 +33,7 @@
     Šiuo metu bendrabutyje nėra skalbyklių
     </div>
 
-<WashingMachineModal v-if="showModal" :isActive="showModal" :machineId="machineId" :machineNumber="washingNumber" @close-action="closeMachineModal()" @washing-sucess="washingSucess()" @washing-fail="washingFail()" @washing-occupied="washingOccupied()"></WashingMachineModal>
+<WashingMachineModal v-if="showModal" :isActive="showModal" :machineId="machineId" :machineNumber="washingNumber" @close-action="closeMachineModal()" @washing-sucess="washingSucess()" @washing-fail="washingFail()" @washing-occupied="washingOccupied()" @washing-broken="washingBroken()"></WashingMachineModal>
 <!-- show a message when the resident has provided a washing registration  -->
 <SucessMessageModal v-if="showSucessMessage" :isActive="showSucessMessage" :Message="messageSucess" @close-action="showSucessMessage = false, messageSucess = '', getMachineData()"></SucessMessageModal>
 <ConfirmationModal  v-if="showConfirmation" :isActive="showConfirmation" @close-action="closeFailRegModal()" @confirm-action="registerFailure(brokenMachineRegistrationId)"></ConfirmationModal>
@@ -184,6 +184,11 @@ export default {
         this.messageSucess= 'Skalbimo mašinoje jau yra užregistruotas skalbimas'
         this.showSucessMessage = true
     },
+    washingBroken(){
+      this.showModal = false
+        this.messageSucess= 'Skalbimas nebuvo užregistruotas, dėl skalbimo mašinos gedimo'
+        this.showSucessMessage = true
+    },
     async getAdminOccupation(){
       try{
         let data = await this.$api.getAdminOccupation()
@@ -218,6 +223,12 @@ export default {
     },
     //register a washing machine failure
     async registerFailure(id){
+      if(await this.checkBeforeFailReg(id)){
+        this.showConfirmation = false
+        this.failRegMessage = 'Gedimas nebuvo užregistruotas, dėl skalbimo mašinos statuso pokyčio'
+        this.showFailRegMessage = true
+        return
+      }
         try{
         let data = await this.$api.getDataFromToken()
     try{
@@ -244,7 +255,19 @@ export default {
 catch(error){
 
 }
-    }
+    },
+   async checkBeforeFailReg(id){
+      let machines = await this.$api.getWashingMachineData()
+                 let thisMachine = machines.filter(obj => {
+                 return obj.machine_id === id
+                })
+                if(thisMachine[0].machine_status == "Working"){
+                 return false
+                }
+                else{
+                  return true
+                }
+    },
 
     },
     created() {

@@ -15,6 +15,8 @@ import doorKeeperPasswordView from "../views/DoorKeeperPasswordView"
 import WashingMachineView from "../views/WashingMachineView.vue"
 import ServiceHistoryView from "../views/ServiceHistoryView.vue"
 import SpesificServiceHistoryView from "../views/SpesificServiceHistoryView.vue"
+import AccountActivationView from "../views/AccountActivationView.vue"
+import BadActivasionView from "../views/BadActivasionView.vue"
 import axios from 'axios';
 
 const routes = [
@@ -30,6 +32,11 @@ const routes = [
     name: '401',
     component: Page401,
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/badActivation',
+    name: 'badActivation',
+    component: BadActivasionView,
   },
   //route to main page
   {
@@ -251,6 +258,31 @@ const routes = [
       }
   }
   //route to contacts information page
+},
+{
+  path: '/activate/:token',
+  name: 'accActivation',
+  component: AccountActivationView,
+  beforeEnter: async (to, from, next) => {
+    //check if the resident with the given name exists
+    try {
+        const response = await axios.post(`http://localhost:5000/checkActivationToken`, {"token": to.params.token})
+        if (response.status == 200) {
+          to.params.id=response.data.user_id
+            next()
+          }
+          else if(response.status == 401){
+            next('/badActivation')
+          }
+          else if(response.status == 500){
+            next('/badActivation')
+          }
+        } 
+    catch (error) {
+      next('/badActivation')
+    }
+}
+ 
 },
 {
   path: '/contacts',

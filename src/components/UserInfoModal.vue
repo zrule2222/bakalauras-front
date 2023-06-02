@@ -45,9 +45,9 @@
             Administratorius šiuo metu atnaujina jūsų informaciją. Prašome palaukti
            </div>
             </section>
-            <footer class="modal-card-foot flex justify-between">
-                <button @click="setUserData()" class="button is-success">Tvirtinti</button>
-                <button @click.prevent="closeModal()" class="button is-danger">Uždaryti</button>
+            <footer class="modal-card-foot flex justify-between" :class="(userRole == 'Administratorius' && adminCanOpenForm == true) || (userRole == 'Gyventojas' && residentCanOpenForm == true) ? '' : '!justify-end'">
+                <button v-if="(userRole == 'Administratorius' && adminCanOpenForm == true) || (userRole == 'Gyventojas' && residentCanOpenForm == true)" @click="setUserData()" class="button is-success">Tvirtinti</button>
+                <button @click.prevent="closeModal()" class="button is-danger ">Uždaryti</button>
             </footer>
 
 
@@ -140,14 +140,17 @@ export default {
                 this.$emit('update-sucess');
               }
               else{
+                await this.$api.setEditStatus(sessionStorage.getItem('id'), {status: null})
                 this.$emit('no-changes');
               }
             }
             catch(error){
               if(error.request.status == 500){
+                await this.$api.setEditStatus(sessionStorage.getItem('id'), {status: null})
                 this.$emit('same-password');
               }
               else{
+                await this.$api.setEditStatus(sessionStorage.getItem('id'), {status: null})
               this.$emit('update-fail');
               }
             }

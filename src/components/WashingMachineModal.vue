@@ -86,8 +86,11 @@ export default {
                   await this.$api.updateWashingMachine(this.machineId,updateData)
                   this.$emit('washing-sucess');
               }
-              else{
+              else if(thisMachine[0].machine_status == "Occupied"){
                 this.$emit('washing-occupied');
+              }
+              else{
+                this.$emit('washing-broken');
               }
             }
             catch(error){

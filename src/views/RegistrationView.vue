@@ -176,9 +176,9 @@ export default {
                  this.room = null
             }
             this.generatePassword()
-            let userData ={
+            var userData ={
                 username: this.username,
-	            password: this.randomPassword,
+	            //password: this.randomPassword,
 	            role: this.role,
                 blocked: 0,
 	            email: this.email,
@@ -194,8 +194,10 @@ export default {
               this.showLoading = true
               //check if a user with the given username already exists
                if(await this.checkUsername()){
-                await this.$api.sendEmail(userData.email,userData.password,userData.username)
-            await this.$api.registerUser(userData)
+             let token = await this.$api.registerUser(userData)
+             console.log(token)
+                await this.$api.sendEmail(userData.email,token, userData.username)
+         
             //update room space if creating a resident's account
             if(this.role == 'Gyventojas'){
             await this.$api.updateRoomSpace(this.room)
@@ -212,6 +214,7 @@ export default {
 
             }
             catch(error){
+              console.log(error)
                 this.sucessMessage = "Naudotojo registracija nebuvo sėkminga",
                 this.showSucessMessageModal()
             }

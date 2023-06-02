@@ -171,6 +171,10 @@ api.userByName = async function (username) {
     }
      return response.data
    }
+   api.checkActivationToken = async function (token) {
+      let response = await this.http.post(`/checkActivationToken`,{token: token})
+     return response.data
+   }
 //return rooms that are available to register a resident in
    api.getRoomsForRegistration = async function (roomType) {
     const res = await this.authenticateUser()
@@ -183,9 +187,16 @@ api.userByName = async function (username) {
 //create a new user's account
    api.registerUser = async function (userData) {
     const res = await this.authenticateUser()
+    let response = null
     if (res == true) {
-    await this.http.post(`/register`,userData)
+      response = await this.http.post(`/register`,userData)
     }
+    return response.data
+   }
+
+   api.activateAccount = async function (id) {
+    console.log(id)
+      await this.http.put(`/activationDone/${id}`)
    }
 //update the amout of free spaces left in the room
    api.updateRoomSpace = async function (id) {
@@ -365,10 +376,9 @@ api.userByName = async function (username) {
         },
 //update the password of a user with the given id
         api.updateUserPassword = async function(id,password){
-          const res = await this.authenticateUser()
-          if (res == true) {
+
         await this.http.put(`/userPass/${id}`, {password: password})
-          }
+          
           },
           //update the password of a user with the given id
         api.updateGuestArrival = async function(id,updateData){
@@ -396,10 +406,10 @@ api.userByName = async function (username) {
                 return response.data
               },
 //send an email to a user with the login credentials
-        api.sendEmail = async function(email,password,username){
+        api.sendEmail = async function(email,token, username){
           const res = await this.authenticateUser()
           if (res == true) {
-            await this.http.post(`/sendMail`, {userMail: email,password: password,username: username})
+            await this.http.post(`/sendMail`, {userMail: email,token: token, username:username})
           }
           },
 

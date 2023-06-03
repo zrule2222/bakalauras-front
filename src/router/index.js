@@ -34,7 +34,7 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/badActivation',
+    path: '/badActivation/:failReason',
     name: 'badActivation',
     component: BadActivasionView,
   },
@@ -279,7 +279,12 @@ const routes = [
           }
         } 
     catch (error) {
-      next('/badActivation')
+      if(error.response.status == 401){
+        next({name:'badActivation', params:{failReason: "expired"}})
+      }
+      else if(error.response.status == 500){
+        next({name:'badActivation', params:{failReason: "error"}})
+      }
     }
 }
  

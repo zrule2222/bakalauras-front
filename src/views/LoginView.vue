@@ -71,6 +71,7 @@ export default {
         })
         localStorage.removeItem('message')
         if(response.blocked == 0){
+          if(localStorage.getItem('token') == null){
         localStorage.setItem('token', response.token)
         
 
@@ -93,6 +94,20 @@ export default {
           this.showMessage = true
        }
         }
+        else{
+          let data = await this.$api.getDataFromToken()
+          let id =  await this.$api.getUserLoginId(response.token)
+          if(data.id != id){
+          this.message = "Jūs jau esate prisijunge prie paskyros šioje naršyklėje"
+          this.showMessage = true
+          }
+          else{
+            sessionStorage.setItem('id',data.id)
+       sessionStorage.setItem('role',data.role)
+            this.$router.push('/main')
+          }
+        }
+      }
         else{
           this.message = "Jūsų paskyra užblokuota"
         this.showMessage = true

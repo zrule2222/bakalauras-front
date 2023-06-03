@@ -81,6 +81,7 @@ export default {
             }
             else{
               try{
+               await this.ckeckActivationToken(this.$route.params.token)
                await this.$api.updateUserPassword(this.$route.params.id,this.password)
                await this.$api.activateAccount(this.$route.params.id)
                this.sucessMessage = 'Paskyra aktyvuota sėkmingai'
@@ -97,6 +98,14 @@ export default {
                     this.changeSucess = false
                 }
               }
+            },
+           async ckeckActivationToken(token){
+            try{
+          await this.$api.checkActivationToken(token)
+            }
+            catch(error){
+              this.$router.push({name:'badActivation', params:{failReason: "expired"}})
+            }
             },
              //close sucess message modal
         closeSucessModal(){

@@ -21,10 +21,11 @@
  </div>
 
  <div class="hero-body is-justify-content-center is-align-items-center">
+  <form @submit.prevent autocomplete="on">
         <div class="columns is-flex is-flex-direction-column box">
           <div class="column has-text-left">
             <label for="username">Prisijungimo vardas</label>
-            <input class="input " type="text" :class="noUsername || badUsernameLenght ? 'is-danger' : ''"
+            <input class="input " autocomplete="on" type="text" :class="noUsername || badUsernameLenght ? 'is-danger' : ''"
               placeholder="Prisijungimo vardas" v-model="username">
             <p v-show="noUsername" class="help is-danger">Prisijungimo vardas tuščias</p>
             <p v-show="badUsernameLenght" class="help is-danger">Prisijungimo vardas negali viršyti 50 simbolių</p>
@@ -46,7 +47,7 @@
           </div>
           <div class="column has-text-left">
             <label for="Name">El. paštas</label>
-            <input class="input " type="text" :class="noEmail || badEmail || badEmailLenght ? 'is-danger' : ''" placeholder="El. paštas"
+            <input class="input " type="text" name="email" :class="noEmail || badEmail || badEmailLenght ? 'is-danger' : ''" placeholder="El. paštas"
               v-model="email">
               <p v-show="noEmail" class="help is-danger has-text-left">El. pašto laukelis tuščias</p>
             <p v-show="badEmail" class="help is-danger has-text-left">Netinkamas el. pašto formatas</p>
@@ -54,7 +55,7 @@
           </div>
           <div class="column has-text-left">
             <label for="Name">Vardas</label>
-            <input class="input " type="text" :class="noName || badNameLenght || nameHasNumbers ? 'is-danger' : ''" placeholder="Vardas"
+            <input class="input " type="text"  name="first_name" :class="noName || badNameLenght || nameHasNumbers ? 'is-danger' : ''" placeholder="Vardas"
               v-model="name">
             <p v-show="noName" class="help is-danger">Vardas tuščias</p>
             <p v-show="badNameLenght" class="help is-danger">Vardas negali viršyti 40 simbolių</p>
@@ -62,7 +63,7 @@
           </div>
           <div class="column has-text-left">
             <label for="Name">Pavardė</label>
-            <input class="input " type="text" :class="noLastName || BadLastNameLenght || lastnameHasNumbers ? 'is-danger' : ''" placeholder="Pavardė"
+            <input class="input " type="text" name="last_name" :class="noLastName || BadLastNameLenght || lastnameHasNumbers ? 'is-danger' : ''" placeholder="Pavardė"
               v-model="lastName">
             <p v-show="noLastName" class="help is-danger">Pavardė tuščia</p>
             <p v-show="BadLastNameLenght" class="help is-danger">Pavardė negali viršyti 40 simbolių</p>
@@ -114,6 +115,7 @@
           <SucessMessageModal v-if="showUsernameSucessModal" :isActive="showUsernameSucessModal" :Message="usernameExistsMessage" @close-action="closeUsernameMessageModal()"></SucessMessageModal>
 
         </div>
+      </form>
       </div>
       </div>
 

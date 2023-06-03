@@ -356,6 +356,15 @@ api.userByName = async function (username) {
       }
         return response.data
       },
+      api.getUserLoginId = async function(token){
+        let response =  await this.http.get(`/authenticate`, {
+          headers: {
+            Authorization: 'Bearer ' + token
+          }
+        })
+        return response.data.id
+
+        },
 //return all user guest registrations that are waiting confirmation
     api.getuserGuestRegistrations = async function(id){
       const res = await this.authenticateUser()

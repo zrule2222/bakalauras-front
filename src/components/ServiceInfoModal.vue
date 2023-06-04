@@ -8,7 +8,7 @@
             <section class="modal-card-body has-text-left">
                 <label v-if="serviceInformation.length > 0" class="label whitespace-pre-wrap ">{{ serviceInformation }}</label>
                 <!-- display this text if service description is not found -->
-                <label v-else class="label whitespace-pre-wrap ">Paslaugos aprašymas.</label>
+                <label v-else class="label whitespace-pre-wrap ">Paslaugos aprašymas</label>
 
             </section>
             <footer class="modal-card-foot flex justify-end">

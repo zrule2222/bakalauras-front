@@ -78,6 +78,7 @@ async getRegistrations(){
      let day =   new Date(registrations[index].waiting_confirmation_at).getUTCDate()
      let hour =   new Date(registrations[index].waiting_confirmation_at).getHours()
       let minute =  new Date(registrations[index].waiting_confirmation_at).getMinutes()
+      let seconds = new Date(registrations[index].waiting_confirmation_at).getSeconds()
 
       if(month < 10){
         month = '0' + month
@@ -91,7 +92,10 @@ async getRegistrations(){
       if(hour < 10){
         hour = '0' + hour
       }
-      let finalDate = `${year}-${month}-${day} ${hour}:${minute}`
+      if(seconds < 10){
+        seconds = '0' + seconds
+      }
+      let finalDate = `${year}-${month}-${day} ${hour}:${minute}:${seconds}`
       registrations[index].waiting_confirmation_at = finalDate
     }
     this.registrations = registrations

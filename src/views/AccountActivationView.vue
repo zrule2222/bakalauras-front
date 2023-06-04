@@ -81,6 +81,7 @@ export default {
             }
             else{
               try{
+              //  return
                await this.ckeckActivationToken(this.$route.params.token)
                await this.$api.updateUserPassword(this.$route.params.id,this.password)
                await this.$api.activateAccount(this.$route.params.id)

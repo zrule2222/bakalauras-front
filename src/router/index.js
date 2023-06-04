@@ -484,7 +484,7 @@ router.beforeEach( async (to, from, next) => {
         }
         }
       catch(error){
-        localStorage.setItem('message',"Jūsų paskyra užblokuota")
+        localStorage.setItem('message',"Nepavyko patikrinti ar naudotojas yra užblokuotas")
         next({
           path: "/", 
         });

@@ -14,7 +14,7 @@
 
             </div>
             <p v-show="noTime == false" class="help is-danger has-text-left">Nepasirinktas svečio atvykimo laikas</p>
-            <p v-show="incorrectTime == false" class="help is-danger has-text-left">Svečias negali atvykti laiko tarpu 00:00-08:00</p>
+            <p v-show="incorrectTime == false" class="help is-danger has-text-left">Svečias negali atvykti laiko tarpu 00:00-07:59</p>
             <p v-show="sameTimeRrror == false" class="help is-danger has-text-left">Nebuvo pasirinktas naujas svečio atvykimo laikas</p>
             <p v-show="bellowCurrentTimeError == false" class="help is-danger has-text-left">Svečio atvykimo laikas yra praeityje</p>
             <p v-show="sameTimeError == false" class="help is-danger has-text-left">Jūs jau esate užregistravę šį svečia nurodytam laikui</p>

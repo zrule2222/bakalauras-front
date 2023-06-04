@@ -13,16 +13,16 @@
  <MenuBar v-if="role == 'Administratorius'" :menu-type="'main-admin'"></MenuBar>
  <MenuBar v-if="role == 'Budėtojas'" :menu-type="'main-doorkeeper'"></MenuBar>
  <div v-if="role == 'Gyventojas'" class="is-flex is-flex-direction-row is-justify-content-space-between  mt-4">
-<div v-if="role == 'Gyventojas'" class="  ml-6 min-w-fit sm:text-xl mr-2">
+<div v-if="role == 'Gyventojas'" class="  ml-6 min-w-fit sm:text-[21px]/[30px] mr-2">
  Jūsų kambarys: {{ room }}
 </div>
 <!-- display workers occupation to the resident -->
 <div v-if="role == 'Gyventojas'" class="mr-6">
-  <div class=" sm:ml-6 min-w-fit text-left sm:text-center sm:text-xl">
+  <div class=" sm:ml-6 min-w-fit text-left sm:text-center sm:text-[21px]/[30px]">
   Darbuotojų užimtumas
 </div>
   <div class="has-text-left is-flex is-flex-direction-column min-w-fit">
-    <div class="has-text-left is-flex is-flex-direction-row sm:text-xl">
+    <div class="has-text-left is-flex is-flex-direction-row sm:text-[21px]/[30px]">
     Budėtojas:
     <div v-if="role == 'Gyventojas' && doorkeeperOccupation == 'Užimtas'" class="has-text-danger ml-2">
     {{doorkeeperOccupation}}
@@ -34,7 +34,7 @@
     {{doorkeeperOccupation}}
   </div>
 </div>
-    <div class="has-text-left is-flex is-flex-direction-row sm:text-xl">
+    <div class="has-text-left is-flex is-flex-direction-row sm:text-[21px]/[30px]">
     <div>
       Administratorius:
     </div >
@@ -54,12 +54,12 @@
 </div>
 <div v-else class="is-flex is-flex-direction-row is-justify-content-end  mt-4">
 <div  class="mr-6">
-  <div class=" sm:ml-6 min-w-fit text-left sm:text-center sm:text-xl">
+  <div class=" sm:ml-6 min-w-fit text-left sm:text-center sm:text-[21px]/[30px]">
   Užimtumas
 </div>
 <!-- display the occupation for the admin -->
 <div class="has-text-left is-flex is-flex-direction-column min-w-fit">
-    <div class="has-text-left is-flex is-flex-direction-row items-center sm:text-xl">
+    <div class="has-text-left is-flex is-flex-direction-row items-center sm:text-[21px]/[30px]">
     Jūsų užimtumas:
     <div v-if="role == 'Administratorius' && administratorOccupation == 'Užimtas'" class="has-text-danger ml-2">
     {{administratorOccupation}}
@@ -81,7 +81,7 @@
     {{doorkeeperOccupation}}
   </div>
   </div>
-  <div  class="flex flex-row sm:text-xl">
+  <div  class="flex flex-row sm:text-[21px]/[30px]">
   <div v-if="role == 'Administratorius'">
       Budėtojas:
     </div >

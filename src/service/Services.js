@@ -63,6 +63,7 @@ api.userByName = async function (username) {
   }
 //update user's email and blocked status
   api.updateUserInfo = async function (id,userinfo) {
+    this.setEditStatus(sessionStorage.getItem('id'), {status: null})
    const res = await this.authenticateUser()
    if (res == true) {
      await this.http.put(`/updateUser/${id}`, userinfo)
@@ -314,6 +315,9 @@ api.userByName = async function (username) {
     catch(error){
      // if(sessionStorage.getItem('role')  == 'Administratorius' || sessionStorage.getItem('role')  == 'Budėtojas'){
         this.setWorkerOccupation("Neprisijungęs",sessionStorage.getItem('id'))
+        localStorage.removeItem('token')
+        sessionStorage.removeItem('id')
+        sessionStorage.removeItem('role')
       //}
       localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijungti")
       router.push({ path: '/' })
@@ -385,7 +389,7 @@ api.userByName = async function (username) {
         },
 //update the password of a user with the given id
         api.updateUserPassword = async function(id,password){
-
+          this.setEditStatus(sessionStorage.getItem('id'), {status: null})
         await this.http.put(`/userPass/${id}`, {password: password})
           
           },
@@ -399,11 +403,7 @@ api.userByName = async function (username) {
           },
           //get user's information editing status
           api.setEditStatus = async function(id,updateData){
-            const res = await this.authenticateUser()
-            if (res == true) {
-             
           await this.http.put(`/setEditStatus/${id}`, updateData)
-            }
             },
             //get user's information editing status
             api.getEditStatus = async function(id){
@@ -536,7 +536,13 @@ api.userByName = async function (username) {
   }
   catch(error){
     //if(sessionStorage.getItem('role')  == 'Administratorius' || sessionStorage.getItem('role')  == 'Budėtojas'){
+      if(sessionStorage.getItem('role') == "Gyventojas" || sessionStorage.getItem('role') == "Administratorius"){
+      this.setEditStatus(sessionStorage.getItem('id'), {status: null})
+      }
       this.setWorkerOccupation("Neprisijungęs",sessionStorage.getItem('id'))
+      localStorage.removeItem('token')
+      sessionStorage.removeItem('id')
+      sessionStorage.removeItem('role')
     //}
     localStorage.setItem('message',"Jūs neturite galiojančios sesijos. Prašome prisijungti")
     router.push({ path: '/' })

@@ -8,10 +8,10 @@
           </p>
         </div>
       </section>
-      <div v-if="showError" class="notification is-danger has-text-centered text-xl">
+      <div v-if="showError" class="notification is-danger has-text-centered text-[21px]/[30px]">
         <p>{{ errorMessage }}</p>
       </div>
-      <div v-if="showMessage" class="notification is-info has-text-centered text-xl">
+      <div v-if="showMessage" class="notification is-info has-text-centered text-[21px]/[30px]">
         <p>{{ message }}</p>
       </div>
       <div class="hero-body is-justify-content-center is-align-items-center">
@@ -90,6 +90,7 @@ export default {
         this.$router.push('/main')
        }
        else{
+        localStorage.removeItem('token')
         this.message = "Naudotojas jau yra prisijungęs prie paskyros"
           this.showMessage = true
        }

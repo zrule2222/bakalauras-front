@@ -215,7 +215,7 @@ closeSucessMessageModal(){
     //cancel the guest registration
    async cancelRegistration(){
     if(await this.checkForRegStatusChange(this.selectedRegistrationId)){
-        this.sucessMessage = "Svečio registracija nebuvo atšaukta, dėl registracijos statuso pokyčio "
+        this.sucessMessage = "Svečio registracija nebuvo atšaukta, dėl registracijos statuso pokyčio"
   this.showConfirmationModal = false
   this.showSucessMessage = true
   return

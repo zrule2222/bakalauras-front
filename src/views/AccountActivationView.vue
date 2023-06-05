@@ -13,7 +13,7 @@
     <!-- <MenuBar :menu-type="'main-back'"></MenuBar> -->
 
       <div  class="text-2xl mt-0 border-2 box is-radiusless border-bulma-green w-[700px] border-t-0 mx-auto font-semibold">
-        Norėdami aktyvuoti savo paskyrą pasikeiskite slaptažodį
+        Norėdami aktyvuoti savo paskyrą susikurkite slaptažodį
     </div>
 
     <div class="hero-body is-justify-content-center is-align-items-center">

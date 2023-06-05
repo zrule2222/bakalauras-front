@@ -99,7 +99,7 @@ export default {
           let data = await this.$api.getDataFromToken()
           let id =  await this.$api.getUserLoginId(response.token)
           if(data.id != id){
-          this.message = "Jūs jau esate prisijunge prie paskyros šioje naršyklėje"
+          this.message = "Jūs jau esate prisijungę prie paskyros šioje naršyklėje"
           this.showMessage = true
           }
           else{

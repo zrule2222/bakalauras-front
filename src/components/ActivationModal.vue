@@ -9,7 +9,7 @@
                 <label class="label">{{ Message }}</label>
 
             </section>
-            <footer class="modal-card-foot flex justify-end" :class="activationStatus == 'fail' ? '' : '!justify-start'">
+            <footer class="modal-card-foot flex justify-end" :class="activationStatus == 'fail' ? '' : '!justify-center'">
                 <button v-if="activationStatus == 'fail'" @click.prevent="close()" class="button is-danger">Uždaryti</button>
                 <router-link v-else-if="activationStatus == 'sucess'" :to="{ name: 'login'}">
                 <button  class="button is-primary">Prisijungimo puslapis</button>

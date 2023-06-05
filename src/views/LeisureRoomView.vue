@@ -190,7 +190,7 @@ try{
       if(seconds < 10){
         seconds = '0' + seconds
       }
-      let finalDate = `${year}-${month}-${day} ${hour}:${minute}:${seconds}`
+      let finalDate = `${year}-${month}-${day} ${hour}:${minute}`
       this.users[index].confirmed_at = finalDate
  }
 
@@ -234,7 +234,7 @@ try{
       if(seconds < 10){
         seconds = '0' + seconds
       }
-      let finalDate = `${year}-${month}-${day} ${hour}:${minute}:${seconds}`
+      let finalDate = `${year}-${month}-${day} ${hour}:${minute}`
     this.registrationWaitingConfirmTime = finalDate
     }
     else if(this.registrationStatus =='Patvirtinta'){
@@ -261,7 +261,7 @@ try{
       if(seconds < 10){
         seconds = '0' + seconds
       }
-      let finalDate = `${year}-${month}-${day} ${hour}:${minute}:${seconds}`
+      let finalDate = `${year}-${month}-${day} ${hour}:${minute}`
     this.RegistrationConfirmTime = finalDate
     }
   }
@@ -274,7 +274,7 @@ this.userHasRegistration = false
 async unregister(id){
   if(this.registrationStatus == 'Laukiama patvirtinimo'){
     if(await this.checkForRegCancelStatusChange()){
-      this.sucessMessage = "Registracija nebuvo atšaukta, dėl registracijos statuso pokyčio "
+      this.sucessMessage = "Registracija nebuvo atšaukta, dėl registracijos statuso pokyčio"
     this.showCancelConfirmation = false
     this.showSucessMessageModal()
     return

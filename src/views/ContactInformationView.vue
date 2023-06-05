@@ -15,7 +15,10 @@
     <div v-if="users.length > 0" v-for="user in users" :key="user.id" class="hero-body is-justify-content-center is-align-items-center">
         <div class="columns is-flex is-flex-direction-column box w-[304px] h-[220px]">
           <div class="column has-text-left">
-            <label class="font-bold text-3xl" for="username">{{user.role}}</label>
+            <label v-if="user.gender == 'Vyras'" class="font-bold text-3xl" for="username">{{user.role}}</label>
+            <label v-else-if="user.gender == 'Moteris' && user.role == 'Budėtojas'" class="font-bold text-3xl" for="username">Budėtoja</label>
+            <label v-else-if="user.gender == 'Moteris' && user.role == 'Administratorius'" class="font-bold text-3xl" for="username">Administratorė</label>
+            
           </div>
           <div class="column has-text-left break-all">
             <label for="Name">{{ user.firstname }} {{ user.lastname }}</label>
@@ -59,6 +62,7 @@ export default {
     async getContactInfo(){
     try{
       this.users = await this.$api.getContactInformation()
+      console.log(this.users)
     }
     catch(error){
       this.users = []

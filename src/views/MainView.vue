@@ -14,7 +14,7 @@
  <MenuBar v-if="role == 'Budėtojas'" :menu-type="'main-doorkeeper'"></MenuBar>
  <div v-if="role == 'Gyventojas'" class="is-flex is-flex-direction-row is-justify-content-space-between  mt-4">
 <div v-if="role == 'Gyventojas'" class="  ml-6 min-w-fit sm:text-[21px]/[30px] mr-2">
- Jūsų kambarys: {{ room }}
+ Jūsų kambarys: <span class="font-bold ">{{ room }}</span>
 </div>
 <!-- display workers occupation to the resident -->
 <div v-if="role == 'Gyventojas'" class="mr-6">

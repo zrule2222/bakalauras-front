@@ -3,7 +3,7 @@
         <div class="hero-body">
             <div>
                 <p class="title text-left">
-                    Paskyros aktyvuoti negalima
+                    Paskyros aktyvavimas negalimas
                 </p>
                 <p v-if="$route.params.failReason == 'error'" class="subtitle w-fit ">
                     Nerasta paskyra aktyvavimui

@@ -95,7 +95,7 @@ async getRegistrations(){
       if(seconds < 10){
         seconds = '0' + seconds
       }
-      let finalDate = `${year}-${month}-${day} ${hour}:${minute}:${seconds}`
+      let finalDate = `${year}-${month}-${day} ${hour}:${minute}`
       registrations[index].waiting_confirmation_at = finalDate
     }
     this.registrations = registrations

@@ -26,7 +26,7 @@
             <label class="label has-text-left">Svečio atvykimo laikas</label>
             <VueDatePicker :state="timeError" :minDate="new Date(new Date().setDate(new Date().getDate() - 1))"  v-model="guestArrival" locale="lt" :min-time="{ hours: 8, minutes: 0 }" cancelText="Atšaukti" selectText="Pasirinkti" :timezone="'UTC'" :teleport="true" :format="`yyyy/MM/dd HH:mm`" placeholder="Svečio atvykimo laikas"/>
             <p v-show="noTimeEror == true" class="help is-danger has-text-left">Nepasirinktas svečio atvykimo laikas</p>
-            <p v-show="RegistrationAlreadyExists == true" class="help is-danger has-text-left">Jūs jau esate užregistravę svečia nurodytam laikui</p>
+            <p v-show="RegistrationAlreadyExists == true" class="help is-danger has-text-left">Jūs jau esate užregistravę svečią nurodytam laikui</p>
             <p v-show="incorrectTime == true" class="help is-danger has-text-left">Svečias negali atvykti laiko tarpu 00:00-07:59</p>
             <p v-show="bellowCurrentTimeError == true" class="help is-danger has-text-left">Svečio atvykimo laikas yra praeityje</p>
           </div>

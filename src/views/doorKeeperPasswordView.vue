@@ -21,7 +21,7 @@
             <p v-show="noPassword" class="help is-danger">Slaptažodis tuščias</p>
             <p v-show="badPasswordLength" class="help is-danger">Slaptažodis negali viršyti 100 simbolių</p>
             <p v-show="passwordTooShort" class="help is-danger has-text-left">Minimalus slaptažodžio ilgis yra 6 simboliai</p>
-            <p v-show="notStrongPassword" class="help is-danger has-text-left">Slaptažotis privalo turėti mažaja, didžiają raidę, skaičių ir specialų simbolį</p>
+            <p v-show="notStrongPassword" class="help is-danger has-text-left">Slaptažodis privalo turėti mažąją, didžiąją raidę, skaičių ir specialų simbolį</p>
           </div>
           <div class="column has-text-left">
             <label for="repeatPassword">Slaptažio pakartojimas</label>

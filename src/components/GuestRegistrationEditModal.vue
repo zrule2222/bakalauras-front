@@ -17,7 +17,7 @@
             <p v-show="incorrectTime == false" class="help is-danger has-text-left">Svečias negali atvykti laiko tarpu 00:00-07:59</p>
             <p v-show="sameTimeRrror == false" class="help is-danger has-text-left">Nebuvo pasirinktas naujas svečio atvykimo laikas</p>
             <p v-show="bellowCurrentTimeError == false" class="help is-danger has-text-left">Svečio atvykimo laikas yra praeityje</p>
-            <p v-show="sameTimeError == false" class="help is-danger has-text-left">Jūs jau esate užregistravę šį svečia nurodytam laikui</p>
+            <p v-show="sameTimeError == false" class="help is-danger has-text-left">Jūs jau esate užregistravę šį svečią nurodytam laikui</p>
           </div>
 
             </section>
@@ -125,6 +125,7 @@ else{
     },
     created() {
       console.log(this.regId)
+      console.log(this.timeArray)
         this.registrationTime = this.time
         this.originalRegistrationTime = this.time
     }

@@ -104,7 +104,7 @@
 <GuestRegistrationModal @registration-sucess="registrationComplete()" :activeRegistrations="userRegistrations" @registration-fail="registrationFailed()" @close-action="closeRegistrationModal" v-if="showModal" :is-active="showModal" ></GuestRegistrationModal>
 <SucessMessageModal v-if="showSucessMessage" :is-active="showSucessMessage"  @close-action="closeSucessMessageModal()" :Message="sucessMessage"></SucessMessageModal>
 <ConfirmationModal @close-action="closeConfirmationModal()" @confirm-action="cancelRegistration()" :isActive="showConfirmationModal"></ConfirmationModal>
-<GuestRegistrationEditModal v-if="showEditModal" :is-active="showEditModal" :regId="registrationEditId" :time="registrationEditTime" @close-action="showEditModal = false, registrationEditTime = ''" @time-update-sucess="sucessfulTimeEdit()" @time-update-fail="failTimeEdit()" @time-update-canceled="canceledTimeEdit()" :timeArray="timeEditArray"></GuestRegistrationEditModal>
+<GuestRegistrationEditModal v-if="showEditModal" :is-active="showEditModal" :regId="registrationEditId" :time="registrationEditTime" @close-action="showEditModal = false, registrationEditTime = '', timeEditArray = []" @time-update-sucess="sucessfulTimeEdit()" @time-update-fail="failTimeEdit()" @time-update-canceled="canceledTimeEdit()" :timeArray="timeEditArray"></GuestRegistrationEditModal>
 <SucessMessageModal v-if="showEditMessage" :is-active="showEditMessage" @close-action="closeEditSucessMessage()" :Message="editTimeMessage"></SucessMessageModal>
     </div>
     </div>
@@ -393,6 +393,10 @@ else{
       this.showConfirmationModal = true
     },
     openRegistrationEditModal(id,arrivalTime, firstname, lastname){
+      console.log(id)
+      console.log(arrivalTime)
+      console.log(firstname)
+      console.log(lastname)
       let registrationArray = [...this.userRegistrations]
       registrationArray.splice(registrationArray.findIndex(registration => registration.guest_id === id), 1)
       for (let index = 0; index < registrationArray.length; index++) {
@@ -421,6 +425,7 @@ else{
       this.showEditMessage = true
     },
     closeEditSucessMessage(){
+      this.timeEditArray = []
       this.showEditMessage = false
       this.editTimeMessage = ""
       this.getActiveUserRegistrations()
